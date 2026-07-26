@@ -65,6 +65,12 @@ export class ShellHost {
     this.setupListeners();
   }
 
+  public writeOutput(text: string): void {
+    if (!text) return;
+    const formatted = text.replace(/\r?\n/g, "\r\n");
+    this.terminal.write(formatted);
+  }
+
   private prompt() {
     const cwd = this.kernel.getCwd();
     const username = this.kernel.userManager.getCurrentUser().username;
@@ -129,8 +135,8 @@ export class ShellHost {
     if (cmdLine.includes("|") || cmdLine.includes(">") || cmdLine.includes("<")) {
       this.pipelineEngine.executePipeline(
         cmdLine,
-        (stdout) => this.terminal.write(stdout),
-        (stderr) => this.terminal.write(`\x1b[1;31m${stderr}\x1b[0m`)
+        (stdout) => this.writeOutput(stdout),
+        (stderr) => this.writeOutput(`\x1b[1;31m${stderr}\x1b[0m`)
       ).catch((err) => {
         this.terminal.writeln(`\x1b[1;31mPipeline Error: ${err.message}\x1b[0m`);
       });
@@ -170,8 +176,8 @@ export class ShellHost {
             args[0],
             args,
             undefined,
-            (stdout) => this.terminal.write(stdout),
-            (stderr) => this.terminal.write(`\x1b[1;31m${stderr}\x1b[0m`)
+            (stdout) => this.writeOutput(stdout),
+            (stderr) => this.writeOutput(`\x1b[1;31m${stderr}\x1b[0m`)
           ).then((code) => {
             this.terminal.writeln(`\x1b[1;32mProcess finished with exit code ${code}\x1b[0m`);
           }).catch((err) => {
@@ -184,8 +190,8 @@ export class ShellHost {
             "/bin/calc.wasm",
             ["/bin/calc.wasm", ...args],
             undefined,
-            (stdout) => this.terminal.write(stdout),
-            (stderr) => this.terminal.write(`\x1b[1;31m${stderr}\x1b[0m`)
+            (stdout) => this.writeOutput(stdout),
+            (stderr) => this.writeOutput(`\x1b[1;31m${stderr}\x1b[0m`)
           );
           break;
 
@@ -194,8 +200,8 @@ export class ShellHost {
             "/bin/wc.wasm",
             ["/bin/wc.wasm", ...args],
             undefined,
-            (stdout) => this.terminal.write(stdout),
-            (stderr) => this.terminal.write(`\x1b[1;31m${stderr}\x1b[0m`)
+            (stdout) => this.writeOutput(stdout),
+            (stderr) => this.writeOutput(`\x1b[1;31m${stderr}\x1b[0m`)
           );
           break;
 
@@ -215,8 +221,8 @@ export class ShellHost {
               "/bin/curl.wasm",
               ["/bin/curl.wasm"],
               undefined,
-              (stdout) => this.terminal.write(stdout),
-              (stderr) => this.terminal.write(`\x1b[1;31m${stderr}\x1b[0m`)
+              (stdout) => this.writeOutput(stdout),
+              (stderr) => this.writeOutput(`\x1b[1;31m${stderr}\x1b[0m`)
             );
           }
           break;
@@ -226,8 +232,8 @@ export class ShellHost {
             "/bin/draw.wasm",
             ["/bin/draw.wasm"],
             undefined,
-            (stdout) => this.terminal.write(stdout),
-            (stderr) => this.terminal.write(`\x1b[1;31m${stderr}\x1b[0m`)
+            (stdout) => this.writeOutput(stdout),
+            (stderr) => this.writeOutput(`\x1b[1;31m${stderr}\x1b[0m`)
           );
           break;
 
@@ -236,8 +242,8 @@ export class ShellHost {
             "/bin/ps.wasm",
             ["/bin/ps.wasm"],
             undefined,
-            (stdout) => this.terminal.write(stdout),
-            (stderr) => this.terminal.write(`\x1b[1;31m${stderr}\x1b[0m`)
+            (stdout) => this.writeOutput(stdout),
+            (stderr) => this.writeOutput(`\x1b[1;31m${stderr}\x1b[0m`)
           );
           break;
 
@@ -282,36 +288,36 @@ export class ShellHost {
 
         case "sh":
           if (args[0]) {
-            this.pipelineEngine.executePipeline(`sh ${args.join(" ")}`, (out) => this.terminal.write(out), (err) => this.terminal.write(`\x1b[1;31m${err}\x1b[0m`));
+            this.pipelineEngine.executePipeline(`sh ${args.join(" ")}`, (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
           } else {
             this.terminal.writeln("Styx Shell Subshell v0.1.0");
           }
           break;
 
         case "spkg":
-          this.pipelineEngine.executePipeline(`spkg ${args.join(" ")}`, (out) => this.terminal.write(out), (err) => this.terminal.write(`\x1b[1;31m${err}\x1b[0m`));
+          this.pipelineEngine.executePipeline(`spkg ${args.join(" ")}`, (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
           break;
 
         case "nano":
         case "edit":
           if (args[0]) {
             this.terminal.writeln(`Opening text editor for file '${args[0]}'...`);
-            this.kernel.sys_execve("/bin/nano.wasm", ["/bin/nano.wasm"], undefined, (out) => this.terminal.write(out), (err) => this.terminal.write(`\x1b[1;31m${err}\x1b[0m`));
+            this.kernel.sys_execve("/bin/nano.wasm", ["/bin/nano.wasm"], undefined, (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
           } else {
             this.terminal.writeln("Usage: nano <filename> or edit <filename>");
           }
           break;
 
         case "top":
-          this.pipelineEngine.executePipeline("top", (out) => this.terminal.write(out), (err) => this.terminal.write(`\x1b[1;31m${err}\x1b[0m`));
+          this.pipelineEngine.executePipeline("top", (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
           break;
 
         case "beep":
-          this.pipelineEngine.executePipeline("beep", (out) => this.terminal.write(out), (err) => this.terminal.write(`\x1b[1;31m${err}\x1b[0m`));
+          this.pipelineEngine.executePipeline("beep", (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
           break;
 
         case "env":
-          this.terminal.write(this.kernel.envManager.formatEnvOutput());
+          this.writeOutput(this.kernel.envManager.formatEnvOutput());
           break;
 
         case "export":
@@ -319,7 +325,7 @@ export class ShellHost {
             const [key, ...valParts] = args[0].split("=");
             this.kernel.envManager.setenv(key, valParts.join("="));
           } else {
-            this.terminal.write(this.kernel.envManager.formatEnvOutput());
+            this.writeOutput(this.kernel.envManager.formatEnvOutput());
           }
           break;
 
@@ -332,54 +338,54 @@ export class ShellHost {
           break;
 
         case "rand":
-          this.pipelineEngine.executePipeline("rand", (out) => this.terminal.write(out), (err) => this.terminal.write(`\x1b[1;31m${err}\x1b[0m`));
+          this.pipelineEngine.executePipeline("rand", (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
           break;
 
         case "signal":
-          this.pipelineEngine.executePipeline("signal", (out) => this.terminal.write(out), (err) => this.terminal.write(`\x1b[1;31m${err}\x1b[0m`));
+          this.pipelineEngine.executePipeline("signal", (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
           break;
 
         case "tar":
-          this.pipelineEngine.executePipeline("tar", (out) => this.terminal.write(out), (err) => this.terminal.write(`\x1b[1;31m${err}\x1b[0m`));
+          this.pipelineEngine.executePipeline("tar", (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
           break;
 
         case "gzip":
-          this.pipelineEngine.executePipeline("gzip", (out) => this.terminal.write(out), (err) => this.terminal.write(`\x1b[1;31m${err}\x1b[0m`));
+          this.pipelineEngine.executePipeline("gzip", (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
           break;
 
         case "ping":
           const hostArg = args[0] || "localhost";
-          this.pipelineEngine.executePipeline(`ping ${hostArg}`, (out) => this.terminal.write(out), (err) => this.terminal.write(`\x1b[1;31m${err}\x1b[0m`));
+          this.pipelineEngine.executePipeline(`ping ${hostArg}`, (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
           break;
 
         case "cron":
         case "crontab":
-          this.pipelineEngine.executePipeline(args[0] ? `crontab ${args[0]}` : "cron", (out) => this.terminal.write(out), (err) => this.terminal.write(`\x1b[1;31m${err}\x1b[0m`));
+          this.pipelineEngine.executePipeline(args[0] ? `crontab ${args[0]}` : "cron", (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
           break;
 
         case "dmesg":
-          this.pipelineEngine.executePipeline("dmesg", (out) => this.terminal.write(out), (err) => this.terminal.write(`\x1b[1;31m${err}\x1b[0m`));
+          this.pipelineEngine.executePipeline("dmesg", (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
           break;
 
         case "history":
-          this.pipelineEngine.executePipeline("history", (out) => this.terminal.write(out), (err) => this.terminal.write(`\x1b[1;31m${err}\x1b[0m`));
+          this.pipelineEngine.executePipeline("history", (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
           break;
 
         case "bench":
-          this.pipelineEngine.executePipeline("bench", (out) => this.terminal.write(out), (err) => this.terminal.write(`\x1b[1;31m${err}\x1b[0m`));
+          this.pipelineEngine.executePipeline("bench", (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
           break;
 
         case "lspci":
-          this.pipelineEngine.executePipeline("lspci", (out) => this.terminal.write(out), (err) => this.terminal.write(`\x1b[1;31m${err}\x1b[0m`));
+          this.pipelineEngine.executePipeline("lspci", (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
           break;
 
         case "lsusb":
-          this.pipelineEngine.executePipeline("lsusb", (out) => this.terminal.write(out), (err) => this.terminal.write(`\x1b[1;31m${err}\x1b[0m`));
+          this.pipelineEngine.executePipeline("lsusb", (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
           break;
 
         case "man":
           const cmdArg = args[0] || "spkg";
-          this.pipelineEngine.executePipeline(`man ${cmdArg}`, (out) => this.terminal.write(out), (err) => this.terminal.write(`\x1b[1;31m${err}\x1b[0m`));
+          this.pipelineEngine.executePipeline(`man ${cmdArg}`, (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
           break;
 
         case "clear":
@@ -414,7 +420,7 @@ export class ShellHost {
           const fd = this.kernel.sys_open(args[0], false);
           const buf = this.kernel.sys_read(fd, 4096);
           this.kernel.sys_close(fd);
-          this.terminal.write(new TextDecoder().decode(buf));
+          this.writeOutput(new TextDecoder().decode(buf));
           this.terminal.writeln("");
           break;
 
