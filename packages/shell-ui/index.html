@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Styx OS - Unix Browser Kernel & Desktop Environment</title>
+    <link rel="stylesheet" href="./src/style.css" />
+    <link rel="stylesheet" href="node_modules/@xterm/xterm/css/xterm.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="app">
+      <header class="os-header">
+        <div class="brand">
+          <div class="logo-icon">⚡</div>
+          <div class="brand-text">
+            <h1>Styx Unix OS</h1>
+            <span class="badge">Browser Kernel v0.1.0</span>
+          </div>
+        </div>
+        <div class="system-status">
+          <span class="status-item"><span class="dot active"></span> VFS: OPFS</span>
+          <span class="status-item"><span class="dot active"></span> Display: /dev/fb0</span>
+          <span class="status-item"><span class="dot active"></span> Socket: Active</span>
+          <span class="status-item"><span class="dot active"></span> Auth: Multi-User</span>
+        </div>
+      </header>
+
+      <main class="os-workspace" id="os-desktop">
+        <div class="sidebar">
+          <h3>Kernel Controls</h3>
+          <button id="btn-posix" class="btn btn-primary">🧪 Run POSIX Tests</button>
+          <button id="btn-mount" class="btn btn-secondary">📁 Mount Host Directory</button>
+          <button id="btn-install" class="btn btn-secondary">📦 Install WASM App</button>
+          <input type="file" id="file-input" accept=".wasm" style="display: none;" />
+          
+          <div class="info-card">
+            <h4>Styx Subsystems</h4>
+            <ul>
+              <li><strong>VFS:</strong> OPFS + MemFS + /proc</li>
+              <li><strong>Concurrency:</strong> Web Workers + Futex</li>
+              <li><strong>Display:</strong> 320x200 /dev/fb0 RGBA</li>
+              <li><strong>Network:</strong> POSIX Sockets & WASI</li>
+              <li><strong>Auth:</strong> /etc/passwd & /etc/shadow</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="terminal-container" id="terminal-window">
+          <div class="terminal-header">
+            <div class="window-controls">
+              <span class="control close"></span>
+              <span class="control minimize"></span>
+              <span class="control maximize"></span>
+            </div>
+            <div class="window-title">sh - user@styx (~/home/user)</div>
+          </div>
+          <div id="terminal-root"></div>
+        </div>
+      </main>
+
+      <footer class="os-taskbar">
+        <div class="taskbar-apps">
+          <button class="taskbar-btn active" id="tb-terminal">💻 Terminal</button>
+          <button class="taskbar-btn" id="tb-display">🖼️ Display (/dev/fb0)</button>
+          <button class="taskbar-btn" id="tb-files">📂 File Explorer</button>
+          <button class="taskbar-btn" id="tb-top">📊 System Monitor</button>
+        </div>
+      </footer>
+    </div>
+
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>
