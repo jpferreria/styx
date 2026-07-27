@@ -9,7 +9,7 @@
  */
 
 import { createHelloWasmBinary } from "./sampleWasm";
-import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary } from "./binaries";
+import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary } from "./binaries";
 import { WasmProcessRunner } from "./execve";
 import { PipeNode } from "./pipe";
 import { SocketNode, SocketDomain, SocketType } from "./socket";
@@ -29,6 +29,7 @@ import { HistoryManager } from "./history";
 import { BenchmarkEngine } from "./bench";
 import { SysFSManager } from "./sysfs";
 import { ManualManager } from "./man";
+import { PtyManager } from "./pty";
 
 export enum Errno {
   EPERM = 1,
@@ -166,7 +167,8 @@ export class UnixKernel {
   public historyManager!: HistoryManager;
   public benchEngine!: BenchmarkEngine;
   public sysfsManager!: SysFSManager;
-  public manualManager!: ManualManager;
+  public manualManager: ManualManager;
+  public ptyManager: PtyManager;
 
   constructor() {
     this.root = new MemNode(1, true, 0o755);
@@ -182,6 +184,7 @@ export class UnixKernel {
     this.benchEngine = new BenchmarkEngine(this);
     this.sysfsManager = new SysFSManager();
     this.manualManager = new ManualManager();
+    this.ptyManager = new PtyManager(this);
     this.setupHierarchy();
   }
 
@@ -190,6 +193,12 @@ export class UnixKernel {
     dev.createChild("tty", false, 0o666);
     dev.createChild("null", false, 0o666);
     dev.createChild("zero", false, 0o666);
+
+    // Pseudoterminal Master Device (/dev/ptmx) & Slave Devices (/dev/pts)
+    dev.createChild("ptmx", false, 0o666);
+    const ptsDevNode = dev.createChild("pts", true, 0o755);
+    ptsDevNode.createChild("0", false, 0o620);
+    ptsDevNode.createChild("1", false, 0o620);
 
     // Mount /usr/share/man/man1 hierarchy
     const usrNode = this.root.createChild("usr", true, 0o755);
@@ -365,6 +374,9 @@ export class UnixKernel {
 
     const vimAppNode = binNode.createChild("vim.wasm", false, 0o755);
     vimAppNode.write(0, createVimWasmBinary());
+
+    const ptyAppNode = binNode.createChild("pty.wasm", false, 0o755);
+    ptyAppNode.write(0, createPtyWasmBinary());
 
     // Initial files
     const userHome = this.resolvePath("/home/user");

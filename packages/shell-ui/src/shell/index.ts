@@ -137,7 +137,7 @@ export class ShellHost {
               this.terminal.write(this.inputBuffer);
             }
           } else {
-            const available = ["cat", "ls", "pwd", "mkdir", "rm", "cp", "mv", "whoami", "su", "sudo", "ps", "kill", "draw", "curl", "calc", "wc", "spkg", "nano", "edit", "top", "beep", "env", "export", "unset", "rand", "signal", "tar", "gzip", "ping", "cron", "crontab", "dmesg", "history", "lspci", "lsusb", "man", "vim", "vi"];
+            const available = ["cat", "ls", "pwd", "mkdir", "rm", "cp", "mv", "whoami", "su", "sudo", "ps", "kill", "draw", "curl", "calc", "wc", "spkg", "nano", "edit", "top", "beep", "env", "export", "unset", "rand", "signal", "tar", "gzip", "ping", "cron", "crontab", "dmesg", "history", "lspci", "lsusb", "man", "vim", "vi", "pty"];
             const candidates = this.kernel.historyManager.autoComplete(this.inputBuffer, available);
 
             if (candidates.length === 1) {
@@ -443,6 +443,10 @@ export class ShellHost {
           this.activeVim = new VimEditor(this.kernel, fullPath);
           this.terminal.clear();
           this.writeOutput(this.activeVim.render());
+          break;
+
+        case "pty":
+          this.pipelineEngine.executePipeline("pty", (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
           break;
 
         case "clear":

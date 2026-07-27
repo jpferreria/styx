@@ -110,6 +110,14 @@ export class ManualManager {
       options: "  i       Switch to INSERT mode\n  :       Switch to COMMAND mode\n  h/j/k/l Cursor movement\n  dd      Delete current line\n  :w      Save file\n  :q      Quit editor\n  :wq     Save and quit",
       examples: "  vim /home/user/README.txt\n  vim /etc/environment",
     });
+
+    this.register({
+      name: "pty",
+      summary: "pseudoterminal multiplexer session manager",
+      synopsis: "pty [list|create]",
+      description: "pty manages master /dev/ptmx and slave /dev/pts/* pseudoterminal multiplexer session devices.",
+      examples: "  pty\n  pty list",
+    });
   }
 
   register(entry: ManualEntry): void {

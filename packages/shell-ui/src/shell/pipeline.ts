@@ -327,6 +327,10 @@ export class PipelineEngine {
         onStdout(`VIM Terminal Text Editor: Run 'vim <file>' in interactive shell terminal.\n`);
         break;
 
+      case "pty":
+        onStdout(this.kernel.ptyManager.listSessions());
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);

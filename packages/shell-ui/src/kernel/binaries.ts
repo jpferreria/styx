@@ -179,3 +179,7 @@ export function createManWasmBinary(): Uint8Array {
 export function createVimWasmBinary(): Uint8Array {
   return createMessageWasmBinary("VIM - Vi IMproved: Terminal modal text editor\n");
 }
+
+export function createPtyWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS Pseudoterminal Subsystem: /dev/ptmx & /dev/pts/*\n");
+}
