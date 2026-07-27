@@ -9,7 +9,7 @@
  */
 
 import { createHelloWasmBinary } from "./sampleWasm";
-import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary, createIfconfigWasmBinary, createSpkgExportWasmBinary, createThemeWasmBinary, createShDebugWasmBinary, createSwaponWasmBinary, createSysbenchWasmBinary, createGetfattrWasmBinary, createSetfattrWasmBinary, createAliasWasmBinary, createTopGuiWasmBinary } from "./binaries";
+import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary, createIfconfigWasmBinary, createSpkgExportWasmBinary, createThemeWasmBinary, createShDebugWasmBinary, createSwaponWasmBinary, createSysbenchWasmBinary, createGetfattrWasmBinary, createSetfattrWasmBinary, createAliasWasmBinary, createTopGuiWasmBinary, createIpcsWasmBinary } from "./binaries";
 import { WasmProcessRunner } from "./execve";
 import { PipeNode } from "./pipe";
 import { SocketNode, SocketDomain, SocketType } from "./socket";
@@ -35,6 +35,7 @@ import { SwapManager } from "./swap";
 import { ProfilerEngine } from "./profile";
 import { XAttrManager } from "./xattr";
 import { AliasManager } from "../shell/alias";
+import { SharedMemoryManager } from "./shm";
 
 export enum Errno {
   EPERM = 1,
@@ -180,6 +181,7 @@ export class UnixKernel {
   public xattrManager: XAttrManager;
   public aliasManager: AliasManager;
   public procFSNode: ProcFSNode;
+  public shmManager: SharedMemoryManager;
 
   constructor() {
     this.root = new MemNode(1, true, 0o755);
@@ -202,6 +204,7 @@ export class UnixKernel {
     this.profilerEngine = new ProfilerEngine(this);
     this.xattrManager = new XAttrManager(this);
     this.aliasManager = new AliasManager();
+    this.shmManager = new SharedMemoryManager(this);
     this.setupHierarchy();
   }
 
@@ -213,6 +216,7 @@ export class UnixKernel {
     dev.createChild("tty", false, 0o666);
     dev.createChild("null", false, 0o666);
     dev.createChild("zero", false, 0o666);
+    dev.createChild("shm", true, 0o1777);
 
     // Pseudoterminal Master Device (/dev/ptmx) & Slave Devices (/dev/pts)
     dev.createChild("ptmx", false, 0o666);
@@ -433,6 +437,9 @@ export class UnixKernel {
 
     const topGuiAppNode = binNode.createChild("top-gui.wasm", false, 0o755);
     topGuiAppNode.write(0, createTopGuiWasmBinary());
+
+    const ipcsAppNode = binNode.createChild("ipcs.wasm", false, 0o755);
+    ipcsAppNode.write(0, createIpcsWasmBinary());
 
     // Initial files
     const userHome = this.resolvePath("/home/user");

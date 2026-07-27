@@ -194,6 +194,15 @@ export class ManualManager {
       description: "top-gui launches an interactive desktop window displaying live process load, CPU/memory progress bars, and PID tables.",
       examples: "  top-gui",
     });
+
+    this.register({
+      name: "ipcs",
+      summary: "IPC facility status inspector (shared memory /dev/shm)",
+      synopsis: "ipcs [-m]",
+      description: "ipcs displays information on active System V / POSIX shared memory segments mounted in /dev/shm.",
+      options: "  -m    Display active shared memory segment statistics",
+      examples: "  ipcs\n  ipcs -m",
+    });
   }
 
   register(entry: ManualEntry): void {

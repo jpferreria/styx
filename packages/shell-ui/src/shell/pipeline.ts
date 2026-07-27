@@ -434,6 +434,10 @@ export class PipelineEngine {
         break;
       }
 
+      case "ipcs":
+        onStdout(this.kernel.shmManager.formatIpcs());
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);

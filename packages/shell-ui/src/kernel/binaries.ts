@@ -223,3 +223,7 @@ export function createAliasWasmBinary(): Uint8Array {
 export function createTopGuiWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS Real-Time Process Monitor GUI (top-gui)\n");
 }
+
+export function createIpcsWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS Shared Memory Inspector (ipcs)\n");
+}
