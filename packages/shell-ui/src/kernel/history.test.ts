@@ -24,7 +24,8 @@ describe("Styx OS Shell History & Auto-Completion Test Suite", () => {
     expect(historyText).toContain("whoami");
   });
 
-  it("should record commands and match auto-completion prefixes", () => {
+  it("should record commands and match auto-completion prefixes and VFS paths", () => {
+    const kernel = new UnixKernel();
     const hist = new HistoryManager();
     hist.add("ping 8.8.8.8");
 
@@ -32,6 +33,11 @@ describe("Styx OS Shell History & Auto-Completion Test Suite", () => {
 
     const matches = hist.autoComplete("hi", ["history", "help", "hello"]);
     expect(matches).toContain("history");
+
+    // VFS path auto-completion test
+    const { candidates, completion } = hist.autoCompletePath("/etc/pass", kernel);
+    expect(candidates).toContain("passwd");
+    expect(completion).toBe("wd");
   });
 
   it("should execute /bin/history.wasm via sys_execve and stream history report", async () => {

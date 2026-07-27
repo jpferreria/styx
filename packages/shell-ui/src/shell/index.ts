@@ -120,15 +120,36 @@ export class ShellHost {
           return;
         }
 
-        if (char === "\t") { // Tab auto-completion
-          const candidates = this.kernel.historyManager.autoComplete(
-            this.inputBuffer,
-            ["cat", "ls", "pwd", "mkdir", "rm", "cp", "mv", "whoami", "su", "sudo", "ps", "kill", "draw", "curl", "calc", "wc", "spkg", "nano", "edit", "top", "beep", "env", "export", "unset", "rand", "signal", "tar", "gzip", "ping", "cron", "crontab", "dmesg", "history", "lspci", "lsusb", "man", "vim", "vi"]
-          );
-          if (candidates.length === 1) {
-            const completion = candidates[0].substring(this.inputBuffer.length);
-            this.inputBuffer += completion;
-            this.terminal.write(completion);
+        if (char === "\t") { // Tab auto-completion (Command & VFS Path)
+          const isPathCompletion = this.inputBuffer.includes(" ");
+          if (isPathCompletion) {
+            const parts = this.inputBuffer.split(" ");
+            const lastPart = parts[parts.length - 1];
+            const { candidates, completion } = this.kernel.historyManager.autoCompletePath(lastPart, this.kernel);
+
+            if (candidates.length === 1 && completion) {
+              this.inputBuffer += completion;
+              this.terminal.write(completion);
+            } else if (candidates.length > 1) {
+              this.terminal.writeln("");
+              this.terminal.writeln(`  ${candidates.join("   ")}`);
+              this.prompt();
+              this.terminal.write(this.inputBuffer);
+            }
+          } else {
+            const available = ["cat", "ls", "pwd", "mkdir", "rm", "cp", "mv", "whoami", "su", "sudo", "ps", "kill", "draw", "curl", "calc", "wc", "spkg", "nano", "edit", "top", "beep", "env", "export", "unset", "rand", "signal", "tar", "gzip", "ping", "cron", "crontab", "dmesg", "history", "lspci", "lsusb", "man", "vim", "vi"];
+            const candidates = this.kernel.historyManager.autoComplete(this.inputBuffer, available);
+
+            if (candidates.length === 1) {
+              const completion = candidates[0].substring(this.inputBuffer.length);
+              this.inputBuffer += completion;
+              this.terminal.write(completion);
+            } else if (candidates.length > 1) {
+              this.terminal.writeln("");
+              this.terminal.writeln(`  ${candidates.join("   ")}`);
+              this.prompt();
+              this.terminal.write(this.inputBuffer);
+            }
           }
           return;
         }
