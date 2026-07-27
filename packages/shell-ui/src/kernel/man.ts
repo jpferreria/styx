@@ -118,6 +118,14 @@ export class ManualManager {
       description: "pty manages master /dev/ptmx and slave /dev/pts/* pseudoterminal multiplexer session devices.",
       examples: "  pty\n  pty list",
     });
+
+    this.register({
+      name: "ifconfig",
+      summary: "configure network interface parameters",
+      synopsis: "ifconfig [interface]",
+      description: "ifconfig displays network interface statistics, IP addresses, netmasks, MAC addresses, and packet counts for lo and eth0.",
+      examples: "  ifconfig\n  ifconfig eth0",
+    });
   }
 
   register(entry: ManualEntry): void {

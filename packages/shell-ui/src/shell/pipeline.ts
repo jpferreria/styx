@@ -331,6 +331,10 @@ export class PipelineEngine {
         onStdout(this.kernel.ptyManager.listSessions());
         break;
 
+      case "ifconfig":
+        onStdout(this.kernel.netManager.formatIfconfig());
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);

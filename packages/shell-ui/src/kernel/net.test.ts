@@ -36,18 +36,34 @@ describe("Styx OS Network Diagnostics Test Suite", () => {
     expect(report).toContain("0% packet loss");
   });
 
-  it("should execute /bin/ping.wasm via sys_execve and stream ping response", async () => {
+  it("should read /etc/resolv.conf and format ifconfig network interface statistics", () => {
+    const kernel = new UnixKernel();
+
+    const fd = kernel.sys_open("/etc/resolv.conf", false);
+    const resolvText = new TextDecoder().decode(kernel.sys_read(fd, 2048));
+    kernel.sys_close(fd);
+
+    expect(resolvText).toContain("nameserver 8.8.8.8");
+    expect(resolvText).toContain("search localdomain");
+
+    const ifconfigReport = kernel.netManager.formatIfconfig();
+    expect(ifconfigReport).toContain("eth0:");
+    expect(ifconfigReport).toContain("inet 192.168.1.100");
+    expect(ifconfigReport).toContain("RX packets 1284");
+  });
+
+  it("should execute /bin/ifconfig.wasm via sys_execve and stream interface report", async () => {
     const kernel = new UnixKernel();
     let stdout = "";
 
     const exitCode = await kernel.sys_execve(
-      "/bin/ping.wasm",
-      ["/bin/ping.wasm"],
+      "/bin/ifconfig.wasm",
+      ["/bin/ifconfig.wasm"],
       undefined,
       (text) => { stdout += text; }
     );
 
     expect(exitCode).toBe(0);
-    expect(stdout).toContain("PING localhost");
+    expect(stdout).toContain("Network Interface Configurator");
   });
 });

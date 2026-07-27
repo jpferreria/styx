@@ -183,3 +183,7 @@ export function createVimWasmBinary(): Uint8Array {
 export function createPtyWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS Pseudoterminal Subsystem: /dev/ptmx & /dev/pts/*\n");
 }
+
+export function createIfconfigWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS Network Interface Configurator (ifconfig)\n");
+}
