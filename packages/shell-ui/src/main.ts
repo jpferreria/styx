@@ -127,7 +127,22 @@ document.addEventListener("DOMContentLoaded", () => {
         const li = document.createElement("li");
         li.style.padding = "4px 0";
         li.style.cursor = "pointer";
-        li.innerHTML = e.isDir ? `📁 <strong>${e.name}/</strong>` : `📄 ${e.name} (${e.size} bytes)`;
+
+        const iconSpan = document.createElement("span");
+        iconSpan.textContent = e.isDir ? "📁 " : "📄 ";
+
+        const nameSpan = document.createElement("span");
+        if (e.isDir) {
+          const strong = document.createElement("strong");
+          strong.textContent = `${e.name}/`;
+          nameSpan.appendChild(strong);
+        } else {
+          nameSpan.textContent = `${e.name} (${e.size} bytes)`;
+        }
+
+        li.appendChild(iconSpan);
+        li.appendChild(nameSpan);
+
         if (e.isDir) {
           li.addEventListener("click", () => renderDir(path === "/" ? `/${e.name}` : `${path}/${e.name}`));
         }

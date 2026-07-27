@@ -33,7 +33,8 @@ export class BinaryInstaller {
       throw new Error("Invalid WebAssembly executable binary header (expected WASM magic bytes 0x0061736d)");
     }
 
-    const cleanFilename = filename.endsWith(".wasm") ? filename : `${filename}.wasm`;
+    const safeBase = filename.split(/[/\\]/).pop() || "app.wasm";
+    const cleanFilename = safeBase.endsWith(".wasm") ? safeBase : `${safeBase}.wasm`;
     const targetPath = `${targetDir.replace(/\/$/, "")}/${cleanFilename}`;
 
     const fd = this.kernel.sys_open(targetPath, true);
