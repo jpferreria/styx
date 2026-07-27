@@ -12,7 +12,6 @@ import { ShellHost } from "./shell";
 import { BinaryInstaller } from "./kernel/installer";
 import { WindowManager } from "./shell/wm";
 import { FramebufferNode } from "./kernel/framebuffer";
-import { SystemMonitor } from "./shell/top";
 
 document.addEventListener("DOMContentLoaded", () => {
   const terminalRoot = document.getElementById("terminal-root");
@@ -153,24 +152,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     renderDir("/");
     wm.createWindow({ id: "files", title: "Styx OS VFS File Explorer", width: 440, height: 300 }, fileContainer);
-  });
-
-  const tbTop = document.getElementById("tb-top");
-  tbTop?.addEventListener("click", () => {
-    const topContainer = document.createElement("div");
-    topContainer.style.color = "#10b981";
-    topContainer.style.fontFamily = "Fira Code, monospace";
-    topContainer.style.whiteSpace = "pre-wrap";
-    topContainer.style.fontSize = "0.85rem";
-
-    const monitor = new SystemMonitor(kernel);
-    const updateStats = () => {
-      topContainer.textContent = monitor.generateReport();
-    };
-    updateStats();
-    setInterval(updateStats, 2000);
-
-    wm.createWindow({ id: "top", title: "Styx OS System Monitor (top)", width: 620, height: 320 }, topContainer);
   });
 
   // Sidebar Controls
