@@ -95,7 +95,7 @@ export class ShellHost {
         if (char === "\t") { // Tab auto-completion
           const candidates = this.kernel.historyManager.autoComplete(
             this.inputBuffer,
-            ["cat", "ls", "pwd", "mkdir", "rm", "cp", "mv", "whoami", "su", "sudo", "ps", "kill", "draw", "curl", "calc", "wc", "spkg", "nano", "edit", "top", "beep", "env", "export", "unset", "rand", "signal", "tar", "gzip", "ping", "cron", "crontab", "dmesg", "history"]
+            ["cat", "ls", "pwd", "mkdir", "rm", "cp", "mv", "whoami", "su", "sudo", "ps", "kill", "draw", "curl", "calc", "wc", "spkg", "nano", "edit", "top", "beep", "env", "export", "unset", "rand", "signal", "tar", "gzip", "ping", "cron", "crontab", "dmesg", "history", "lspci", "lsusb", "man", "vim", "vi"]
           );
           if (candidates.length === 1) {
             const completion = candidates[0].substring(this.inputBuffer.length);
@@ -386,6 +386,16 @@ export class ShellHost {
         case "man":
           const cmdArg = args[0] || "spkg";
           this.pipelineEngine.executePipeline(`man ${cmdArg}`, (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
+          break;
+
+        case "vim":
+        case "vi":
+          if (args[0]) {
+            this.writeOutput(`Opening VIM modal text editor for file '${args[0]}'... (Use :q to exit)\n`);
+            this.kernel.sys_execve("/bin/vim.wasm", ["/bin/vim.wasm"], undefined, (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
+          } else {
+            this.terminal.writeln("Usage: vim <filename> or vi <filename>");
+          }
           break;
 
         case "clear":

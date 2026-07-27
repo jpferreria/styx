@@ -101,6 +101,15 @@ export class ManualManager {
       description: "lsusb reads /sys/bus/usb/devices to probe virtual USB HID keyboard and mouse devices.",
       examples: "  lsusb",
     });
+
+    this.register({
+      name: "vim",
+      summary: "Vi IMproved, a programmers text editor",
+      synopsis: "vim [file]",
+      description: "vim is a modal terminal text editor. It supports NORMAL mode (h/j/k/l movement, dd line delete), INSERT mode (typing text, ESC to return), and COMMAND mode (:w save, :q quit, :wq save & quit).",
+      options: "  i       Switch to INSERT mode\n  :       Switch to COMMAND mode\n  h/j/k/l Cursor movement\n  dd      Delete current line\n  :w      Save file\n  :q      Quit editor\n  :wq     Save and quit",
+      examples: "  vim /home/user/README.txt\n  vim /etc/environment",
+    });
   }
 
   register(entry: ManualEntry): void {

@@ -175,3 +175,7 @@ export function createLsusbWasmBinary(): Uint8Array {
 export function createManWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS Manual Pages: Reading /usr/share/man/man1/*.1\n");
 }
+
+export function createVimWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("VIM - Vi IMproved: Terminal modal text editor\n");
+}
