@@ -24,6 +24,19 @@ export class FramebufferNode implements VNode {
     this.height = height;
     // 4 bytes per pixel (RGBA)
     this.buffer = new Uint8Array(width * height * 4);
+    this.renderDefaultPattern();
+  }
+
+  renderDefaultPattern(): void {
+    for (let y = 0; y < this.height; y++) {
+      for (let x = 0; x < this.width; x++) {
+        const idx = (y * this.width + x) * 4;
+        this.buffer[idx] = Math.floor((x / this.width) * 200) + 20;     // R
+        this.buffer[idx + 1] = Math.floor((y / this.height) * 180) + 40; // G
+        this.buffer[idx + 2] = 220;                                      // B
+        this.buffer[idx + 3] = 255;                                      // A
+      }
+    }
   }
 
   stat(): FileStat {

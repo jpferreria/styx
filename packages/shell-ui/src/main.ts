@@ -42,11 +42,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const ctx = canvas.getContext("2d");
     const fbNode = kernel.resolvePath("/dev/fb0") as FramebufferNode;
     if (fbNode && ctx) {
-      fbNode.onFrameUpdate = (w, h, buf) => {
+      const render = (w: number, h: number, buf: Uint8Array) => {
         const imgData = ctx.createImageData(w, h);
         imgData.data.set(buf);
         ctx.putImageData(imgData, 0, 0);
       };
+      render(fbNode.width, fbNode.height, fbNode.buffer);
+      fbNode.onFrameUpdate = render;
     }
 
     wm.createWindow({ id: "display", title: "/dev/fb0 Graphical Display Screen", width: 480, height: 320 }, canvas);
