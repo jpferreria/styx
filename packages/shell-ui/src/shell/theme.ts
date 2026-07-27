@@ -90,6 +90,13 @@ export class ThemeManager {
     root.style.setProperty("--styx-accent", theme.accent);
     root.style.setProperty("--styx-panel-bg", theme.panelBg);
     root.style.setProperty("--styx-border", theme.border);
+
+    // Bind to style.css root variables
+    root.style.setProperty("--bg-dark", theme.background);
+    root.style.setProperty("--text-main", theme.foreground);
+    root.style.setProperty("--primary", theme.accent);
+    root.style.setProperty("--panel-bg", theme.panelBg);
+    root.style.setProperty("--border-color", theme.border);
   }
 
   listThemes(): string {
