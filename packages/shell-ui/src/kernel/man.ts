@@ -219,6 +219,14 @@ export class ManualManager {
       description: "termcolor displays a 256-color matrix and TrueColor RGB spectrum diagnostic test grid.",
       examples: "  termcolor\n  color",
     });
+
+    this.register({
+      name: "pmap",
+      summary: "report memory map of a process",
+      synopsis: "pmap [pid]",
+      description: "pmap reports the virtual memory mapping structure of a process, including heap, stack, code, and shared memory segments.",
+      examples: "  pmap\n  pmap 1\n  pmap 2",
+    });
   }
 
   register(entry: ManualEntry): void {

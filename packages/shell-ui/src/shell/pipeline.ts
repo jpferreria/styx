@@ -451,6 +451,11 @@ export class PipelineEngine {
         onStdout(this.kernel.termColorEngine.formatColorGrid());
         break;
 
+      case "pmap":
+        const targetPid = args[0] ? parseInt(args[0], 10) : 1;
+        onStdout(this.kernel.pmapEngine.formatPMap(isNaN(targetPid) ? 1 : targetPid));
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);

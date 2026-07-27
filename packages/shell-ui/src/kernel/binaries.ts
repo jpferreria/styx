@@ -235,3 +235,7 @@ export function createMqueueWasmBinary(): Uint8Array {
 export function createTermcolorWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS ANSI TrueColor Engine (termcolor)\n");
 }
+
+export function createPmapWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS Process Memory Map Inspector (pmap)\n");
+}

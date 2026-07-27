@@ -140,7 +140,7 @@ export class ShellHost {
               this.terminal.write(this.inputBuffer);
             }
           } else {
-            const available = ["cat", "ls", "pwd", "mkdir", "rm", "cp", "mv", "whoami", "su", "sudo", "ps", "kill", "draw", "curl", "calc", "wc", "spkg", "nano", "edit", "top", "beep", "env", "export", "unset", "rand", "signal", "tar", "gzip", "ping", "cron", "crontab", "dmesg", "history", "lspci", "lsusb", "man", "vim", "vi", "pty", "ifconfig", "theme", "swapon", "swapoff", "sysbench", "getfattr", "setfattr", "alias", "unalias", "top-gui", "ipcs", "mqueue", "termcolor", "color"];
+            const available = ["cat", "ls", "pwd", "mkdir", "rm", "cp", "mv", "whoami", "su", "sudo", "ps", "kill", "draw", "curl", "calc", "wc", "spkg", "nano", "edit", "top", "beep", "env", "export", "unset", "rand", "signal", "tar", "gzip", "ping", "cron", "crontab", "dmesg", "history", "lspci", "lsusb", "man", "vim", "vi", "pty", "ifconfig", "theme", "swapon", "swapoff", "sysbench", "getfattr", "setfattr", "alias", "unalias", "top-gui", "ipcs", "mqueue", "termcolor", "color", "pmap"];
             const candidates = this.kernel.historyManager.autoComplete(this.inputBuffer, available);
 
             if (candidates.length === 1) {
@@ -479,6 +479,7 @@ export class ShellHost {
         case "mqueue":
         case "termcolor":
         case "color":
+        case "pmap":
           this.pipelineEngine.executePipeline(`${cmd} ${args.join(" ")}`, (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
           break;
 
