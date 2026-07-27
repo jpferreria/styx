@@ -178,6 +178,14 @@ export class ManualManager {
       options: "  -n    Extended attribute name (e.g. user.comment)\n  -v    Extended attribute value",
       examples: "  setfattr -n user.comment -v 'Styx Backup' /home/user/README.txt",
     });
+
+    this.register({
+      name: "alias",
+      summary: "define or display shell command line aliases",
+      synopsis: "alias [name=command] / unalias <name>",
+      description: "alias defines command line shortcuts for quick terminal execution. Running alias without arguments lists active aliases.",
+      examples: "  alias\n  alias ll='ls -l'\n  unalias ll",
+    });
   }
 
   register(entry: ManualEntry): void {

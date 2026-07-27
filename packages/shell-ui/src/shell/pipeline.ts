@@ -402,6 +402,32 @@ export class PipelineEngine {
         }
         break;
 
+      case "alias":
+        if (args[0]) {
+          const aliasExpr = args.join(" ");
+          if (aliasExpr.includes("=")) {
+            const [name, ...valParts] = aliasExpr.split("=");
+            const val = valParts.join("=").replace(/^['"]|['"]$/g, "");
+            this.kernel.aliasManager.setAlias(name, val);
+            onStdout(`Created alias ${name}='${val}'\n`);
+          } else {
+            const val = this.kernel.aliasManager.getAlias(args[0]);
+            onStdout(val ? `alias ${args[0]}='${val}'\n` : `alias: ${args[0]}: not found\n`);
+          }
+        } else {
+          onStdout(this.kernel.aliasManager.listAliases());
+        }
+        break;
+
+      case "unalias":
+        if (args[0]) {
+          const ok = this.kernel.aliasManager.removeAlias(args[0]);
+          onStdout(ok ? `Removed alias '${args[0]}'\n` : `unalias: ${args[0]}: not found\n`);
+        } else {
+          onStderr("Usage: unalias <name>\n");
+        }
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);

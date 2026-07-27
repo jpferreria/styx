@@ -215,3 +215,7 @@ export function createGetfattrWasmBinary(): Uint8Array {
 export function createSetfattrWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS Set Extended Attributes (setfattr)\n");
 }
+
+export function createAliasWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS Dynamic Command Alias Subsystem (alias)\n");
+}
