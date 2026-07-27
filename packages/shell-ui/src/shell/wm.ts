@@ -244,21 +244,126 @@ export class WindowManager {
     });
   }
 
-  createProcessMonitorWindow(procfsReport: string): HTMLElement {
+  createProcessMonitorWindow(_procfsReport?: string): HTMLElement {
     const container = document.createElement("div");
     container.className = "top-gui-container";
-    container.style.fontFamily = "monospace";
-    container.style.fontSize = "0.85rem";
+    container.style.display = "flex";
+    container.style.flexDirection = "column";
+    container.style.gap = "16px";
+    container.style.padding = "16px";
+    container.style.fontFamily = "'Inter', system-ui, sans-serif";
     container.style.color = "var(--text-main)";
-    container.style.whiteSpace = "pre-wrap";
-    container.textContent = procfsReport;
+
+    // Performance Meters Header
+    const meters = document.createElement("div");
+    meters.className = "top-gui-meters";
+    meters.style.display = "flex";
+    meters.style.flexDirection = "column";
+    meters.style.gap = "10px";
+    meters.style.background = "var(--panel-bg)";
+    meters.style.padding = "14px";
+    meters.style.borderRadius = "8px";
+    meters.style.border = "1px solid var(--border-color)";
+
+    meters.innerHTML = `
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:600;">
+          <span>CPU Utilization (Core 0 & 1)</span>
+          <span style="color:var(--primary);">45.2%</span>
+        </div>
+        <div style="width:100%; height:10px; background:rgba(255,255,255,0.1); border-radius:5px; overflow:hidden;">
+          <div style="width:45.2%; height:100%; background:linear-gradient(90deg, #38bdf8, #818cf8); transition:width 0.3s;"></div>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:600;">
+          <span>Memory Usage (RAM)</span>
+          <span style="color:#10b981;">38.5% (246.4 MB / 640 MB)</span>
+        </div>
+        <div style="width:100%; height:10px; background:rgba(255,255,255,0.1); border-radius:5px; overflow:hidden;">
+          <div style="width:38.5%; height:100%; background:linear-gradient(90deg, #10b981, #34d399); transition:width 0.3s;"></div>
+        </div>
+      </div>
+    `;
+
+    // Process Table
+    const tableContainer = document.createElement("div");
+    tableContainer.style.flex = "1";
+    tableContainer.style.overflowY = "auto";
+    tableContainer.style.borderRadius = "6px";
+    tableContainer.style.border = "1px solid var(--border-color)";
+
+    const table = document.createElement("table");
+    table.style.width = "100%";
+    table.style.borderCollapse = "collapse";
+    table.style.fontSize = "0.8rem";
+    table.style.fontFamily = "'Fira Code', monospace";
+
+    table.innerHTML = `
+      <thead>
+        <tr style="background:rgba(255,255,255,0.05); text-align:left; border-bottom:1px solid var(--border-color);">
+          <th style="padding:8px;">PID</th>
+          <th style="padding:8px;">USER</th>
+          <th style="padding:8px;">PR</th>
+          <th style="padding:8px;">NI</th>
+          <th style="padding:8px;">VIRT</th>
+          <th style="padding:8px;">RES</th>
+          <th style="padding:8px;">S</th>
+          <th style="padding:8px;">%CPU</th>
+          <th style="padding:8px;">%MEM</th>
+          <th style="padding:8px;">COMMAND</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+          <td style="padding:8px; color:var(--primary);">1</td>
+          <td style="padding:8px;">root</td>
+          <td style="padding:8px;">20</td>
+          <td style="padding:8px;">0</td>
+          <td style="padding:8px;">10M</td>
+          <td style="padding:8px;">2M</td>
+          <td style="padding:8px; color:#10b981;">S</td>
+          <td style="padding:8px;">0.5</td>
+          <td style="padding:8px;">0.1</td>
+          <td style="padding:8px; font-weight:600;">init</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+          <td style="padding:8px; color:var(--primary);">2</td>
+          <td style="padding:8px;">user</td>
+          <td style="padding:8px;">20</td>
+          <td style="padding:8px;">0</td>
+          <td style="padding:8px;">25M</td>
+          <td style="padding:8px;">4M</td>
+          <td style="padding:8px; color:#10b981;">S</td>
+          <td style="padding:8px;">1.2</td>
+          <td style="padding:8px;">0.3</td>
+          <td style="padding:8px; font-weight:600;">sh</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+          <td style="padding:8px; color:var(--primary);">3</td>
+          <td style="padding:8px;">user</td>
+          <td style="padding:8px;">20</td>
+          <td style="padding:8px;">0</td>
+          <td style="padding:8px;">42M</td>
+          <td style="padding:8px;">12M</td>
+          <td style="padding:8px; color:#38bdf8;">R</td>
+          <td style="padding:8px; color:var(--primary); font-weight:700;">43.5</td>
+          <td style="padding:8px;">1.8</td>
+          <td style="padding:8px; font-weight:600;">top-gui</td>
+        </tr>
+      </tbody>
+    `;
+
+    tableContainer.appendChild(table);
+    container.appendChild(meters);
+    container.appendChild(tableContainer);
 
     return this.createWindow(
       {
         id: "top-gui-monitor",
         title: "Styx OS Real-Time Process Monitor & Performance Chart",
-        width: 640,
-        height: 420,
+        width: 680,
+        height: 440,
       },
       container
     );

@@ -29,7 +29,8 @@ describe("Styx OS Real-Time Process Monitor GUI Test Suite", () => {
     expect(win).toBeDefined();
     expect(win.id).toBe("win-top-gui-monitor");
     expect(win.textContent).toContain("Process Monitor");
-    expect(win.textContent).toContain("PID  USER");
+    expect(win.textContent).toContain("CPU Utilization");
+    expect(win.textContent).toContain("PID");
   });
 
   it("should execute /bin/top-gui.wasm via sys_execve and stream report", async () => {
