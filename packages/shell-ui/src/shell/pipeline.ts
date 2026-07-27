@@ -435,7 +435,15 @@ export class PipelineEngine {
       }
 
       case "ipcs":
-        onStdout(this.kernel.shmManager.formatIpcs());
+        if (args.includes("-q")) {
+          onStdout(this.kernel.mqueueManager.formatIpcsQueues());
+        } else {
+          onStdout(this.kernel.shmManager.formatIpcs());
+        }
+        break;
+
+      case "mqueue":
+        onStdout(this.kernel.mqueueManager.formatIpcsQueues());
         break;
 
       case "cat":

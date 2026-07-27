@@ -227,3 +227,7 @@ export function createTopGuiWasmBinary(): Uint8Array {
 export function createIpcsWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS Shared Memory Inspector (ipcs)\n");
 }
+
+export function createMqueueWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS Message Queue Inspector (mqueue)\n");
+}

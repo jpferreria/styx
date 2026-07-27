@@ -197,11 +197,19 @@ export class ManualManager {
 
     this.register({
       name: "ipcs",
-      summary: "IPC facility status inspector (shared memory /dev/shm)",
-      synopsis: "ipcs [-m]",
-      description: "ipcs displays information on active System V / POSIX shared memory segments mounted in /dev/shm.",
-      options: "  -m    Display active shared memory segment statistics",
-      examples: "  ipcs\n  ipcs -m",
+      summary: "IPC facility status inspector (shared memory /dev/shm & message queues /dev/mqueue)",
+      synopsis: "ipcs [-m] [-q]",
+      description: "ipcs displays information on active System V / POSIX shared memory segments and message queues.",
+      options: "  -m    Display active shared memory segment statistics\n  -q    Display active POSIX message queue statistics",
+      examples: "  ipcs\n  ipcs -m\n  ipcs -q",
+    });
+
+    this.register({
+      name: "mqueue",
+      summary: "POSIX inter-process message queue facility",
+      synopsis: "mqueue",
+      description: "mqueue inspects active message queues mounted inside /dev/mqueue.",
+      examples: "  mqueue",
     });
   }
 
