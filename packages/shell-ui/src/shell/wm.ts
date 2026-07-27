@@ -368,4 +368,81 @@ export class WindowManager {
       container
     );
   }
+
+  createFileExplorerWindow(kernel: any): HTMLElement {
+    const fileContainer = document.createElement("div");
+    fileContainer.className = "file-explorer-container";
+    fileContainer.style.color = "var(--text-main)";
+    fileContainer.style.fontFamily = "'Fira Code', monospace";
+    fileContainer.style.fontSize = "0.85rem";
+    fileContainer.style.padding = "10px";
+
+    const renderDir = (path: string) => {
+      const entries = kernel.sys_readdir(path);
+      fileContainer.innerHTML = "";
+
+      const navBar = document.createElement("div");
+      navBar.style.display = "flex";
+      navBar.style.alignItems = "center";
+      navBar.style.gap = "8px";
+      navBar.style.marginBottom = "10px";
+      navBar.style.paddingBottom = "6px";
+      navBar.style.borderBottom = "1px solid var(--border-color)";
+
+      if (path !== "/") {
+        const backBtn = document.createElement("button");
+        backBtn.style.padding = "4px 8px";
+        backBtn.style.borderRadius = "4px";
+        backBtn.style.border = "1px solid var(--border-color)";
+        backBtn.style.background = "var(--panel-bg)";
+        backBtn.style.color = "var(--primary)";
+        backBtn.style.cursor = "pointer";
+        backBtn.style.fontSize = "0.75rem";
+        backBtn.textContent = "⬅️ Up";
+
+        const parentPath = path.substring(0, path.lastIndexOf("/")) || "/";
+        backBtn.addEventListener("click", () => renderDir(parentPath));
+        navBar.appendChild(backBtn);
+      }
+
+      const pathLabel = document.createElement("span");
+      pathLabel.style.fontWeight = "600";
+      pathLabel.textContent = `Path: ${path}`;
+      navBar.appendChild(pathLabel);
+      fileContainer.appendChild(navBar);
+
+      const ul = document.createElement("ul");
+      ul.style.listStyle = "none";
+      ul.style.padding = "0";
+      ul.style.margin = "0";
+
+      for (const entry of entries) {
+        const li = document.createElement("li");
+        li.style.padding = "4px 6px";
+        li.style.cursor = "pointer";
+        li.style.borderRadius = "4px";
+        li.style.display = "flex";
+        li.style.alignItems = "center";
+        li.style.gap = "8px";
+
+        const isDir = entry.stat ? entry.stat.isDir : entry.name !== "." && !entry.name.includes(".");
+        li.innerHTML = isDir ? `📁 <strong style="color:var(--primary);">${entry.name}</strong>` : `📄 ${entry.name}`;
+
+        if (isDir) {
+          li.addEventListener("click", () => {
+            const nextPath = path === "/" ? `/${entry.name}` : `${path}/${entry.name}`;
+            renderDir(nextPath);
+          });
+        }
+        ul.appendChild(li);
+      }
+      fileContainer.appendChild(ul);
+    };
+
+    renderDir("/");
+    return this.createWindow(
+      { id: "files", title: "Styx OS VFS File Explorer", width: 440, height: 320 },
+      fileContainer
+    );
+  }
 }
