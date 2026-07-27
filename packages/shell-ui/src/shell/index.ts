@@ -12,6 +12,7 @@ import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import { UnixKernel } from "../kernel";
 import { PipelineEngine } from "./pipeline";
+import { VimEditor } from "../kernel/vim";
 
 export class ShellHost {
   private terminal: Terminal;
@@ -19,6 +20,7 @@ export class ShellHost {
   private kernel: UnixKernel;
   private pipelineEngine: PipelineEngine;
   private inputBuffer: string = "";
+  private activeVim: VimEditor | null = null;
 
   constructor(container: HTMLElement) {
     this.kernel = new UnixKernel();
@@ -80,6 +82,18 @@ export class ShellHost {
 
   private setupListeners() {
     this.terminal.onData((data) => {
+      if (this.activeVim) {
+        this.terminal.clear();
+        const res = this.activeVim.handleKey(data);
+        this.writeOutput(res.output);
+        if (res.quit) {
+          this.activeVim = null;
+          this.terminal.clear();
+          this.prompt();
+        }
+        return;
+      }
+
       for (let i = 0; i < data.length; i++) {
         const char = data[i];
         const code = char.charCodeAt(0);
@@ -390,12 +404,11 @@ export class ShellHost {
 
         case "vim":
         case "vi":
-          if (args[0]) {
-            this.writeOutput(`Opening VIM modal text editor for file '${args[0]}'... (Use :q to exit)\n`);
-            this.kernel.sys_execve("/bin/vim.wasm", ["/bin/vim.wasm"], undefined, (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
-          } else {
-            this.terminal.writeln("Usage: vim <filename> or vi <filename>");
-          }
+          const targetFile = args[0] || "/home/user/newfile.txt";
+          const fullPath = targetFile.startsWith("/") ? targetFile : `${this.kernel.getCwd()}/${targetFile}`;
+          this.activeVim = new VimEditor(this.kernel, fullPath);
+          this.terminal.clear();
+          this.writeOutput(this.activeVim.render());
           break;
 
         case "clear":
