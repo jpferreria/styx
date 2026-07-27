@@ -9,7 +9,7 @@
  */
 
 import { createHelloWasmBinary } from "./sampleWasm";
-import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary, createIfconfigWasmBinary, createSpkgExportWasmBinary } from "./binaries";
+import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary, createIfconfigWasmBinary, createSpkgExportWasmBinary, createThemeWasmBinary } from "./binaries";
 import { WasmProcessRunner } from "./execve";
 import { PipeNode } from "./pipe";
 import { SocketNode, SocketDomain, SocketType } from "./socket";
@@ -30,6 +30,7 @@ import { BenchmarkEngine } from "./bench";
 import { SysFSManager } from "./sysfs";
 import { ManualManager } from "./man";
 import { PtyManager } from "./pty";
+import { ThemeManager } from "../shell/theme";
 
 export enum Errno {
   EPERM = 1,
@@ -169,6 +170,7 @@ export class UnixKernel {
   public sysfsManager!: SysFSManager;
   public manualManager: ManualManager;
   public ptyManager: PtyManager;
+  public themeManager: ThemeManager;
 
   constructor() {
     this.root = new MemNode(1, true, 0o755);
@@ -185,6 +187,7 @@ export class UnixKernel {
     this.sysfsManager = new SysFSManager();
     this.manualManager = new ManualManager();
     this.ptyManager = new PtyManager(this);
+    this.themeManager = new ThemeManager();
     this.setupHierarchy();
   }
 
@@ -386,6 +389,9 @@ export class UnixKernel {
 
     const spkgExportAppNode = binNode.createChild("spkg-export.wasm", false, 0o755);
     spkgExportAppNode.write(0, createSpkgExportWasmBinary());
+
+    const themeAppNode = binNode.createChild("theme.wasm", false, 0o755);
+    themeAppNode.write(0, createThemeWasmBinary());
 
     // Initial files
     const userHome = this.resolvePath("/home/user");

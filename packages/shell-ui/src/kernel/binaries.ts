@@ -191,3 +191,7 @@ export function createIfconfigWasmBinary(): Uint8Array {
 export function createSpkgExportWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS VFS Backup Exporter (spkg export)\n");
 }
+
+export function createThemeWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS Desktop Theme Switcher (theme)\n");
+}

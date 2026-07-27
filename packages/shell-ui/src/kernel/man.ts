@@ -126,6 +126,14 @@ export class ManualManager {
       description: "ifconfig displays network interface statistics, IP addresses, netmasks, MAC addresses, and packet counts for lo and eth0.",
       examples: "  ifconfig\n  ifconfig eth0",
     });
+
+    this.register({
+      name: "theme",
+      summary: "customizable desktop GUI theme engine",
+      synopsis: "theme [dark|cyberpunk|retro|light]",
+      description: "theme manages and switches desktop GUI visual presets (Dark Glassmorphism, Cyberpunk Neon, Classic Retro UNIX, Light Mode).",
+      examples: "  theme\n  theme cyberpunk\n  theme retro\n  theme light",
+    });
   }
 
   register(entry: ManualEntry): void {

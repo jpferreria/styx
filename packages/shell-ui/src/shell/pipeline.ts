@@ -338,6 +338,15 @@ export class PipelineEngine {
         onStdout(this.kernel.netManager.formatIfconfig());
         break;
 
+      case "theme":
+        if (args[0]) {
+          const ok = this.kernel.themeManager.setTheme(args[0]);
+          onStdout(ok ? `Successfully applied desktop theme '${args[0]}'\n` : `Theme '${args[0]}' not found. Available: dark, cyberpunk, retro, light\n`);
+        } else {
+          onStdout(this.kernel.themeManager.listThemes());
+        }
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);
