@@ -465,6 +465,23 @@ export class PipelineEngine {
         onStdout(this.kernel.eventNotificationEngine.formatEpollStats());
         break;
 
+      case "mknod":
+        if (args.length >= 4) {
+          const [path, typeStr, majStr, minStr] = args;
+          const type = typeStr === "b" ? "b" : "c";
+          const major = parseInt(majStr, 10) || 1;
+          const minor = parseInt(minStr, 10) || 0;
+          this.kernel.deviceNodeEngine.mknod(path, type, major, minor);
+          onStdout(`Created device node '${path}' (${type} ${major}:${minor})\n`);
+        } else {
+          onStderr("Usage: mknod <path> <c|b> <major> <minor>\n");
+        }
+        break;
+
+      case "lsdev":
+        onStdout(this.kernel.deviceNodeEngine.listDevices());
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);

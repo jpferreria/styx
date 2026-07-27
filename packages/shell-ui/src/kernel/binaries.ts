@@ -247,3 +247,7 @@ export function createLscpuWasmBinary(): Uint8Array {
 export function createEpollWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS POSIX Event Notification (epoll)\n");
 }
+
+export function createMknodWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS Device Major/Minor Node Driver (mknod)\n");
+}

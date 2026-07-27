@@ -243,6 +243,14 @@ export class ManualManager {
       description: "epoll is a scalable I/O event notification mechanism. It monitors multiple file descriptors to see if I/O is possible on any of them (EPOLLIN, EPOLLOUT, EPOLLERR).",
       examples: "  epoll\n  eventfd",
     });
+
+    this.register({
+      name: "mknod",
+      summary: "make block or character special files",
+      synopsis: "mknod [path] [c|b] [major] [minor]",
+      description: "mknod creates special character or block device nodes with specified major and minor numbers.",
+      examples: "  mknod /dev/testc c 10 1\n  mknod /dev/testb b 8 0\n  lsdev",
+    });
   }
 
   register(entry: ManualEntry): void {
