@@ -15,6 +15,7 @@ import { PipelineEngine } from "./pipeline";
 import { VimEditor } from "../kernel/vim";
 import { NanoEditor } from "../kernel/nano";
 import { WindowManager } from "./wm";
+import { DockManager } from "./dock";
 
 export class ShellHost {
   private terminal: Terminal;
@@ -22,6 +23,7 @@ export class ShellHost {
   private kernel: UnixKernel;
   private pipelineEngine: PipelineEngine;
   private windowManager: WindowManager;
+  private dockManager: DockManager;
   private inputBuffer: string = "";
   private activeVim: VimEditor | null = null;
   private activeNano: NanoEditor | null = null;
@@ -30,6 +32,7 @@ export class ShellHost {
     this.kernel = new UnixKernel();
     this.pipelineEngine = new PipelineEngine(this.kernel);
     this.windowManager = new WindowManager();
+    this.dockManager = new DockManager();
     this.terminal = new Terminal({
       cursorBlink: true,
       fontFamily: "'Fira Code', 'Courier New', monospace",
@@ -68,8 +71,17 @@ export class ShellHost {
     this.terminal.writeln("Kernel initialized with VFS, OPFS storage, and WASI app execution.");
     this.terminal.writeln("Type \x1b[1;33mhelp\x1b[0m for commands, \x1b[1;33mexec /bin/hello.wasm\x1b[0m, or \x1b[1;33mposix-test\x1b[0m.\n");
 
+    this.setupDock();
     this.prompt();
     this.setupListeners();
+  }
+
+  private setupDock() {
+    if (typeof document === "undefined") return;
+    const dockEl = this.dockManager.createDockElement((app) => {
+      this.executeCommand(app.command);
+    });
+    document.body.appendChild(dockEl);
   }
 
   public writeOutput(text: string): void {
