@@ -13,6 +13,7 @@ import { FitAddon } from "@xterm/addon-fit";
 import { UnixKernel } from "../kernel";
 import { PipelineEngine } from "./pipeline";
 import { VimEditor } from "../kernel/vim";
+import { NanoEditor } from "../kernel/nano";
 
 export class ShellHost {
   private terminal: Terminal;
@@ -21,6 +22,7 @@ export class ShellHost {
   private pipelineEngine: PipelineEngine;
   private inputBuffer: string = "";
   private activeVim: VimEditor | null = null;
+  private activeNano: NanoEditor | null = null;
 
   constructor(container: HTMLElement) {
     this.kernel = new UnixKernel();
@@ -88,6 +90,18 @@ export class ShellHost {
         this.writeOutput(res.output);
         if (res.quit) {
           this.activeVim = null;
+          this.terminal.clear();
+          this.prompt();
+        }
+        return;
+      }
+
+      if (this.activeNano) {
+        this.terminal.clear();
+        const res = this.activeNano.handleKey(data);
+        this.writeOutput(res.output);
+        if (res.quit) {
+          this.activeNano = null;
           this.terminal.clear();
           this.prompt();
         }
@@ -314,12 +328,11 @@ export class ShellHost {
 
         case "nano":
         case "edit":
-          if (args[0]) {
-            this.terminal.writeln(`Opening text editor for file '${args[0]}'...`);
-            this.kernel.sys_execve("/bin/nano.wasm", ["/bin/nano.wasm"], undefined, (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
-          } else {
-            this.terminal.writeln("Usage: nano <filename> or edit <filename>");
-          }
+          const targetNanoPath = args[0] || "/home/user/newfile.txt";
+          const fullNanoPath = targetNanoPath.startsWith("/") ? targetNanoPath : `${this.kernel.getCwd()}/${targetNanoPath}`;
+          this.activeNano = new NanoEditor(this.kernel, fullNanoPath);
+          this.terminal.clear();
+          this.writeOutput(this.activeNano.render());
           break;
 
         case "top":
