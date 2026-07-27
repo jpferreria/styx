@@ -592,9 +592,9 @@ export class ShellHost {
           break;
 
         case "posix-test":
-          this.terminal.writeln("Executing POSIX compatibility test suite...\n");
+          this.writeOutput("Executing POSIX compatibility test suite...\n\n");
           const report = this.kernel.runPosixTestSuite();
-          this.terminal.writeln(report);
+          this.writeOutput(report + "\n");
           break;
 
         case "mount-host":
