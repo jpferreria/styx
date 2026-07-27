@@ -9,7 +9,7 @@
  */
 
 import { createHelloWasmBinary } from "./sampleWasm";
-import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary, createIfconfigWasmBinary, createSpkgExportWasmBinary, createThemeWasmBinary, createShDebugWasmBinary, createSwaponWasmBinary, createSysbenchWasmBinary, createGetfattrWasmBinary, createSetfattrWasmBinary, createAliasWasmBinary } from "./binaries";
+import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary, createIfconfigWasmBinary, createSpkgExportWasmBinary, createThemeWasmBinary, createShDebugWasmBinary, createSwaponWasmBinary, createSysbenchWasmBinary, createGetfattrWasmBinary, createSetfattrWasmBinary, createAliasWasmBinary, createTopGuiWasmBinary } from "./binaries";
 import { WasmProcessRunner } from "./execve";
 import { PipeNode } from "./pipe";
 import { SocketNode, SocketDomain, SocketType } from "./socket";
@@ -179,9 +179,11 @@ export class UnixKernel {
   public profilerEngine: ProfilerEngine;
   public xattrManager: XAttrManager;
   public aliasManager: AliasManager;
+  public procFSNode: ProcFSNode;
 
   constructor() {
     this.root = new MemNode(1, true, 0o755);
+    this.procFSNode = new ProcFSNode(500, () => "PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND\n1 root 20 0 10M 2M 1M S 0.5 0.1 0:01 init\n2 user 20 0 25M 4M 2M S 1.2 0.3 0:02 sh\n");
     this.userManager = new UserManager();
     this.pkgManager = new PackageManager(this);
     this.envManager = new EnvironmentManager();
@@ -204,6 +206,9 @@ export class UnixKernel {
   }
 
   private setupHierarchy() {
+    // Mount /proc virtual filesystem
+    this.root.createChild("proc", true, 0o755);
+
     const dev = this.root.createChild("dev", true, 0o755);
     dev.createChild("tty", false, 0o666);
     dev.createChild("null", false, 0o666);
@@ -425,6 +430,9 @@ export class UnixKernel {
 
     const aliasAppNode = binNode.createChild("alias.wasm", false, 0o755);
     aliasAppNode.write(0, createAliasWasmBinary());
+
+    const topGuiAppNode = binNode.createChild("top-gui.wasm", false, 0o755);
+    topGuiAppNode.write(0, createTopGuiWasmBinary());
 
     // Initial files
     const userHome = this.resolvePath("/home/user");

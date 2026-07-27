@@ -243,4 +243,24 @@ export class WindowManager {
       });
     });
   }
+
+  createProcessMonitorWindow(procfsReport: string): HTMLElement {
+    const container = document.createElement("div");
+    container.className = "top-gui-container";
+    container.style.fontFamily = "monospace";
+    container.style.fontSize = "0.85rem";
+    container.style.color = "var(--text-main)";
+    container.style.whiteSpace = "pre-wrap";
+    container.textContent = procfsReport;
+
+    return this.createWindow(
+      {
+        id: "top-gui-monitor",
+        title: "Styx OS Real-Time Process Monitor & Performance Chart",
+        width: 640,
+        height: 420,
+      },
+      container
+    );
+  }
 }

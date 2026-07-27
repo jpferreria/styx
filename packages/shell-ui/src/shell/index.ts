@@ -14,12 +14,14 @@ import { UnixKernel } from "../kernel";
 import { PipelineEngine } from "./pipeline";
 import { VimEditor } from "../kernel/vim";
 import { NanoEditor } from "../kernel/nano";
+import { WindowManager } from "./wm";
 
 export class ShellHost {
   private terminal: Terminal;
   private fitAddon: FitAddon;
   private kernel: UnixKernel;
   private pipelineEngine: PipelineEngine;
+  private windowManager: WindowManager;
   private inputBuffer: string = "";
   private activeVim: VimEditor | null = null;
   private activeNano: NanoEditor | null = null;
@@ -27,6 +29,7 @@ export class ShellHost {
   constructor(container: HTMLElement) {
     this.kernel = new UnixKernel();
     this.pipelineEngine = new PipelineEngine(this.kernel);
+    this.windowManager = new WindowManager();
     this.terminal = new Terminal({
       cursorBlink: true,
       fontFamily: "'Fira Code', 'Courier New', monospace",
@@ -137,7 +140,7 @@ export class ShellHost {
               this.terminal.write(this.inputBuffer);
             }
           } else {
-            const available = ["cat", "ls", "pwd", "mkdir", "rm", "cp", "mv", "whoami", "su", "sudo", "ps", "kill", "draw", "curl", "calc", "wc", "spkg", "nano", "edit", "top", "beep", "env", "export", "unset", "rand", "signal", "tar", "gzip", "ping", "cron", "crontab", "dmesg", "history", "lspci", "lsusb", "man", "vim", "vi", "pty", "ifconfig", "theme", "swapon", "swapoff", "sysbench", "getfattr", "setfattr", "alias", "unalias"];
+            const available = ["cat", "ls", "pwd", "mkdir", "rm", "cp", "mv", "whoami", "su", "sudo", "ps", "kill", "draw", "curl", "calc", "wc", "spkg", "nano", "edit", "top", "beep", "env", "export", "unset", "rand", "signal", "tar", "gzip", "ping", "cron", "crontab", "dmesg", "history", "lspci", "lsusb", "man", "vim", "vi", "pty", "ifconfig", "theme", "swapon", "swapoff", "sysbench", "getfattr", "setfattr", "alias", "unalias", "top-gui"];
             const candidates = this.kernel.historyManager.autoComplete(this.inputBuffer, available);
 
             if (candidates.length === 1) {
@@ -473,6 +476,12 @@ export class ShellHost {
         case "alias":
         case "unalias":
           this.pipelineEngine.executePipeline(`${cmd} ${args.join(" ")}`, (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
+          break;
+
+        case "top-gui":
+          const procReport = this.kernel.procFSNode ? new TextDecoder().decode(this.kernel.procFSNode.read(0, 4096)) : "PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND\n";
+          this.windowManager.createProcessMonitorWindow(procReport);
+          this.terminal.writeln("Opened Real-Time Process Monitor GUI window.");
           break;
 
         case "clear":

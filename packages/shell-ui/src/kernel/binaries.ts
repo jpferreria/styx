@@ -219,3 +219,7 @@ export function createSetfattrWasmBinary(): Uint8Array {
 export function createAliasWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS Dynamic Command Alias Subsystem (alias)\n");
 }
+
+export function createTopGuiWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS Real-Time Process Monitor GUI (top-gui)\n");
+}

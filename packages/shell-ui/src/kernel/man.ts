@@ -186,6 +186,14 @@ export class ManualManager {
       description: "alias defines command line shortcuts for quick terminal execution. Running alias without arguments lists active aliases.",
       examples: "  alias\n  alias ll='ls -l'\n  unalias ll",
     });
+
+    this.register({
+      name: "top-gui",
+      summary: "real-time desktop process monitor & performance chart GUI",
+      synopsis: "top-gui",
+      description: "top-gui launches an interactive desktop window displaying live process load, CPU/memory progress bars, and PID tables.",
+      examples: "  top-gui",
+    });
   }
 
   register(entry: ManualEntry): void {

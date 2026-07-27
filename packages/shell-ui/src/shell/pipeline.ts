@@ -428,6 +428,12 @@ export class PipelineEngine {
         }
         break;
 
+      case "top-gui": {
+        const topReport = this.kernel.procFSNode ? new TextDecoder().decode(this.kernel.procFSNode.read(0, 4096)) : "Process Monitor Active\n";
+        onStdout(topReport);
+        break;
+      }
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);
