@@ -30,7 +30,7 @@ graph TD
         HOST["Mounted Host Directory (/host)"]
     end
 
-    XT -->|User Commands (e.g. exec /bin/hello.wasm)| SH
+    XT -->|"User Commands (e.g. exec /bin/hello.wasm)"| SH
     SH -->|Syscall API Calls| SC
     SC --> CAP
     SC --> EXEC
