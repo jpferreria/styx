@@ -231,3 +231,7 @@ export function createIpcsWasmBinary(): Uint8Array {
 export function createMqueueWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS Message Queue Inspector (mqueue)\n");
 }
+
+export function createTermcolorWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS ANSI TrueColor Engine (termcolor)\n");
+}

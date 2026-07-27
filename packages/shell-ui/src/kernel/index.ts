@@ -9,7 +9,7 @@
  */
 
 import { createHelloWasmBinary } from "./sampleWasm";
-import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary, createIfconfigWasmBinary, createSpkgExportWasmBinary, createThemeWasmBinary, createShDebugWasmBinary, createSwaponWasmBinary, createSysbenchWasmBinary, createGetfattrWasmBinary, createSetfattrWasmBinary, createAliasWasmBinary, createTopGuiWasmBinary, createIpcsWasmBinary, createMqueueWasmBinary } from "./binaries";
+import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary, createIfconfigWasmBinary, createSpkgExportWasmBinary, createThemeWasmBinary, createShDebugWasmBinary, createSwaponWasmBinary, createSysbenchWasmBinary, createGetfattrWasmBinary, createSetfattrWasmBinary, createAliasWasmBinary, createTopGuiWasmBinary, createIpcsWasmBinary, createMqueueWasmBinary, createTermcolorWasmBinary } from "./binaries";
 import { WasmProcessRunner } from "./execve";
 import { PipeNode } from "./pipe";
 import { SocketNode, SocketDomain, SocketType } from "./socket";
@@ -37,6 +37,7 @@ import { XAttrManager } from "./xattr";
 import { AliasManager } from "../shell/alias";
 import { SharedMemoryManager } from "./shm";
 import { MessageQueueManager } from "./mqueue";
+import { TermColorEngine } from "./termcolor";
 
 export enum Errno {
   EPERM = 1,
@@ -184,6 +185,7 @@ export class UnixKernel {
   public procFSNode: ProcFSNode;
   public shmManager: SharedMemoryManager;
   public mqueueManager: MessageQueueManager;
+  public termColorEngine: TermColorEngine;
 
   constructor() {
     this.root = new MemNode(1, true, 0o755);
@@ -208,6 +210,7 @@ export class UnixKernel {
     this.aliasManager = new AliasManager();
     this.shmManager = new SharedMemoryManager(this);
     this.mqueueManager = new MessageQueueManager(this);
+    this.termColorEngine = new TermColorEngine();
     this.setupHierarchy();
   }
 
@@ -447,6 +450,9 @@ export class UnixKernel {
 
     const mqueueAppNode = binNode.createChild("mqueue.wasm", false, 0o755);
     mqueueAppNode.write(0, createMqueueWasmBinary());
+
+    const termcolorAppNode = binNode.createChild("termcolor.wasm", false, 0o755);
+    termcolorAppNode.write(0, createTermcolorWasmBinary());
 
     // Initial files
     const userHome = this.resolvePath("/home/user");

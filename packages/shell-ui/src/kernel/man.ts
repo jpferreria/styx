@@ -211,6 +211,14 @@ export class ManualManager {
       description: "mqueue inspects active message queues mounted inside /dev/mqueue.",
       examples: "  mqueue",
     });
+
+    this.register({
+      name: "termcolor",
+      summary: "ANSI TrueColor (24-bit RGB) and 256-color palette renderer",
+      synopsis: "termcolor / color",
+      description: "termcolor displays a 256-color matrix and TrueColor RGB spectrum diagnostic test grid.",
+      examples: "  termcolor\n  color",
+    });
   }
 
   register(entry: ManualEntry): void {
