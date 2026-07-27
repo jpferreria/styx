@@ -1,7 +1,7 @@
 /**
  * @file wm.ts
  * @module StyxOS/ShellHost/WindowManager
- * @description Desktop window manager handling draggable windows, Z-index stacking, taskbar tray clock, and notifications.
+ * @description Desktop window manager handling draggable/resizable windows, Z-index stacking, taskbar tray clock, and notifications.
  *
  * Copyright (C) 2026 Styx OS Project Authors
  * Licensed under the GNU General Public License v3.0 or later (GPL-3.0-or-later).
@@ -19,6 +19,7 @@ export interface WindowOptions {
 
 export class WindowManager {
   private windows: Map<string, HTMLElement> = new Map();
+  private minimized: Set<string> = new Set();
   private topZIndex: number = 100;
   private clockInterval?: ReturnType<typeof setInterval>;
 
@@ -26,6 +27,7 @@ export class WindowManager {
     const win = document.createElement("div");
     win.id = `win-${options.id}`;
     win.className = "styx-window";
+    win.style.position = "absolute";
     win.style.width = `${options.width || 600}px`;
     win.style.height = `${options.height || 400}px`;
     win.style.left = `${options.x || 100}px`;
@@ -47,10 +49,23 @@ export class WindowManager {
     body.className = "window-body";
     body.appendChild(contentElement);
 
+    const resizer = document.createElement("div");
+    resizer.className = "wm-resizer";
+    resizer.style.position = "absolute";
+    resizer.style.bottom = "0";
+    resizer.style.right = "0";
+    resizer.style.width = "14px";
+    resizer.style.height = "14px";
+    resizer.style.cursor = "se-resize";
+    resizer.style.background = "rgba(255, 255, 255, 0.2)";
+    resizer.style.borderTopLeftRadius = "4px";
+
     win.appendChild(header);
     win.appendChild(body);
+    win.appendChild(resizer);
 
     this.makeDraggable(win, header);
+    this.makeResizable(win, resizer);
     this.setupWindowListeners(win, options.id);
 
     document.getElementById("os-desktop")?.appendChild(win);
@@ -61,7 +76,35 @@ export class WindowManager {
   focusWindow(id: string): void {
     const win = this.windows.get(id);
     if (win) {
+      if (this.minimized.has(id)) {
+        this.restoreWindow(id);
+      }
       win.style.zIndex = `${++this.topZIndex}`;
+    }
+  }
+
+  minimizeWindow(id: string): void {
+    const win = this.windows.get(id);
+    if (win) {
+      win.style.display = "none";
+      this.minimized.add(id);
+    }
+  }
+
+  restoreWindow(id: string): void {
+    const win = this.windows.get(id);
+    if (win) {
+      win.style.display = "flex";
+      this.minimized.delete(id);
+      win.style.zIndex = `${++this.topZIndex}`;
+    }
+  }
+
+  toggleWindow(id: string): void {
+    if (this.minimized.has(id)) {
+      this.restoreWindow(id);
+    } else {
+      this.minimizeWindow(id);
     }
   }
 
@@ -70,7 +113,12 @@ export class WindowManager {
     if (win) {
       win.remove();
       this.windows.delete(id);
+      this.minimized.delete(id);
     }
+  }
+
+  isMinimized(id: string): boolean {
+    return this.minimized.has(id);
   }
 
   getFormattedTime(): string {
@@ -149,6 +197,36 @@ export class WindowManager {
     });
   }
 
+  private makeResizable(win: HTMLElement, resizer: HTMLElement): void {
+    let isResizing = false;
+    let startX = 0;
+    let startY = 0;
+    let startWidth = 0;
+    let startHeight = 0;
+
+    resizer.addEventListener("mousedown", (e) => {
+      e.stopPropagation();
+      isResizing = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      startWidth = win.offsetWidth;
+      startHeight = win.offsetHeight;
+      this.focusWindow(win.id.replace("win-", ""));
+    });
+
+    window.addEventListener("mousemove", (e) => {
+      if (!isResizing) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      win.style.width = `${Math.max(220, startWidth + dx)}px`;
+      win.style.height = `${Math.max(160, startHeight + dy)}px`;
+    });
+
+    window.addEventListener("mouseup", () => {
+      isResizing = false;
+    });
+  }
+
   private setupWindowListeners(win: HTMLElement, id: string): void {
     win.addEventListener("mousedown", () => this.focusWindow(id));
 
@@ -160,7 +238,7 @@ export class WindowManager {
         if (action === "close") {
           this.closeWindow(id);
         } else if (action === "minimize") {
-          win.style.display = "none";
+          this.minimizeWindow(id);
         }
       });
     });

@@ -42,4 +42,22 @@ describe("Styx OS Window Manager & Desktop Tray Test Suite", () => {
     expect(notif.textContent).toContain("Styx OS System");
     expect(notif.textContent).toContain("Kernel boot complete");
   });
+
+  it("should minimize, restore, and toggle desktop window visibility", () => {
+    const content = document.createElement("div");
+    const win = wm.createWindow({ id: "files", title: "File Explorer" }, content);
+
+    expect(wm.isMinimized("files")).toBe(false);
+
+    wm.minimizeWindow("files");
+    expect(wm.isMinimized("files")).toBe(true);
+    expect(win.style.display).toBe("none");
+
+    wm.restoreWindow("files");
+    expect(wm.isMinimized("files")).toBe(false);
+    expect(win.style.display).toBe("flex");
+
+    wm.toggleWindow("files");
+    expect(wm.isMinimized("files")).toBe(true);
+  });
 });
