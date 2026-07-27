@@ -141,14 +141,21 @@ export class PipelineEngine {
 
     switch (cmd) {
       case "sh":
-        if (args[0]) {
+        let debugMode = false;
+        let scriptPathIndex = 0;
+        if (args[0] === "-x") {
+          debugMode = true;
+          scriptPathIndex = 1;
+        }
+
+        if (args[scriptPathIndex]) {
           try {
-            const fd = this.kernel.sys_open(args[0], false);
+            const fd = this.kernel.sys_open(args[scriptPathIndex], false);
             const scriptBytes = this.kernel.sys_read(fd, 65536);
             this.kernel.sys_close(fd);
             const scriptText = new TextDecoder().decode(scriptBytes);
             const interpreter = new ScriptInterpreter(this.kernel, this);
-            await interpreter.executeScript(scriptText, args.slice(1), onStdout, onStderr);
+            await interpreter.executeScript(scriptText, args.slice(scriptPathIndex + 1), onStdout, onStderr, debugMode);
           } catch (err: any) {
             onStderr(`sh: ${err.message}\n`);
           }

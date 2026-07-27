@@ -9,7 +9,7 @@
  */
 
 import { createHelloWasmBinary } from "./sampleWasm";
-import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary, createIfconfigWasmBinary, createSpkgExportWasmBinary, createThemeWasmBinary } from "./binaries";
+import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary, createIfconfigWasmBinary, createSpkgExportWasmBinary, createThemeWasmBinary, createShDebugWasmBinary } from "./binaries";
 import { WasmProcessRunner } from "./execve";
 import { PipeNode } from "./pipe";
 import { SocketNode, SocketDomain, SocketType } from "./socket";
@@ -392,6 +392,9 @@ export class UnixKernel {
 
     const themeAppNode = binNode.createChild("theme.wasm", false, 0o755);
     themeAppNode.write(0, createThemeWasmBinary());
+
+    const shDebugAppNode = binNode.createChild("sh-debug.wasm", false, 0o755);
+    shDebugAppNode.write(0, createShDebugWasmBinary());
 
     // Initial files
     const userHome = this.resolvePath("/home/user");

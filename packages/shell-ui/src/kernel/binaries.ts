@@ -195,3 +195,7 @@ export function createSpkgExportWasmBinary(): Uint8Array {
 export function createThemeWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS Desktop Theme Switcher (theme)\n");
 }
+
+export function createShDebugWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS Shell Script Debugger (sh -x)\n");
+}

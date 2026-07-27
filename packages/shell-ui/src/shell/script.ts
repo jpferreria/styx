@@ -1,7 +1,7 @@
 /**
  * @file script.ts
  * @module StyxOS/ShellHost/ScriptInterpreter
- * @description POSIX shell script interpreter evaluating .sh scripts, variable expansion, and control flow.
+ * @description POSIX shell script interpreter evaluating .sh scripts, variable expansion, control flow, and sh -x debug trace mode.
  *
  * Copyright (C) 2026 Styx OS Project Authors
  * Licensed under the GNU General Public License v3.0 or later (GPL-3.0-or-later).
@@ -31,15 +31,12 @@ export class ScriptInterpreter {
 
   expandVariables(line: string, args: string[] = []): string {
     let expanded = line;
-    // Substitute positional parameters $1, $2...
     args.forEach((arg, index) => {
       expanded = expanded.replace(new RegExp(`\\$${index + 1}`, "g"), arg);
     });
 
-    // Substitute $USER dynamically
     this.variables.set("USER", this.kernel.userManager.getCurrentUser().username);
 
-    // Substitute $VAR
     this.variables.forEach((value, key) => {
       expanded = expanded.replace(new RegExp(`\\$${key}`, "g"), value);
     });
@@ -51,7 +48,8 @@ export class ScriptInterpreter {
     scriptContent: string,
     args: string[] = [],
     onStdout: (text: string) => void = () => {},
-    onStderr: (text: string) => void = () => {}
+    onStderr: (text: string) => void = () => {},
+    debugMode: boolean = false
   ): Promise<number> {
     const lines = scriptContent.split("\n");
 
@@ -60,6 +58,10 @@ export class ScriptInterpreter {
       if (!rawLine || rawLine.startsWith("#")) continue;
 
       const line = this.expandVariables(rawLine, args);
+
+      if (debugMode) {
+        onStdout(`+ line [${i + 1}]: ${line}\n`);
+      }
 
       // Handle variable assignment (VAR=val)
       if (/^[A-Za-z_][A-Za-z0-9_]*=/.test(line) && !line.includes(" ")) {
@@ -70,7 +72,6 @@ export class ScriptInterpreter {
 
       // Handle control flow: if statement
       if (line.startsWith("if ")) {
-        // Simple condition check
         const condition = line.replace(/^if\s+/, "").replace(/;\s*then$/, "").trim();
         const shouldExecute = !condition.includes("false") && !condition.includes("[ 1 -eq 0 ]");
         
@@ -84,7 +85,7 @@ export class ScriptInterpreter {
         }
 
         if (blockLines.length > 0) {
-          await this.executeScript(blockLines.join("\n"), args, onStdout, onStderr);
+          await this.executeScript(blockLines.join("\n"), args, onStdout, onStderr, debugMode);
         }
         continue;
       }

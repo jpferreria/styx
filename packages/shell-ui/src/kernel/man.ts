@@ -134,6 +134,15 @@ export class ManualManager {
       description: "theme manages and switches desktop GUI visual presets (Dark Glassmorphism, Cyberpunk Neon, Classic Retro UNIX, Light Mode).",
       examples: "  theme\n  theme cyberpunk\n  theme retro\n  theme light",
     });
+
+    this.register({
+      name: "sh",
+      summary: "command language interpreter",
+      synopsis: "sh [-x] [script.sh] [args...]",
+      description: "sh is the standard POSIX shell script interpreter evaluating commands, variable expansions, and control flow statements. With -x, outputs line-by-line debug traces (+ line [N]: command).",
+      options: "  -x    Enable line-by-line debug trace execution mode",
+      examples: "  sh /home/user/demo.sh\n  sh -x /home/user/demo.sh",
+    });
   }
 
   register(entry: ManualEntry): void {
