@@ -482,6 +482,19 @@ export class PipelineEngine {
         onStdout(this.kernel.deviceNodeEngine.listDevices());
         break;
 
+      case "mkfifo":
+        if (args[0]) {
+          this.kernel.fifoManager.mkfifo(args[0]);
+          onStdout(`Created FIFO named pipe '${args[0]}'\n`);
+        } else {
+          onStderr("Usage: mkfifo <path>\n");
+        }
+        break;
+
+      case "lsfifo":
+        onStdout(this.kernel.fifoManager.listFifos());
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);

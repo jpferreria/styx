@@ -259,6 +259,14 @@ export class ManualManager {
       description: "browser launches the graphical web browser window with URL address bar, navigation controls, bookmarks, and sandboxed iframe viewport.",
       examples: "  browser\n  browser https://example.com\n  web https://en.m.wikipedia.org/",
     });
+
+    this.register({
+      name: "mkfifo",
+      summary: "make FIFO (named pipe) special files",
+      synopsis: "mkfifo [path]",
+      description: "mkfifo creates POSIX named pipe special files for inter-process communication.",
+      examples: "  mkfifo /tmp/myfifo\n  lsfifo",
+    });
   }
 
   register(entry: ManualEntry): void {

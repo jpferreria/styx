@@ -255,3 +255,7 @@ export function createMknodWasmBinary(): Uint8Array {
 export function createBrowserWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS Basic Web Browser (browser)\n");
 }
+
+export function createMkfifoWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS POSIX FIFO Named Pipe (mkfifo)\n");
+}
