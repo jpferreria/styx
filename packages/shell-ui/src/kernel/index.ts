@@ -9,7 +9,7 @@
  */
 
 import { createHelloWasmBinary } from "./sampleWasm";
-import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary, createIfconfigWasmBinary, createSpkgExportWasmBinary, createThemeWasmBinary, createShDebugWasmBinary, createSwaponWasmBinary, createSysbenchWasmBinary } from "./binaries";
+import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary, createIfconfigWasmBinary, createSpkgExportWasmBinary, createThemeWasmBinary, createShDebugWasmBinary, createSwaponWasmBinary, createSysbenchWasmBinary, createGetfattrWasmBinary, createSetfattrWasmBinary } from "./binaries";
 import { WasmProcessRunner } from "./execve";
 import { PipeNode } from "./pipe";
 import { SocketNode, SocketDomain, SocketType } from "./socket";
@@ -33,6 +33,7 @@ import { PtyManager } from "./pty";
 import { ThemeManager } from "../shell/theme";
 import { SwapManager } from "./swap";
 import { ProfilerEngine } from "./profile";
+import { XAttrManager } from "./xattr";
 
 export enum Errno {
   EPERM = 1,
@@ -175,6 +176,7 @@ export class UnixKernel {
   public themeManager: ThemeManager;
   public swapManager: SwapManager;
   public profilerEngine: ProfilerEngine;
+  public xattrManager: XAttrManager;
 
   constructor() {
     this.root = new MemNode(1, true, 0o755);
@@ -194,6 +196,7 @@ export class UnixKernel {
     this.themeManager = new ThemeManager();
     this.swapManager = new SwapManager(this);
     this.profilerEngine = new ProfilerEngine(this);
+    this.xattrManager = new XAttrManager(this);
     this.setupHierarchy();
   }
 
@@ -410,6 +413,12 @@ export class UnixKernel {
 
     const sysbenchAppNode = binNode.createChild("sysbench.wasm", false, 0o755);
     sysbenchAppNode.write(0, createSysbenchWasmBinary());
+
+    const getfattrAppNode = binNode.createChild("getfattr.wasm", false, 0o755);
+    getfattrAppNode.write(0, createGetfattrWasmBinary());
+
+    const setfattrAppNode = binNode.createChild("setfattr.wasm", false, 0o755);
+    setfattrAppNode.write(0, createSetfattrWasmBinary());
 
     // Initial files
     const userHome = this.resolvePath("/home/user");

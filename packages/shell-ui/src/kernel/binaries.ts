@@ -207,3 +207,11 @@ export function createSwaponWasmBinary(): Uint8Array {
 export function createSysbenchWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS Performance Profiler (sysbench)\n");
 }
+
+export function createGetfattrWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS Get Extended Attributes (getfattr)\n");
+}
+
+export function createSetfattrWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS Set Extended Attributes (setfattr)\n");
+}

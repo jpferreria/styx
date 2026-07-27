@@ -368,6 +368,40 @@ export class PipelineEngine {
         onStdout(this.kernel.profilerEngine.formatReport(args[0] || "cpu"));
         break;
 
+      case "getfattr":
+        const targetPath = args.includes("-d") ? args.filter((a) => a !== "-d")[0] : args[0];
+        if (targetPath) {
+          onStdout(this.kernel.xattrManager.formatGetFAttr(targetPath));
+        } else {
+          onStderr("Usage: getfattr [-d] <path>\n");
+        }
+        break;
+
+      case "setfattr":
+        let attrName = "";
+        let attrVal = "";
+        let filePath = "";
+
+        for (let i = 0; i < args.length; i++) {
+          if (args[i] === "-n" && args[i + 1]) {
+            attrName = args[i + 1];
+            i++;
+          } else if (args[i] === "-v" && args[i + 1]) {
+            attrVal = args[i + 1];
+            i++;
+          } else if (!args[i].startsWith("-")) {
+            filePath = args[i];
+          }
+        }
+
+        if (attrName && filePath) {
+          this.kernel.xattrManager.setXAttr(filePath, attrName, attrVal);
+          onStdout(`Set attribute '${attrName}' on '${filePath}'\n`);
+        } else {
+          onStderr("Usage: setfattr -n <name> -v <val> <path>\n");
+        }
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);

@@ -160,6 +160,24 @@ export class ManualManager {
       description: "sysbench evaluates CPU prime number calculation performance, VFS disk I/O throughput, and memory bandwidth allocation.",
       examples: "  sysbench\n  sysbench cpu\n  sysbench disk\n  sysbench mem",
     });
+
+    this.register({
+      name: "getfattr",
+      summary: "get POSIX extended attributes of VFS filesystem objects",
+      synopsis: "getfattr [-d] <path>",
+      description: "getfattr displays extended attribute names and values associated with VFS file paths.",
+      options: "  -d    Dump all extended attribute names and values",
+      examples: "  getfattr -d /home/user/README.txt",
+    });
+
+    this.register({
+      name: "setfattr",
+      summary: "set POSIX extended attributes of VFS filesystem objects",
+      synopsis: "setfattr -n <name> -v <val> <path>",
+      description: "setfattr associates custom key-value extended attribute metadata with specified VFS file paths.",
+      options: "  -n    Extended attribute name (e.g. user.comment)\n  -v    Extended attribute value",
+      examples: "  setfattr -n user.comment -v 'Styx Backup' /home/user/README.txt",
+    });
   }
 
   register(entry: ManualEntry): void {
