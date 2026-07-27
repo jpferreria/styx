@@ -364,6 +364,10 @@ export class PipelineEngine {
         onStdout(`Disabled virtual swap file device (/var/swap).\n`);
         break;
 
+      case "sysbench":
+        onStdout(this.kernel.profilerEngine.formatReport(args[0] || "cpu"));
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);

@@ -203,3 +203,7 @@ export function createShDebugWasmBinary(): Uint8Array {
 export function createSwaponWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS Virtual Swap Subsystem (/var/swap)\n");
 }
+
+export function createSysbenchWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS Performance Profiler (sysbench)\n");
+}

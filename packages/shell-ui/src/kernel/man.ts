@@ -152,6 +152,14 @@ export class ManualManager {
       options: "  -s    Display swap device summary statistics\n  -a    Enable all swap devices",
       examples: "  swapon\n  swapon -s\n  swapoff",
     });
+
+    this.register({
+      name: "sysbench",
+      summary: "system performance profiler & benchmark tool",
+      synopsis: "sysbench [cpu|disk|mem]",
+      description: "sysbench evaluates CPU prime number calculation performance, VFS disk I/O throughput, and memory bandwidth allocation.",
+      examples: "  sysbench\n  sysbench cpu\n  sysbench disk\n  sysbench mem",
+    });
   }
 
   register(entry: ManualEntry): void {
