@@ -187,3 +187,7 @@ export function createPtyWasmBinary(): Uint8Array {
 export function createIfconfigWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS Network Interface Configurator (ifconfig)\n");
 }
+
+export function createSpkgExportWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS VFS Backup Exporter (spkg export)\n");
+}

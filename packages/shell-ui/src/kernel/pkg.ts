@@ -63,4 +63,11 @@ export class PackageManager {
     pkg.installed = false;
     return true;
   }
+
+  export(targetPath: string = "/home/user"): string {
+    const tarData = this._kernel.archiveManager.exportDirectory(targetPath, this._kernel);
+    const filename = `styx-backup-${Date.now()}.tar`;
+    this._kernel.archiveManager.triggerBrowserDownload(tarData, filename);
+    return `Exported '${targetPath}' (${tarData.length} bytes) to backup archive '${filename}'.\n`;
+  }
 }

@@ -21,7 +21,7 @@ describe("Styx OS POSIX Manual Page Subsystem Test Suite", () => {
     kernel.sys_close(fd);
 
     expect(manText).toContain("SPKG(1)");
-    expect(manText).toContain("Styx OS Package Manager");
+    expect(manText).toContain("package manager");
   });
 
   it("should format POSIX manual pages for target commands", () => {

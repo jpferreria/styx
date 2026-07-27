@@ -225,6 +225,9 @@ export class PipelineEngine {
         } else if (args[0] === "remove" && args[1]) {
           const ok = this.kernel.pkgManager.remove(args[1]);
           onStdout(ok ? `Successfully removed ${args[1]}\n` : `Package ${args[1]} not installed\n`);
+        } else if (args[0] === "export") {
+          const target = args[1] || "/home/user";
+          onStdout(this.kernel.pkgManager.export(target));
         } else {
           await this.kernel.sys_execve("/bin/spkg.wasm", ["/bin/spkg.wasm"], undefined, onStdout, onStderr);
         }

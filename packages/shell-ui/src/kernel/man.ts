@@ -23,11 +23,11 @@ export class ManualManager {
   constructor() {
     this.register({
       name: "spkg",
-      summary: "Styx OS Package Manager",
-      synopsis: "spkg [update | list | install <pkg> | remove <pkg>]",
-      description: "spkg is the system package manager for Styx OS. It queries remote/local package indexes, reads /etc/spkg.conf, and manages WASI application binaries.",
-      options: "  update      Synchronize repository index manifests\n  list        Display available and installed packages\n  install     Install a target package binary\n  remove      Uninstall a target package binary",
-      examples: "  spkg update\n  spkg list\n  spkg install grep",
+      summary: "Styx OS package manager & system export utility",
+      synopsis: "spkg [update|list|install|remove|export] [package|path]",
+      description: "spkg manages software packages from repository mirrors and exports VFS user directories to backup archives.",
+      options: "  update           Update repository package manifests\n  list             List all packages and installation status\n  install <pkg>    Install target Wasm package\n  remove <pkg>     Remove installed package\n  export [path]    Export VFS directory to downloadable backup archive",
+      examples: "  spkg update\n  spkg install grep\n  spkg export /home/user",
     });
 
     this.register({
