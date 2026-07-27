@@ -321,11 +321,11 @@ export class PipelineEngine {
         break;
 
       case "lspci":
-        onStdout(this.kernel.sysfsManager.listPci());
+        onStdout(this.kernel.hwProbeEngine.lspci());
         break;
 
       case "lsusb":
-        onStdout(this.kernel.sysfsManager.listUsb());
+        onStdout(this.kernel.hwProbeEngine.lsusb());
         break;
 
       case "man":
@@ -454,6 +454,10 @@ export class PipelineEngine {
       case "pmap":
         const targetPid = args[0] ? parseInt(args[0], 10) : 1;
         onStdout(this.kernel.pmapEngine.formatPMap(isNaN(targetPid) ? 1 : targetPid));
+        break;
+
+      case "lscpu":
+        onStdout(this.kernel.hwProbeEngine.lscpu());
         break;
 
       case "cat":

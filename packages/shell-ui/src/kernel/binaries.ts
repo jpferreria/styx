@@ -239,3 +239,7 @@ export function createTermcolorWasmBinary(): Uint8Array {
 export function createPmapWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS Process Memory Map Inspector (pmap)\n");
 }
+
+export function createLscpuWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS CPU Architecture Inspector (lscpu)\n");
+}

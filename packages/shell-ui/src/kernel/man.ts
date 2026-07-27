@@ -227,6 +227,14 @@ export class ManualManager {
       description: "pmap reports the virtual memory mapping structure of a process, including heap, stack, code, and shared memory segments.",
       examples: "  pmap\n  pmap 1\n  pmap 2",
     });
+
+    this.register({
+      name: "lscpu",
+      summary: "display information about the CPU architecture",
+      synopsis: "lscpu",
+      description: "lscpu gathers CPU architecture information such as number of CPUs, cores, sockets, NUMA nodes, CPU family & model, CPU MHz, caches, and instruction set flags.",
+      examples: "  lscpu\n  lspci\n  lsusb",
+    });
   }
 
   register(entry: ManualEntry): void {
