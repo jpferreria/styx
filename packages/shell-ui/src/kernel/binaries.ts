@@ -199,3 +199,7 @@ export function createThemeWasmBinary(): Uint8Array {
 export function createShDebugWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS Shell Script Debugger (sh -x)\n");
 }
+
+export function createSwaponWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS Virtual Swap Subsystem (/var/swap)\n");
+}

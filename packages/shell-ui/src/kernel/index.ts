@@ -9,7 +9,7 @@
  */
 
 import { createHelloWasmBinary } from "./sampleWasm";
-import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary, createIfconfigWasmBinary, createSpkgExportWasmBinary, createThemeWasmBinary, createShDebugWasmBinary } from "./binaries";
+import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary, createIfconfigWasmBinary, createSpkgExportWasmBinary, createThemeWasmBinary, createShDebugWasmBinary, createSwaponWasmBinary } from "./binaries";
 import { WasmProcessRunner } from "./execve";
 import { PipeNode } from "./pipe";
 import { SocketNode, SocketDomain, SocketType } from "./socket";
@@ -31,6 +31,7 @@ import { SysFSManager } from "./sysfs";
 import { ManualManager } from "./man";
 import { PtyManager } from "./pty";
 import { ThemeManager } from "../shell/theme";
+import { SwapManager } from "./swap";
 
 export enum Errno {
   EPERM = 1,
@@ -171,6 +172,7 @@ export class UnixKernel {
   public manualManager: ManualManager;
   public ptyManager: PtyManager;
   public themeManager: ThemeManager;
+  public swapManager: SwapManager;
 
   constructor() {
     this.root = new MemNode(1, true, 0o755);
@@ -188,6 +190,7 @@ export class UnixKernel {
     this.manualManager = new ManualManager();
     this.ptyManager = new PtyManager(this);
     this.themeManager = new ThemeManager();
+    this.swapManager = new SwapManager(this);
     this.setupHierarchy();
   }
 
@@ -259,6 +262,9 @@ export class UnixKernel {
 
     const authlogNode = logNode.createChild("auth.log", false, 0o640);
     authlogNode.write(0, new TextEncoder().encode(this.loggerManager.generateAuthLog()));
+
+    // Virtual Swap File /var/swap
+    varNode.createChild("swap", false, 0o600);
     
     // Virtual Framebuffer Device /dev/fb0
     const fbNode = new FramebufferNode();
@@ -395,6 +401,9 @@ export class UnixKernel {
 
     const shDebugAppNode = binNode.createChild("sh-debug.wasm", false, 0o755);
     shDebugAppNode.write(0, createShDebugWasmBinary());
+
+    const swaponAppNode = binNode.createChild("swapon.wasm", false, 0o755);
+    swaponAppNode.write(0, createSwaponWasmBinary());
 
     // Initial files
     const userHome = this.resolvePath("/home/user");

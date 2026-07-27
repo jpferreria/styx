@@ -354,6 +354,16 @@ export class PipelineEngine {
         }
         break;
 
+      case "swapon":
+        this.kernel.swapManager.swapon();
+        onStdout(this.kernel.swapManager.formatSwapon());
+        break;
+
+      case "swapoff":
+        this.kernel.swapManager.swapoff();
+        onStdout(`Disabled virtual swap file device (/var/swap).\n`);
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);

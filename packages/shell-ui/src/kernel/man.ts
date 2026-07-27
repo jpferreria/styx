@@ -143,6 +143,15 @@ export class ManualManager {
       options: "  -x    Enable line-by-line debug trace execution mode",
       examples: "  sh /home/user/demo.sh\n  sh -x /home/user/demo.sh",
     });
+
+    this.register({
+      name: "swapon",
+      summary: "enable/disable devices and files for paging and swapping",
+      synopsis: "swapon [-a|-s] / swapoff",
+      description: "swapon enables and queries Virtual Swap File (/var/swap) memory page swapping metrics.",
+      options: "  -s    Display swap device summary statistics\n  -a    Enable all swap devices",
+      examples: "  swapon\n  swapon -s\n  swapoff",
+    });
   }
 
   register(entry: ManualEntry): void {
