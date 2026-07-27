@@ -460,6 +460,11 @@ export class PipelineEngine {
         onStdout(this.kernel.hwProbeEngine.lscpu());
         break;
 
+      case "epoll":
+      case "eventfd":
+        onStdout(this.kernel.eventNotificationEngine.formatEpollStats());
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);

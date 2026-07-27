@@ -235,6 +235,14 @@ export class ManualManager {
       description: "lscpu gathers CPU architecture information such as number of CPUs, cores, sockets, NUMA nodes, CPU family & model, CPU MHz, caches, and instruction set flags.",
       examples: "  lscpu\n  lspci\n  lsusb",
     });
+
+    this.register({
+      name: "epoll",
+      summary: "I/O event notification facility",
+      synopsis: "epoll",
+      description: "epoll is a scalable I/O event notification mechanism. It monitors multiple file descriptors to see if I/O is possible on any of them (EPOLLIN, EPOLLOUT, EPOLLERR).",
+      examples: "  epoll\n  eventfd",
+    });
   }
 
   register(entry: ManualEntry): void {

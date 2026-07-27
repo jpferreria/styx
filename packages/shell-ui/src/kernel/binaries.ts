@@ -243,3 +243,7 @@ export function createPmapWasmBinary(): Uint8Array {
 export function createLscpuWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS CPU Architecture Inspector (lscpu)\n");
 }
+
+export function createEpollWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS POSIX Event Notification (epoll)\n");
+}
