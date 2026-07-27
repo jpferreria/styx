@@ -251,3 +251,7 @@ export function createEpollWasmBinary(): Uint8Array {
 export function createMknodWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS Device Major/Minor Node Driver (mknod)\n");
 }
+
+export function createBrowserWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS Basic Web Browser (browser)\n");
+}

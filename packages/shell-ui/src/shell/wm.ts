@@ -445,4 +445,168 @@ export class WindowManager {
       fileContainer
     );
   }
+
+  createWebBrowserWindow(initialUrl: string = "https://example.com"): HTMLElement {
+    const container = document.createElement("div");
+    container.className = "browser-app-container";
+    container.style.display = "flex";
+    container.style.flexDirection = "column";
+    container.style.width = "100%";
+    container.style.height = "100%";
+    container.style.background = "var(--bg-main)";
+    container.style.color = "var(--text-main)";
+
+    // Navigation Bar
+    const navBar = document.createElement("div");
+    navBar.className = "browser-navbar";
+    navBar.style.display = "flex";
+    navBar.style.alignItems = "center";
+    navBar.style.gap = "6px";
+    navBar.style.padding = "8px";
+    navBar.style.background = "var(--panel-bg)";
+    navBar.style.borderBottom = "1px solid var(--border-color)";
+
+    const btnBack = document.createElement("button");
+    btnBack.innerHTML = "⬅️";
+    btnBack.title = "Back";
+    btnBack.style.padding = "4px 8px";
+    btnBack.style.borderRadius = "4px";
+    btnBack.style.border = "1px solid var(--border-color)";
+    btnBack.style.background = "rgba(255,255,255,0.05)";
+    btnBack.style.color = "var(--text-main)";
+    btnBack.style.cursor = "pointer";
+
+    const btnForward = document.createElement("button");
+    btnForward.innerHTML = "➡️";
+    btnForward.title = "Forward";
+    btnForward.style.padding = "4px 8px";
+    btnForward.style.borderRadius = "4px";
+    btnForward.style.border = "1px solid var(--border-color)";
+    btnForward.style.background = "rgba(255,255,255,0.05)";
+    btnForward.style.color = "var(--text-main)";
+    btnForward.style.cursor = "pointer";
+
+    const btnReload = document.createElement("button");
+    btnReload.innerHTML = "🔄";
+    btnReload.title = "Reload Page";
+    btnReload.style.padding = "4px 8px";
+    btnReload.style.borderRadius = "4px";
+    btnReload.style.border = "1px solid var(--border-color)";
+    btnReload.style.background = "rgba(255,255,255,0.05)";
+    btnReload.style.color = "var(--text-main)";
+    btnReload.style.cursor = "pointer";
+
+    const btnHome = document.createElement("button");
+    btnHome.innerHTML = "🏠";
+    btnHome.title = "Home";
+    btnHome.style.padding = "4px 8px";
+    btnHome.style.borderRadius = "4px";
+    btnHome.style.border = "1px solid var(--border-color)";
+    btnHome.style.background = "rgba(255,255,255,0.05)";
+    btnHome.style.color = "var(--text-main)";
+    btnHome.style.cursor = "pointer";
+
+    const urlInput = document.createElement("input");
+    urlInput.type = "text";
+    urlInput.value = initialUrl;
+    urlInput.placeholder = "Enter URL (e.g. https://example.com)...";
+    urlInput.style.flex = "1";
+    urlInput.style.padding = "6px 12px";
+    urlInput.style.borderRadius = "6px";
+    urlInput.style.border = "1px solid var(--border-color)";
+    urlInput.style.background = "rgba(0,0,0,0.3)";
+    urlInput.style.color = "var(--primary)";
+    urlInput.style.fontFamily = "'Fira Code', monospace";
+    urlInput.style.fontSize = "0.85rem";
+
+    const btnGo = document.createElement("button");
+    btnGo.textContent = "Go 🚀";
+    btnGo.style.padding = "6px 12px";
+    btnGo.style.borderRadius = "6px";
+    btnGo.style.border = "1px solid var(--primary)";
+    btnGo.style.background = "var(--primary)";
+    btnGo.style.color = "#0f172a";
+    btnGo.style.fontWeight = "600";
+    btnGo.style.cursor = "pointer";
+    btnGo.style.fontSize = "0.85rem";
+
+    navBar.appendChild(btnBack);
+    navBar.appendChild(btnForward);
+    navBar.appendChild(btnReload);
+    navBar.appendChild(btnHome);
+    navBar.appendChild(urlInput);
+    navBar.appendChild(btnGo);
+    container.appendChild(navBar);
+
+    // Bookmarks Bar
+    const bookmarkBar = document.createElement("div");
+    bookmarkBar.style.display = "flex";
+    bookmarkBar.style.gap = "8px";
+    bookmarkBar.style.padding = "4px 8px";
+    bookmarkBar.style.background = "rgba(0,0,0,0.2)";
+    bookmarkBar.style.borderBottom = "1px solid var(--border-color)";
+    bookmarkBar.style.fontSize = "0.75rem";
+
+    const bookmarks = [
+      { name: "🌐 Example", url: "https://example.com" },
+      { name: "🔍 DuckDuckGo", url: "https://html.duckduckgo.com/html/" },
+      { name: "📚 Wikipedia", url: "https://en.m.wikipedia.org/" },
+      { name: "⚡ Styx OS GitHub", url: "https://github.com/jpferreria/styx" },
+    ];
+
+    for (const b of bookmarks) {
+      const bm = document.createElement("span");
+      bm.style.cursor = "pointer";
+      bm.style.padding = "2px 6px";
+      bm.style.borderRadius = "3px";
+      bm.style.background = "rgba(255,255,255,0.05)";
+      bm.style.color = "var(--text-main)";
+      bm.textContent = b.name;
+      bm.addEventListener("click", () => navigateTo(b.url));
+      bookmarkBar.appendChild(bm);
+    }
+    container.appendChild(bookmarkBar);
+
+    // Iframe Viewport
+    const iframe = document.createElement("iframe");
+    iframe.style.flex = "1";
+    iframe.style.width = "100%";
+    iframe.style.border = "none";
+    iframe.style.background = "#ffffff";
+    iframe.sandbox.add("allow-scripts", "allow-same-origin", "allow-forms");
+
+    const navigateTo = (rawUrl: string) => {
+      let target = rawUrl.trim();
+      if (!target.startsWith("http://") && !target.startsWith("https://")) {
+        target = `https://${target}`;
+      }
+      urlInput.value = target;
+      iframe.src = target;
+    };
+
+    btnGo.addEventListener("click", () => navigateTo(urlInput.value));
+    urlInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") navigateTo(urlInput.value);
+    });
+    btnReload.addEventListener("click", () => {
+      iframe.src = urlInput.value;
+    });
+    btnHome.addEventListener("click", () => {
+      navigateTo("https://example.com");
+    });
+    btnBack.addEventListener("click", () => {
+      try { iframe.contentWindow?.history.back(); } catch (e) {}
+    });
+    btnForward.addEventListener("click", () => {
+      try { iframe.contentWindow?.history.forward(); } catch (e) {}
+    });
+
+    navigateTo(initialUrl);
+    container.appendChild(iframe);
+
+    return this.createWindow(
+      { id: "browser-app", title: "Styx OS Web Browser", width: 720, height: 480 },
+      container
+    );
+  }
 }

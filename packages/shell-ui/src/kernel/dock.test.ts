@@ -25,6 +25,7 @@ describe("Styx OS Desktop Dock Launcher Test Suite", () => {
     const apps = dockMgr.getRegisteredApps();
     expect(apps.length).toBeGreaterThan(0);
     expect(apps.some((a) => a.id === "terminal")).toBe(true);
+    expect(apps.some((a) => a.id === "browser")).toBe(true);
     expect(apps.some((a) => a.id === "files")).toBe(true);
     expect(apps.some((a) => a.id === "top-gui")).toBe(true);
     expect(apps.some((a) => a.id === "theme")).toBe(true);
@@ -36,7 +37,7 @@ describe("Styx OS Desktop Dock Launcher Test Suite", () => {
 
     expect(dockEl).toBeDefined();
     expect(dockEl.id).toBe("styx-desktop-dock");
-    expect(dockEl.children.length).toBe(7);
+    expect(dockEl.children.length).toBe(8);
 
     const firstBtn = dockEl.children[0] as HTMLButtonElement;
     firstBtn.click();

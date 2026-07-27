@@ -251,6 +251,14 @@ export class ManualManager {
       description: "mknod creates special character or block device nodes with specified major and minor numbers.",
       examples: "  mknod /dev/testc c 10 1\n  mknod /dev/testb b 8 0\n  lsdev",
     });
+
+    this.register({
+      name: "browser",
+      summary: "launch Styx OS graphical web browser",
+      synopsis: "browser [url]",
+      description: "browser launches the graphical web browser window with URL address bar, navigation controls, bookmarks, and sandboxed iframe viewport.",
+      examples: "  browser\n  browser https://example.com\n  web https://en.m.wikipedia.org/",
+    });
   }
 
   register(entry: ManualEntry): void {

@@ -18,6 +18,7 @@ export interface DockApp {
 export class DockManager {
   private apps: DockApp[] = [
     { id: "terminal", title: "Terminal Shell", icon: "🐚", command: "clear" },
+    { id: "browser", title: "Web Browser", icon: "🌐", command: "browser" },
     { id: "files", title: "File Explorer", icon: "📂", command: "files" },
     { id: "vim", title: "Vim Editor", icon: "📝", command: "vim" },
     { id: "nano", title: "Nano Editor", icon: "📄", command: "nano" },
