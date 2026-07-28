@@ -495,6 +495,15 @@ export class PipelineEngine {
         onStdout(this.kernel.fifoManager.listFifos());
         break;
 
+      case "ldd":
+        const binTarget = args[0] || "/bin/hello.wasm";
+        onStdout(this.kernel.sharedLibraryEngine.ldd(binTarget));
+        break;
+
+      case "ldconfig":
+        onStdout(this.kernel.sharedLibraryEngine.ldconfig());
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);

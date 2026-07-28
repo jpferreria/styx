@@ -267,6 +267,14 @@ export class ManualManager {
       description: "mkfifo creates POSIX named pipe special files for inter-process communication.",
       examples: "  mkfifo /tmp/myfifo\n  lsfifo",
     });
+
+    this.register({
+      name: "ldd",
+      summary: "print shared object dependencies",
+      synopsis: "ldd [binary_path]",
+      description: "ldd prints the shared objects required by each program or shared object specified on the command line.",
+      examples: "  ldd /bin/hello.wasm\n  ldconfig",
+    });
   }
 
   register(entry: ManualEntry): void {

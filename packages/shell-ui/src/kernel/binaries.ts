@@ -259,3 +259,7 @@ export function createBrowserWasmBinary(): Uint8Array {
 export function createMkfifoWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS POSIX FIFO Named Pipe (mkfifo)\n");
 }
+
+export function createLddWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS Dynamic Linker Inspector (ldd)\n");
+}
