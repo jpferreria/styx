@@ -331,6 +331,14 @@ export class ManualManager {
       description: "time runs specified command and reports high-resolution execution duration.",
       examples: "  time ls -la\n  date\n  uptime",
     });
+
+    this.register({
+      name: "getcap",
+      summary: "examine file capabilities",
+      synopsis: "getcap <filename>",
+      description: "getcap displays the capabilities of specified executable files.",
+      examples: "  getcap /bin/ping.wasm\n  setcap cap_net_bind_service=+ep /bin/ping.wasm",
+    });
   }
 
   register(entry: ManualEntry): void {

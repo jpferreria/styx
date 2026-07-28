@@ -583,6 +583,18 @@ export class PipelineEngine {
         }
         break;
 
+      case "getcap":
+        onStdout(this.kernel.capabilityEngine.getcap(args[0] || "/bin/hello.wasm"));
+        break;
+
+      case "setcap":
+        if (args.length >= 2) {
+          onStdout(this.kernel.capabilityEngine.setcap(args[1], args[0]));
+        } else {
+          onStderr("Usage: setcap <capabilities> <filename>\n");
+        }
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);
