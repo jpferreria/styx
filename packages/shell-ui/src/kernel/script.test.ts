@@ -47,4 +47,14 @@ describe("Styx OS Shell Script Interpreter Test Suite", () => {
     expect(stdout).toContain("Executing Styx OS Script Demo");
     expect(stdout).toContain("Current User: user");
   });
+
+  it("should execute ./demo.sh directly in terminal shell", async () => {
+    const kernel = new UnixKernel();
+    const pipeline = new PipelineEngine(kernel);
+
+    let stdout = "";
+    await pipeline.executePipeline("./demo.sh", (text) => { stdout += text; }, () => {});
+
+    expect(stdout).toContain("Executing Styx OS Script Demo");
+  });
 });

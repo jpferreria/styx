@@ -535,6 +535,21 @@ export class PipelineEngine {
         break;
 
       default:
+        if (cmd.endsWith(".sh") || cmd.startsWith("./") || cmd.startsWith("/")) {
+          try {
+            const scriptPath = cmd.startsWith("./") ? `/home/user/${cmd.substring(2)}` : cmd;
+            const fd = this.kernel.sys_open(scriptPath, false);
+            const scriptBytes = this.kernel.sys_read(fd, 65536);
+            this.kernel.sys_close(fd);
+            const scriptText = new TextDecoder().decode(scriptBytes);
+            const interpreter = new ScriptInterpreter(this.kernel, this);
+            await interpreter.executeScript(scriptText, args, onStdout, onStderr);
+            break;
+          } catch (_e) {
+            onStderr(`sh: ${cmd}: No such file or script\n`);
+            break;
+          }
+        }
         onStderr(`sh: command not found: ${cmd}\n`);
     }
   }
