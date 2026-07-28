@@ -279,3 +279,7 @@ export function createFlockWasmBinary(): Uint8Array {
 export function createSttyWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS POSIX Termios Control Tool (stty)\n");
 }
+
+export function createMmapWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS POSIX Memory Mapping Tool (mmap)\n");
+}

@@ -307,6 +307,14 @@ export class ManualManager {
       description: "stty displays or modifies POSIX termios terminal line discipline attributes.",
       examples: "  stty -a\n  stty raw\n  stty sane",
     });
+
+    this.register({
+      name: "mmap",
+      summary: "map files or devices into memory",
+      synopsis: "mmap [file_path]",
+      description: "mmap maps files or anonymous memory pages into the virtual process address space.",
+      examples: "  mmap /home/user/README.txt\n  lsmaps",
+    });
   }
 
   register(entry: ManualEntry): void {

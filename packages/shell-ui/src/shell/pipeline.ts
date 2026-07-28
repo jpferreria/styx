@@ -541,6 +541,16 @@ export class PipelineEngine {
         onStdout(this.kernel.termiosEngine.stty(args));
         break;
 
+      case "mmap":
+        const mapPath = args[0] || "[anon]";
+        const reg = this.kernel.mmapEngine.mmap(mapPath);
+        onStdout(`Mapped '${mapPath}' -> ${reg.startAddr}-${reg.endAddr} (${reg.length} bytes)\n`);
+        break;
+
+      case "lsmaps":
+        onStdout(this.kernel.mmapEngine.listMaps());
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);
