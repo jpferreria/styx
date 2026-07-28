@@ -427,11 +427,17 @@ export class WindowManager {
 
         const isDir = entry.stat ? entry.stat.isDir : entry.name !== "." && !entry.name.includes(".");
         li.innerHTML = isDir ? `📁 <strong style="color:var(--primary);">${entry.name}</strong>` : `📄 ${entry.name}`;
+        li.title = isDir ? `Click to open directory ${entry.name}` : `Double click to edit ${entry.name} in Text Editor`;
 
         if (isDir) {
           li.addEventListener("click", () => {
             const nextPath = path === "/" ? `/${entry.name}` : `${path}/${entry.name}`;
             renderDir(nextPath);
+          });
+        } else {
+          li.addEventListener("dblclick", () => {
+            const targetPath = path === "/" ? `/${entry.name}` : `${path}/${entry.name}`;
+            this.createTextEditorWindow(targetPath, kernel);
           });
         }
         ul.appendChild(li);
@@ -443,6 +449,114 @@ export class WindowManager {
     return this.createWindow(
       { id: "files", title: "Styx OS VFS File Explorer", width: 440, height: 320 },
       fileContainer
+    );
+  }
+
+  createTextEditorWindow(filePath: string, kernel: any): HTMLElement {
+    const container = document.createElement("div");
+    container.className = "text-editor-container";
+    container.style.display = "flex";
+    container.style.flexDirection = "column";
+    container.style.width = "100%";
+    container.style.height = "100%";
+    container.style.background = "var(--bg-main)";
+    container.style.color = "var(--text-main)";
+    container.style.fontFamily = "'Fira Code', monospace";
+
+    // Toolbar
+    const toolbar = document.createElement("div");
+    toolbar.style.display = "flex";
+    toolbar.style.alignItems = "center";
+    toolbar.style.justifyContent = "space-between";
+    toolbar.style.padding = "6px 10px";
+    toolbar.style.background = "var(--panel-bg)";
+    toolbar.style.borderBottom = "1px solid var(--border-color)";
+
+    const fileLabel = document.createElement("span");
+    fileLabel.style.fontWeight = "600";
+    fileLabel.style.fontSize = "0.85rem";
+    fileLabel.style.color = "var(--primary)";
+    fileLabel.textContent = `📝 ${filePath}`;
+
+    const rightControls = document.createElement("div");
+    rightControls.style.display = "flex";
+    rightControls.style.alignItems = "center";
+    rightControls.style.gap = "10px";
+
+    const statusLabel = document.createElement("span");
+    statusLabel.style.fontSize = "0.75rem";
+    statusLabel.style.color = "#94a3b8";
+    statusLabel.textContent = "Saved";
+
+    const saveBtn = document.createElement("button");
+    saveBtn.style.padding = "4px 10px";
+    saveBtn.style.borderRadius = "4px";
+    saveBtn.style.border = "1px solid var(--border-color)";
+    saveBtn.style.background = "var(--primary)";
+    saveBtn.style.color = "#0f172a";
+    saveBtn.style.fontWeight = "700";
+    saveBtn.style.cursor = "pointer";
+    saveBtn.style.fontSize = "0.75rem";
+    saveBtn.textContent = "💾 Save";
+
+    rightControls.appendChild(statusLabel);
+    rightControls.appendChild(saveBtn);
+    toolbar.appendChild(fileLabel);
+    toolbar.appendChild(rightControls);
+
+    // Editor Area
+    const editor = document.createElement("textarea");
+    editor.style.flex = "1";
+    editor.style.width = "100%";
+    editor.style.height = "100%";
+    editor.style.background = "#0f172a";
+    editor.style.color = "#f8fafc";
+    editor.style.border = "none";
+    editor.style.outline = "none";
+    editor.style.padding = "10px";
+    editor.style.fontSize = "0.85rem";
+    editor.style.fontFamily = "'Fira Code', monospace";
+    editor.style.resize = "none";
+
+    // Read initial content
+    let initialText = "";
+    try {
+      const node = kernel.resolvePath(filePath);
+      if (node && typeof node.read === "function") {
+        const data = node.read(0, 65536);
+        initialText = new TextDecoder().decode(data);
+      }
+    } catch (_e) {
+      initialText = "";
+    }
+    editor.value = initialText;
+
+    editor.addEventListener("input", () => {
+      statusLabel.textContent = "Modified *";
+      statusLabel.style.color = "#f59e0b";
+    });
+
+    saveBtn.addEventListener("click", () => {
+      try {
+        const node = kernel.resolvePath(filePath);
+        if (node && typeof node.write === "function") {
+          node.write(0, new TextEncoder().encode(editor.value));
+          statusLabel.textContent = "Saved";
+          statusLabel.style.color = "#10b981";
+          this.sendNotification("Text Editor", `Saved ${filePath} successfully`, "success");
+        }
+      } catch (err: any) {
+        this.sendNotification("Text Editor Error", `Failed to save ${filePath}: ${err.message}`, "warning");
+      }
+    });
+
+    container.appendChild(toolbar);
+    container.appendChild(editor);
+
+    const winId = `editor-${filePath.replace(/[^a-zA-Z0-9]/g, "_")}`;
+    return this.createWindow(
+      { id: winId, title: `Text Editor - ${filePath}`, width: 560, height: 380 },
+      container
     );
   }
 

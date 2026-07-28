@@ -60,4 +60,26 @@ describe("Styx OS Window Manager & Desktop Tray Test Suite", () => {
     wm.toggleWindow("files");
     expect(wm.isMinimized("files")).toBe(true);
   });
+
+  it("should open text editor window on file double-click", () => {
+    const mockKernel = {
+      sys_readdir: (_path: string) => [
+        { name: "README.txt", stat: { isDir: false } }
+      ],
+      resolvePath: (_path: string) => ({
+        read: () => new TextEncoder().encode("Hello World"),
+        write: () => 11
+      })
+    };
+
+    const fileWin = wm.createFileExplorerWindow(mockKernel);
+    const fileItem = fileWin.querySelector("li");
+    expect(fileItem).toBeDefined();
+
+    fileItem?.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+
+    const editorWin = document.getElementById("win-editor-_README_txt");
+    expect(editorWin).toBeDefined();
+    expect(editorWin?.querySelector(".window-title")?.textContent).toContain("Text Editor - /README.txt");
+  });
 });
