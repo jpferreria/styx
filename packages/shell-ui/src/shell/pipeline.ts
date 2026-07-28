@@ -599,6 +599,18 @@ export class PipelineEngine {
         onStdout(this.kernel.resourceLimitEngine.ulimit(args));
         break;
 
+      case "sysinfo":
+        onStdout(this.kernel.sysInfoEngine.formatProcSysinfo());
+        break;
+
+      case "uname":
+        onStdout(this.kernel.sysInfoEngine.uname(args));
+        break;
+
+      case "free":
+        onStdout(this.kernel.sysInfoEngine.free(args));
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);

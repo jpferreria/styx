@@ -347,6 +347,14 @@ export class ManualManager {
       description: "ulimit provides control over resources available to shell processes.",
       examples: "  ulimit -a\n  ulimit -n 2048\n  ulimit -s 16384",
     });
+
+    this.register({
+      name: "sysinfo",
+      summary: "returns system information and statistics",
+      synopsis: "sysinfo | uname [-a|-s|-n|-r|-m] | free [-h]",
+      description: "sysinfo displays kernel system information, RAM, swap, uptime, and load averages.",
+      examples: "  sysinfo\n  uname -a\n  free -h",
+    });
   }
 
   register(entry: ManualEntry): void {

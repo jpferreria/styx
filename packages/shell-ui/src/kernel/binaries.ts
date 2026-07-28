@@ -299,3 +299,7 @@ export function createGetcapWasmBinary(): Uint8Array {
 export function createUlimitWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS POSIX Resource Limit Tool (ulimit)\n");
 }
+
+export function createSysinfoWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS POSIX System Information Tool (sysinfo)\n");
+}
