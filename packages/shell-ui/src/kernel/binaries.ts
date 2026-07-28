@@ -271,3 +271,7 @@ export function createEvtestWasmBinary(): Uint8Array {
 export function createSemWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS POSIX Semaphore Inspector (sem)\n");
 }
+
+export function createFlockWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS POSIX File Locking Tool (flock)\n");
+}

@@ -518,6 +518,25 @@ export class PipelineEngine {
         onStdout(this.kernel.inputDeviceEngine.listInputs());
         break;
 
+      case "flock":
+        if (args[0]) {
+          const lockPath = args[0];
+          this.kernel.fileLockEngine.lock(1, lockPath, "WRITE", false);
+          onStdout(`Acquired advisory file lock on '${lockPath}'\n`);
+          if (args[1] === "-c" && args[2]) {
+            await this.executePipeline(args[2], onStdout, onStderr);
+            this.kernel.fileLockEngine.unlock(1, lockPath);
+            onStdout(`Released file lock on '${lockPath}'\n`);
+          }
+        } else {
+          onStderr("Usage: flock <file> [-c <command>]\n");
+        }
+        break;
+
+      case "lslocks":
+        onStdout(this.kernel.fileLockEngine.listLocks());
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);

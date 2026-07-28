@@ -291,6 +291,14 @@ export class ManualManager {
       description: "sem inspects and displays POSIX named semaphores and inter-process locking state.",
       examples: "  sem\n  ipcs -s",
     });
+
+    this.register({
+      name: "flock",
+      summary: "manage locks from shell scripts",
+      synopsis: "flock [file] [command]",
+      description: "flock manages advisory file locks for inter-process synchronization.",
+      examples: "  flock /tmp/lockfile -c \"echo locked\"\n  lslocks",
+    });
   }
 
   register(entry: ManualEntry): void {
