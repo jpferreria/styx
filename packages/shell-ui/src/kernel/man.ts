@@ -363,6 +363,14 @@ export class ManualManager {
       description: "poll and lspoll monitor multiple file descriptors, waiting until I/O events trigger.",
       examples: "  lspoll\n  poll",
     });
+
+    this.register({
+      name: "syscheck",
+      summary: "comprehensive POSIX kernel subsystem audit",
+      synopsis: "syscheck | posix-status",
+      description: "syscheck audits all 40+ POSIX kernel subsystems and outputs an operational health score.",
+      examples: "  syscheck\n  posix-status",
+    });
   }
 
   register(entry: ManualEntry): void {
