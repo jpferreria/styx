@@ -299,6 +299,14 @@ export class ManualManager {
       description: "flock manages advisory file locks for inter-process synchronization.",
       examples: "  flock /tmp/lockfile -c \"echo locked\"\n  lslocks",
     });
+
+    this.register({
+      name: "stty",
+      summary: "change and print terminal line settings",
+      synopsis: "stty [-a] [raw|sane|echo|-echo]",
+      description: "stty displays or modifies POSIX termios terminal line discipline attributes.",
+      examples: "  stty -a\n  stty raw\n  stty sane",
+    });
   }
 
   register(entry: ManualEntry): void {

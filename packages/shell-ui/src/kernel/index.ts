@@ -9,7 +9,7 @@
  */
 
 import { createHelloWasmBinary } from "./sampleWasm";
-import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary, createIfconfigWasmBinary, createSpkgExportWasmBinary, createThemeWasmBinary, createShDebugWasmBinary, createSwaponWasmBinary, createSysbenchWasmBinary, createGetfattrWasmBinary, createSetfattrWasmBinary, createAliasWasmBinary, createTopGuiWasmBinary, createIpcsWasmBinary, createMqueueWasmBinary, createTermcolorWasmBinary, createPmapWasmBinary, createLscpuWasmBinary, createEpollWasmBinary, createMknodWasmBinary, createBrowserWasmBinary, createMkfifoWasmBinary, createLddWasmBinary, createEvtestWasmBinary, createSemWasmBinary, createFlockWasmBinary } from "./binaries";
+import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary, createIfconfigWasmBinary, createSpkgExportWasmBinary, createThemeWasmBinary, createShDebugWasmBinary, createSwaponWasmBinary, createSysbenchWasmBinary, createGetfattrWasmBinary, createSetfattrWasmBinary, createAliasWasmBinary, createTopGuiWasmBinary, createIpcsWasmBinary, createMqueueWasmBinary, createTermcolorWasmBinary, createPmapWasmBinary, createLscpuWasmBinary, createEpollWasmBinary, createMknodWasmBinary, createBrowserWasmBinary, createMkfifoWasmBinary, createLddWasmBinary, createEvtestWasmBinary, createSemWasmBinary, createFlockWasmBinary, createSttyWasmBinary } from "./binaries";
 import { WasmProcessRunner } from "./execve";
 import { PipeNode } from "./pipe";
 import { SocketNode, SocketDomain, SocketType } from "./socket";
@@ -47,6 +47,7 @@ import { SharedLibraryEngine } from "./shlib";
 import { InputDeviceEngine } from "./input";
 import { SemaphoreManager } from "./sem";
 import { FileLockEngine } from "./flock";
+import { TermiosEngine } from "./termios";
 
 export enum Errno {
   EPERM = 1,
@@ -204,6 +205,7 @@ export class UnixKernel {
   public inputDeviceEngine: InputDeviceEngine;
   public semaphoreManager: SemaphoreManager;
   public fileLockEngine: FileLockEngine;
+  public termiosEngine: TermiosEngine;
 
   constructor() {
     this.root = new MemNode(1, true, 0o755);
@@ -237,6 +239,7 @@ export class UnixKernel {
     this.sharedLibraryEngine = new SharedLibraryEngine(this);
     this.inputDeviceEngine = new InputDeviceEngine(this);
     this.semaphoreManager = new SemaphoreManager(this);
+    this.termiosEngine = new TermiosEngine(this);
     this.setupHierarchy();
     this.fileLockEngine = new FileLockEngine(this);
   }
@@ -510,6 +513,9 @@ export class UnixKernel {
 
     const flockAppNode = binNode.createChild("flock.wasm", false, 0o755);
     flockAppNode.write(0, createFlockWasmBinary());
+
+    const sttyAppNode = binNode.createChild("stty.wasm", false, 0o755);
+    sttyAppNode.write(0, createSttyWasmBinary());
 
     // Initial files
     const userHome = this.resolvePath("/home/user");

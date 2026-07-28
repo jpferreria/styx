@@ -275,3 +275,7 @@ export function createSemWasmBinary(): Uint8Array {
 export function createFlockWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS POSIX File Locking Tool (flock)\n");
 }
+
+export function createSttyWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS POSIX Termios Control Tool (stty)\n");
+}
