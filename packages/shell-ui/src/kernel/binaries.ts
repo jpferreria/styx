@@ -287,3 +287,7 @@ export function createMmapWasmBinary(): Uint8Array {
 export function createIpcrmWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS IPC Resource Control Tool (ipcrm)\n");
 }
+
+export function createTimeWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS POSIX Time & Timer Tool (time)\n");
+}

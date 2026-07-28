@@ -563,6 +563,26 @@ export class PipelineEngine {
         onStdout(this.kernel.ipcCleanupEngine.ipcclean());
         break;
 
+      case "date":
+        onStdout(this.kernel.timeEngine.formatDate());
+        break;
+
+      case "uptime":
+        onStdout(this.kernel.timeEngine.formatUptime());
+        break;
+
+      case "time":
+        if (args.length > 0) {
+          const subCmd = args.join(" ");
+          const benchOut = await this.kernel.timeEngine.benchmark(async () => {
+            await this.executePipeline(subCmd, onStdout, onStderr);
+          });
+          onStdout(benchOut);
+        } else {
+          onStdout(this.kernel.timeEngine.formatDate());
+        }
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);

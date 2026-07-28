@@ -323,6 +323,14 @@ export class ManualManager {
       description: "ipcrm removes shared memory segments, message queues, or semaphores from the kernel.",
       examples: "  ipcrm shm 1\n  ipcclean\n  ipcs -a",
     });
+
+    this.register({
+      name: "time",
+      summary: "time a simple command or give resource usage",
+      synopsis: "time [command]",
+      description: "time runs specified command and reports high-resolution execution duration.",
+      examples: "  time ls -la\n  date\n  uptime",
+    });
   }
 
   register(entry: ManualEntry): void {
