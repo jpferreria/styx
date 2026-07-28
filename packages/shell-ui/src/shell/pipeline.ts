@@ -551,6 +551,18 @@ export class PipelineEngine {
         onStdout(this.kernel.mmapEngine.listMaps());
         break;
 
+      case "ipcmk":
+        onStdout(this.kernel.ipcCleanupEngine.ipcmk(args[0] as any, parseInt(args[1] || "1024", 10)));
+        break;
+
+      case "ipcrm":
+        onStdout(this.kernel.ipcCleanupEngine.ipcrm(args[0] as any, args[1] || ""));
+        break;
+
+      case "ipcclean":
+        onStdout(this.kernel.ipcCleanupEngine.ipcclean());
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);

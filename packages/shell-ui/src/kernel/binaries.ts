@@ -283,3 +283,7 @@ export function createSttyWasmBinary(): Uint8Array {
 export function createMmapWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS POSIX Memory Mapping Tool (mmap)\n");
 }
+
+export function createIpcrmWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS IPC Resource Control Tool (ipcrm)\n");
+}

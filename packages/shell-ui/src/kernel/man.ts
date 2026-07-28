@@ -315,6 +315,14 @@ export class ManualManager {
       description: "mmap maps files or anonymous memory pages into the virtual process address space.",
       examples: "  mmap /home/user/README.txt\n  lsmaps",
     });
+
+    this.register({
+      name: "ipcrm",
+      summary: "remove System V and POSIX IPC resources",
+      synopsis: "ipcrm [shm|msg|sem] <id|path>",
+      description: "ipcrm removes shared memory segments, message queues, or semaphores from the kernel.",
+      examples: "  ipcrm shm 1\n  ipcclean\n  ipcs -a",
+    });
   }
 
   register(entry: ManualEntry): void {
