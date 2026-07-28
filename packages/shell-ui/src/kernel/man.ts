@@ -275,6 +275,14 @@ export class ManualManager {
       description: "ldd prints the shared objects required by each program or shared object specified on the command line.",
       examples: "  ldd /bin/hello.wasm\n  ldconfig",
     });
+
+    this.register({
+      name: "evtest",
+      summary: "input device event monitor",
+      synopsis: "evtest",
+      description: "evtest monitors and displays real-time input event data from /dev/input/event0 (keyboard) and /dev/input/mice (mouse).",
+      examples: "  evtest\n  lsinput",
+    });
   }
 
   register(entry: ManualEntry): void {

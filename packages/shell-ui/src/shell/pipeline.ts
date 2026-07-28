@@ -504,6 +504,14 @@ export class PipelineEngine {
         onStdout(this.kernel.sharedLibraryEngine.ldconfig());
         break;
 
+      case "evtest":
+        onStdout(this.kernel.inputDeviceEngine.evtest());
+        break;
+
+      case "lsinput":
+        onStdout(this.kernel.inputDeviceEngine.listInputs());
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);
