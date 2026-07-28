@@ -371,6 +371,14 @@ export class ManualManager {
       description: "syscheck audits all 40+ POSIX kernel subsystems and outputs an operational health score.",
       examples: "  syscheck\n  posix-status",
     });
+
+    this.register({
+      name: "sandbox",
+      summary: "LLM code execution sandbox interface",
+      synopsis: "sandbox",
+      description: "sandbox exposes OpenAI/Ollama tool calling interfaces for local LLMs.",
+      examples: "  syscheck\n  sandbox",
+    });
   }
 
   register(entry: ManualEntry): void {
