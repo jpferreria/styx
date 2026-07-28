@@ -355,6 +355,14 @@ export class ManualManager {
       description: "sysinfo displays kernel system information, RAM, swap, uptime, and load averages.",
       examples: "  sysinfo\n  uname -a\n  free -h",
     });
+
+    this.register({
+      name: "poll",
+      summary: "wait for events on file descriptors",
+      synopsis: "poll | lspoll",
+      description: "poll and lspoll monitor multiple file descriptors, waiting until I/O events trigger.",
+      examples: "  lspoll\n  poll",
+    });
   }
 
   register(entry: ManualEntry): void {

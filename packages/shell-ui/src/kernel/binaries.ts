@@ -303,3 +303,7 @@ export function createUlimitWasmBinary(): Uint8Array {
 export function createSysinfoWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS POSIX System Information Tool (sysinfo)\n");
 }
+
+export function createPollWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS POSIX Event Multiplexing Tool (poll)\n");
+}

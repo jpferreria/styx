@@ -611,6 +611,11 @@ export class PipelineEngine {
         onStdout(this.kernel.sysInfoEngine.free(args));
         break;
 
+      case "poll":
+      case "lspoll":
+        onStdout(this.kernel.eventMultiplexEngine.lspoll());
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);
