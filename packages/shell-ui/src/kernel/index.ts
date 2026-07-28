@@ -9,7 +9,7 @@
  */
 
 import { createHelloWasmBinary } from "./sampleWasm";
-import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary, createIfconfigWasmBinary, createSpkgExportWasmBinary, createThemeWasmBinary, createShDebugWasmBinary, createSwaponWasmBinary, createSysbenchWasmBinary, createGetfattrWasmBinary, createSetfattrWasmBinary, createAliasWasmBinary, createTopGuiWasmBinary, createIpcsWasmBinary, createMqueueWasmBinary, createTermcolorWasmBinary, createPmapWasmBinary, createLscpuWasmBinary, createEpollWasmBinary, createMknodWasmBinary, createBrowserWasmBinary, createMkfifoWasmBinary, createLddWasmBinary, createEvtestWasmBinary, createSemWasmBinary, createFlockWasmBinary, createSttyWasmBinary, createMmapWasmBinary, createIpcrmWasmBinary, createTimeWasmBinary, createGetcapWasmBinary } from "./binaries";
+import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary, createIfconfigWasmBinary, createSpkgExportWasmBinary, createThemeWasmBinary, createShDebugWasmBinary, createSwaponWasmBinary, createSysbenchWasmBinary, createGetfattrWasmBinary, createSetfattrWasmBinary, createAliasWasmBinary, createTopGuiWasmBinary, createIpcsWasmBinary, createMqueueWasmBinary, createTermcolorWasmBinary, createPmapWasmBinary, createLscpuWasmBinary, createEpollWasmBinary, createMknodWasmBinary, createBrowserWasmBinary, createMkfifoWasmBinary, createLddWasmBinary, createEvtestWasmBinary, createSemWasmBinary, createFlockWasmBinary, createSttyWasmBinary, createMmapWasmBinary, createIpcrmWasmBinary, createTimeWasmBinary, createGetcapWasmBinary, createUlimitWasmBinary } from "./binaries";
 import { WasmProcessRunner } from "./execve";
 import { PipeNode } from "./pipe";
 import { SocketNode, SocketDomain, SocketType } from "./socket";
@@ -52,6 +52,7 @@ import { MMapEngine } from "./mmap";
 import { IPCCleanupEngine } from "./ipc";
 import { TimeEngine } from "./time";
 import { CapabilityEngine } from "./cap";
+import { ResourceLimitEngine } from "./rlimit";
 
 export enum Errno {
   EPERM = 1,
@@ -214,6 +215,7 @@ export class UnixKernel {
   public ipcCleanupEngine: IPCCleanupEngine;
   public timeEngine: TimeEngine;
   public capabilityEngine: CapabilityEngine;
+  public resourceLimitEngine: ResourceLimitEngine;
 
   constructor() {
     this.root = new MemNode(1, true, 0o755);
@@ -251,6 +253,7 @@ export class UnixKernel {
     this.ipcCleanupEngine = new IPCCleanupEngine(this);
     this.timeEngine = new TimeEngine(this);
     this.capabilityEngine = new CapabilityEngine(this);
+    this.resourceLimitEngine = new ResourceLimitEngine(this);
     this.setupHierarchy();
     this.fileLockEngine = new FileLockEngine(this);
     this.mmapEngine = new MMapEngine(this);
@@ -540,6 +543,9 @@ export class UnixKernel {
 
     const getcapAppNode = binNode.createChild("getcap.wasm", false, 0o755);
     getcapAppNode.write(0, createGetcapWasmBinary());
+
+    const ulimitAppNode = binNode.createChild("ulimit.wasm", false, 0o755);
+    ulimitAppNode.write(0, createUlimitWasmBinary());
 
     // Initial files
     const userHome = this.resolvePath("/home/user");

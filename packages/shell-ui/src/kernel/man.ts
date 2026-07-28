@@ -339,6 +339,14 @@ export class ManualManager {
       description: "getcap displays the capabilities of specified executable files.",
       examples: "  getcap /bin/ping.wasm\n  setcap cap_net_bind_service=+ep /bin/ping.wasm",
     });
+
+    this.register({
+      name: "ulimit",
+      summary: "modify shell process resource limits",
+      synopsis: "ulimit [-a] [-n <num>] [-s <size>]",
+      description: "ulimit provides control over resources available to shell processes.",
+      examples: "  ulimit -a\n  ulimit -n 2048\n  ulimit -s 16384",
+    });
   }
 
   register(entry: ManualEntry): void {

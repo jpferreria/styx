@@ -595,6 +595,10 @@ export class PipelineEngine {
         }
         break;
 
+      case "ulimit":
+        onStdout(this.kernel.resourceLimitEngine.ulimit(args));
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);
