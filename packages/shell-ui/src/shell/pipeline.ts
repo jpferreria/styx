@@ -437,9 +437,15 @@ export class PipelineEngine {
       case "ipcs":
         if (args.includes("-q")) {
           onStdout(this.kernel.mqueueManager.formatIpcsQueues());
+        } else if (args.includes("-s")) {
+          onStdout(this.kernel.semaphoreManager.formatIpcsSemaphores());
         } else {
-          onStdout(this.kernel.shmManager.formatIpcs());
+          onStdout(this.kernel.shmManager.formatIpcs() + "\n" + this.kernel.semaphoreManager.formatIpcsSemaphores());
         }
+        break;
+
+      case "sem":
+        onStdout(this.kernel.semaphoreManager.formatIpcsSemaphores());
         break;
 
       case "mqueue":

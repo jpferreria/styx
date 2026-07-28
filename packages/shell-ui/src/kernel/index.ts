@@ -9,7 +9,7 @@
  */
 
 import { createHelloWasmBinary } from "./sampleWasm";
-import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary, createIfconfigWasmBinary, createSpkgExportWasmBinary, createThemeWasmBinary, createShDebugWasmBinary, createSwaponWasmBinary, createSysbenchWasmBinary, createGetfattrWasmBinary, createSetfattrWasmBinary, createAliasWasmBinary, createTopGuiWasmBinary, createIpcsWasmBinary, createMqueueWasmBinary, createTermcolorWasmBinary, createPmapWasmBinary, createLscpuWasmBinary, createEpollWasmBinary, createMknodWasmBinary, createBrowserWasmBinary, createMkfifoWasmBinary, createLddWasmBinary, createEvtestWasmBinary } from "./binaries";
+import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary, createIfconfigWasmBinary, createSpkgExportWasmBinary, createThemeWasmBinary, createShDebugWasmBinary, createSwaponWasmBinary, createSysbenchWasmBinary, createGetfattrWasmBinary, createSetfattrWasmBinary, createAliasWasmBinary, createTopGuiWasmBinary, createIpcsWasmBinary, createMqueueWasmBinary, createTermcolorWasmBinary, createPmapWasmBinary, createLscpuWasmBinary, createEpollWasmBinary, createMknodWasmBinary, createBrowserWasmBinary, createMkfifoWasmBinary, createLddWasmBinary, createEvtestWasmBinary, createSemWasmBinary } from "./binaries";
 import { WasmProcessRunner } from "./execve";
 import { PipeNode } from "./pipe";
 import { SocketNode, SocketDomain, SocketType } from "./socket";
@@ -45,6 +45,7 @@ import { DeviceNodeEngine } from "./devnodes";
 import { FIFOManager } from "./fifo";
 import { SharedLibraryEngine } from "./shlib";
 import { InputDeviceEngine } from "./input";
+import { SemaphoreManager } from "./sem";
 
 export enum Errno {
   EPERM = 1,
@@ -200,6 +201,7 @@ export class UnixKernel {
   public fifoManager: FIFOManager;
   public sharedLibraryEngine: SharedLibraryEngine;
   public inputDeviceEngine: InputDeviceEngine;
+  public semaphoreManager: SemaphoreManager;
 
   constructor() {
     this.root = new MemNode(1, true, 0o755);
@@ -232,6 +234,7 @@ export class UnixKernel {
     this.fifoManager = new FIFOManager(this);
     this.sharedLibraryEngine = new SharedLibraryEngine(this);
     this.inputDeviceEngine = new InputDeviceEngine(this);
+    this.semaphoreManager = new SemaphoreManager(this);
     this.setupHierarchy();
   }
 
@@ -498,6 +501,9 @@ export class UnixKernel {
 
     const evtestAppNode = binNode.createChild("evtest.wasm", false, 0o755);
     evtestAppNode.write(0, createEvtestWasmBinary());
+
+    const semAppNode = binNode.createChild("sem.wasm", false, 0o755);
+    semAppNode.write(0, createSemWasmBinary());
 
     // Initial files
     const userHome = this.resolvePath("/home/user");

@@ -267,3 +267,7 @@ export function createLddWasmBinary(): Uint8Array {
 export function createEvtestWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS USB/HID Input Event Inspector (evtest)\n");
 }
+
+export function createSemWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS POSIX Semaphore Inspector (sem)\n");
+}

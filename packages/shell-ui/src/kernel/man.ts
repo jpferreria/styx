@@ -283,6 +283,14 @@ export class ManualManager {
       description: "evtest monitors and displays real-time input event data from /dev/input/event0 (keyboard) and /dev/input/mice (mouse).",
       examples: "  evtest\n  lsinput",
     });
+
+    this.register({
+      name: "sem",
+      summary: "POSIX semaphore inspector",
+      synopsis: "sem",
+      description: "sem inspects and displays POSIX named semaphores and inter-process locking state.",
+      examples: "  sem\n  ipcs -s",
+    });
   }
 
   register(entry: ManualEntry): void {
