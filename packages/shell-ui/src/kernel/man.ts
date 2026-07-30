@@ -419,6 +419,14 @@ export class ManualManager {
       description: "wasm-info inspects WASI Preview 1 and WASI 0.2 Preview 2 WebAssembly Component Model headers and WIT exports.",
       examples: "  wasm-info /bin/cron.wasm",
     });
+
+    this.register({
+      name: "fdisk",
+      summary: "manipulate disk partition table and OPFS block device",
+      synopsis: "fdisk -l | mkfs.ext4 | mount | umount",
+      description: "fdisk, mkfs.ext4, mount, and umount format and mount virtual EXT4 OPFS block devices.",
+      examples: "  fdisk -l\n  mkfs.ext4 /dev/sda\n  mount /dev/sda /mnt",
+    });
   }
 
   register(entry: ManualEntry): void {

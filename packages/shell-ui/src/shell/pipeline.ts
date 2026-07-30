@@ -648,6 +648,36 @@ export class PipelineEngine {
         }
         break;
 
+      case "fdisk":
+        onStdout(this.kernel.ext4BlockEngine.fdisk(args));
+        break;
+
+      case "mkfs.ext4":
+      case "mkfs":
+        const dev = args[0] || "/dev/sda";
+        onStdout(this.kernel.ext4BlockEngine.mkfsExt4(dev));
+        break;
+
+      case "mount":
+        if (args.length === 0) {
+          onStdout(this.kernel.ext4BlockEngine.formatMountStatus());
+        } else if (args.length >= 2) {
+          this.kernel.ext4BlockEngine.mount(args[0], args[1]);
+          onStdout(`Mounted ${args[0]} on ${args[1]} (ext4, rw)\n`);
+        } else {
+          onStderr("Usage: mount [<device> <target_dir>]\n");
+        }
+        break;
+
+      case "umount":
+        if (args[0]) {
+          const ok = this.kernel.ext4BlockEngine.umount(args[0]);
+          onStdout(ok ? `Unmounted ${args[0]}\n` : `umount: ${args[0]}: target not mounted\n`);
+        } else {
+          onStderr("Usage: umount <target_dir>\n");
+        }
+        break;
+
       case "poll":
       case "lspoll":
         onStdout(this.kernel.eventMultiplexEngine.lspoll());

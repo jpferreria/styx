@@ -57,6 +57,7 @@ import { SysInfoEngine } from "./sysinfo";
 import { EventMultiplexEngine } from "./poll";
 import { SystemDiagnosticEngine } from "./system";
 import { StyxSandboxEngine } from "./sandbox";
+import { Ext4BlockEngine } from "./ext4";
 
 export enum Errno {
   EPERM = 1,
@@ -224,6 +225,7 @@ export class UnixKernel {
   public eventMultiplexEngine: EventMultiplexEngine;
   public systemDiagnosticEngine: SystemDiagnosticEngine;
   public sandboxEngine: StyxSandboxEngine;
+  public ext4BlockEngine: Ext4BlockEngine;
 
   constructor() {
     this.root = new MemNode(1, true, 0o755);
@@ -266,6 +268,7 @@ export class UnixKernel {
     this.eventMultiplexEngine = new EventMultiplexEngine(this);
     this.systemDiagnosticEngine = new SystemDiagnosticEngine(this);
     this.sandboxEngine = new StyxSandboxEngine(this);
+    this.ext4BlockEngine = new Ext4BlockEngine(this);
     this.setupHierarchy();
     this.fileLockEngine = new FileLockEngine(this);
     this.mmapEngine = new MMapEngine(this);
