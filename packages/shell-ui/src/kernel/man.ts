@@ -427,6 +427,14 @@ export class ManualManager {
       description: "fdisk, mkfs.ext4, mount, and umount format and mount virtual EXT4 OPFS block devices.",
       examples: "  fdisk -l\n  mkfs.ext4 /dev/sda\n  mount /dev/sda /mnt",
     });
+
+    this.register({
+      name: "getfacl",
+      summary: "get file access control lists",
+      synopsis: "getfacl <file> | setfacl [-m|-x] <spec> <file>",
+      description: "getfacl and setfacl inspect and configure POSIX Extended Access Control Lists (ACLs) per user and group.",
+      examples: "  getfacl /home/user/README.txt\n  setfacl -m u:alice:rw- /home/user/README.txt",
+    });
   }
 
   register(entry: ManualEntry): void {

@@ -678,6 +678,18 @@ export class PipelineEngine {
         }
         break;
 
+      case "getfacl":
+        if (args[0]) {
+          onStdout(this.kernel.accessControlListEngine.getfacl(args[0]));
+        } else {
+          onStderr("Usage: getfacl <file_path>\n");
+        }
+        break;
+
+      case "setfacl":
+        onStdout(this.kernel.accessControlListEngine.setfacl(args));
+        break;
+
       case "poll":
       case "lspoll":
         onStdout(this.kernel.eventMultiplexEngine.lspoll());
