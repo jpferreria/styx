@@ -435,6 +435,14 @@ export class ManualManager {
       description: "getfacl and setfacl inspect and configure POSIX Extended Access Control Lists (ACLs) per user and group.",
       examples: "  getfacl /home/user/README.txt\n  setfacl -m u:alice:rw- /home/user/README.txt",
     });
+
+    this.register({
+      name: "cgcreate",
+      summary: "control groups v2 resource limits manager",
+      synopsis: "cgcreate <path> | cgexec <path> | cgset <path> <key> <val> | lscgroup",
+      description: "cgcreate, cgexec, cgset, cgget, and lscgroup manage POSIX Cgroups v2 resource controllers under /sys/fs/cgroup.",
+      examples: "  cgcreate /sys/fs/cgroup/sandbox1\n  cgset /sys/fs/cgroup/sandbox1 memory.max 64M\n  lscgroup",
+    });
   }
 
   register(entry: ManualEntry): void {

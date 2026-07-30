@@ -690,6 +690,43 @@ export class PipelineEngine {
         onStdout(this.kernel.accessControlListEngine.setfacl(args));
         break;
 
+      case "cgcreate":
+        if (args[0]) {
+          onStdout(this.kernel.cgroupV2Engine.cgcreate(args[0]));
+        } else {
+          onStderr("Usage: cgcreate <cgroup_path>\n");
+        }
+        break;
+
+      case "cgexec":
+        if (args[0]) {
+          const pid = args[1] ? parseInt(args[1], 10) : 2;
+          onStdout(this.kernel.cgroupV2Engine.cgexec(args[0], pid));
+        } else {
+          onStderr("Usage: cgexec <cgroup_path> [pid]\n");
+        }
+        break;
+
+      case "cgset":
+        if (args.length >= 3) {
+          onStdout(this.kernel.cgroupV2Engine.cgset(args[0], args[1], args[2]));
+        } else {
+          onStderr("Usage: cgset <cgroup_path> <key> <val>\n");
+        }
+        break;
+
+      case "cgget":
+        if (args[0]) {
+          onStdout(this.kernel.cgroupV2Engine.cgget(args[0]));
+        } else {
+          onStderr("Usage: cgget <cgroup_path>\n");
+        }
+        break;
+
+      case "lscgroup":
+        onStdout(this.kernel.cgroupV2Engine.lscgroup());
+        break;
+
       case "poll":
       case "lspoll":
         onStdout(this.kernel.eventMultiplexEngine.lspoll());
