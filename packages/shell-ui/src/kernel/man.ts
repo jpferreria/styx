@@ -379,6 +379,14 @@ export class ManualManager {
       description: "sandbox exposes OpenAI/Ollama tool calling interfaces for local LLMs.",
       examples: "  syscheck\n  sandbox",
     });
+
+    this.register({
+      name: "sigaction",
+      summary: "examine and change process signal action",
+      synopsis: "sigaction | sigprocmask | sigcheck",
+      description: "sigaction, sigprocmask, and sigcheck inspect and configure process signal masks, handlers, and real-time signals.",
+      examples: "  sigcheck\n  signal 2 1",
+    });
   }
 
   register(entry: ManualEntry): void {

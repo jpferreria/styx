@@ -621,6 +621,12 @@ export class PipelineEngine {
         onStdout(this.kernel.systemDiagnosticEngine.formatPosixStatus());
         break;
 
+      case "sigcheck":
+      case "sigaction":
+      case "sigprocmask":
+        onStdout(this.kernel.signalManager.sigcheck());
+        break;
+
       case "cat":
         if (args[0]) {
           const fd = this.kernel.sys_open(args[0], false);
