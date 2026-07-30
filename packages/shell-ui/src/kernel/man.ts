@@ -403,6 +403,14 @@ export class ManualManager {
       description: "shm_open opens a POSIX shared memory object in /dev/shm mapped into process memory.",
       examples: "  ipcs -m",
     });
+
+    this.register({
+      name: "socket",
+      summary: "create an endpoint for network communication",
+      synopsis: "socket | curl | nc | ifconfig",
+      description: "socket, curl, nc, and ifconfig manage TCP/UDP sockets, WebSockets proxying, and network interfaces.",
+      examples: "  ifconfig\n  curl https://httpbin.org/get\n  nc 127.0.0.1 8080",
+    });
   }
 
   register(entry: ManualEntry): void {

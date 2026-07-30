@@ -297,6 +297,24 @@ export class PipelineEngine {
         onStdout(pingReport);
         break;
 
+      case "ifconfig":
+        onStdout(this.kernel.netManager.formatIfconfig());
+        break;
+
+      case "nc":
+      case "socket":
+        if (args[0] && args[1]) {
+          const host = args[0];
+          const port = parseInt(args[1], 10);
+          const sockFd = this.kernel.sys_socket();
+          await this.kernel.sys_connect(sockFd, `${host}:${port}`);
+          onStdout(`Connected to ${host}:${port} via Styx OS WebSocket/Socket Proxy\n`);
+          this.kernel.sys_close(sockFd);
+        } else {
+          onStdout("Usage: nc <host> <port>\n");
+        }
+        break;
+
       case "cron":
       case "crontab":
         if (args[0] === "-l") {
@@ -339,10 +357,6 @@ export class PipelineEngine {
 
       case "pty":
         onStdout(this.kernel.ptyManager.listSessions());
-        break;
-
-      case "ifconfig":
-        onStdout(this.kernel.netManager.formatIfconfig());
         break;
 
       case "theme":

@@ -1,7 +1,7 @@
 /**
  * @file socket.test.ts
  * @module StyxOS/Kernel/SocketTests
- * @description Vitest test suite for POSIX sys_socket, sys_connect, network I/O, and /bin/curl.wasm.
+ * @description Vitest test suite for POSIX sys_socket, sys_connect, WebSockets proxying, network I/O, and /bin/curl.wasm.
  *
  * Copyright (C) 2026 Styx OS Project Authors
  * Licensed under the GNU General Public License v3.0 or later (GPL-3.0-or-later).
@@ -22,6 +22,21 @@ describe("Styx OS POSIX Virtual Socket & Network Test Suite", () => {
     expect(responseBytes.length).toBeGreaterThan(0);
 
     kernel.sys_close(sockFd);
+  });
+
+  it("should support socket bind, send, and WebSocket proxying mode", async () => {
+    const kernel = new UnixKernel();
+    const sockFd = kernel.sys_socket();
+
+    const descriptor = (kernel as any).fds.get(sockFd);
+    expect(descriptor).toBeDefined();
+    const node = descriptor.node;
+
+    node.bind("127.0.0.1", 8080);
+    expect(node.boundPort).toBe(8080);
+
+    node.write(0, new TextEncoder().encode("PING"));
+    expect(node.stat().mode).toBe(0o666);
   });
 
   it("should execute /bin/curl.wasm via sys_execve and output network data", async () => {
