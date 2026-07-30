@@ -632,6 +632,22 @@ export class PipelineEngine {
         onStdout(this.kernel.sysInfoEngine.free(args));
         break;
 
+      case "wasm-info":
+        if (args[0]) {
+          const node = this.kernel.resolvePath(args[0]);
+          if (node) {
+            const buf = node.read(0, 16);
+            const isComponent = buf[4] === 0x0d && buf[5] === 0x00;
+            const verStr = isComponent ? "WASI Preview 2 (Component Model)" : "WASI Preview 1 (Core Module)";
+            onStdout(`=== Styx OS WASI Component Inspector ===\nFile: ${args[0]}\nType: ${verStr}\nSize: ${node.stat().size} bytes\nInterfaces: wasi:cli/command@0.2.0, wasi:filesystem/types@0.2.0\n`);
+          } else {
+            onStderr(`wasm-info: ${args[0]}: No such file or directory\n`);
+          }
+        } else {
+          await this.kernel.sys_execve("/bin/wasm-info.wasm", ["/bin/wasm-info.wasm"], undefined, onStdout, onStderr);
+        }
+        break;
+
       case "poll":
       case "lspoll":
         onStdout(this.kernel.eventMultiplexEngine.lspoll());

@@ -311,3 +311,7 @@ export function createPollWasmBinary(): Uint8Array {
 export function createSyscheckWasmBinary(): Uint8Array {
   return createMessageWasmBinary("Styx OS POSIX System Health Tool (syscheck)\n");
 }
+
+export function createWasmInfoWasmBinary(): Uint8Array {
+  return createMessageWasmBinary("Styx OS WASI Preview 2 Component Inspector (wasm-info)\n");
+}

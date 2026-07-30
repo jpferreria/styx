@@ -41,4 +41,19 @@ describe("Styx OS Wasm Executable Binaries Test Suite", () => {
     expect(exitCode).toBe(0);
     expect(stdout).toContain("Styx OS Stream");
   });
+
+  it("should execute /bin/wasm-info.wasm via sys_execve and inspect WASI component headers", async () => {
+    const kernel = new UnixKernel();
+    let stdout = "";
+
+    const exitCode = await kernel.sys_execve(
+      "/bin/wasm-info.wasm",
+      ["/bin/wasm-info.wasm"],
+      undefined,
+      (text) => { stdout += text; }
+    );
+
+    expect(exitCode).toBe(0);
+    expect(stdout).toContain("WASI");
+  });
 });

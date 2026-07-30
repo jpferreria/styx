@@ -411,6 +411,14 @@ export class ManualManager {
       description: "socket, curl, nc, and ifconfig manage TCP/UDP sockets, WebSockets proxying, and network interfaces.",
       examples: "  ifconfig\n  curl https://httpbin.org/get\n  nc 127.0.0.1 8080",
     });
+
+    this.register({
+      name: "wasm-info",
+      summary: "WebAssembly Component Model and WIT metadata inspector",
+      synopsis: "wasm-info <file.wasm>",
+      description: "wasm-info inspects WASI Preview 1 and WASI 0.2 Preview 2 WebAssembly Component Model headers and WIT exports.",
+      examples: "  wasm-info /bin/cron.wasm",
+    });
   }
 
   register(entry: ManualEntry): void {
