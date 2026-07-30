@@ -23,17 +23,21 @@ describe("Styx OS POSIX Shared Memory Subsystem Test Suite", () => {
     expect(retrieved).toBeDefined();
     expect(new TextDecoder().decode(retrieved!)).toBe("Shared Memory Payload");
 
-    expect(kernel.shmManager.shmUnlink(segName)).toBe(true);
+    const shmid = kernel.shmManager.shm_open(segName);
+    expect(shmid).toBeGreaterThan(0);
+
+    expect(kernel.shmManager.shm_unlink(segName)).toBe(true);
     expect(kernel.shmManager.readShm(segName)).toBeNull();
   });
 
   it("should format ipcs -m shared memory segments report", () => {
     const kernel = new UnixKernel();
-    const report = kernel.shmManager.formatIpcs();
+    kernel.shmManager.shmOpen("/ipc_segment_1", 2048);
+    const report = kernel.shmManager.formatIpcsShm();
 
     expect(report).toContain("Shared Memory Segments");
-    expect(report).toContain("shmid");
-    expect(report).toContain("user");
+    expect(report).toContain("SHMID");
+    expect(report).toContain("/ipc_segment_1");
   });
 
   it("should execute /bin/ipcs.wasm via sys_execve and stream report", async () => {

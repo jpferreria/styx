@@ -1,7 +1,7 @@
 /**
  * @file shm.ts
  * @module StyxOS/Kernel/SharedMemoryManager
- * @description POSIX Inter-Process Shared Memory subsystem (/dev/shm, shm_open, ipcs).
+ * @description POSIX Inter-Process Shared Memory subsystem (/dev/shm, shm_open, shm_unlink, ipcs -m).
  *
  * Copyright (C) 2026 Styx OS Project Authors
  * Licensed under the GNU General Public License v3.0 or later (GPL-3.0-or-later).
@@ -43,6 +43,11 @@ export class SharedMemoryManager {
     return seg;
   }
 
+  shm_open(name: string, _oflag: number = 0, _mode: number = 0o666): number {
+    const seg = this.shmOpen(name);
+    return seg.shmid;
+  }
+
   writeShm(name: string, offset: number, data: Uint8Array): void {
     const normName = name.startsWith("/") ? name : `/${name}`;
     const seg = this.shmOpen(normName, data.length + offset);
@@ -62,18 +67,24 @@ export class SharedMemoryManager {
     return this.segments.delete(normName);
   }
 
-  formatIpcs(): string {
-    const lines: string[] = ["------ Shared Memory Segments --------"];
-    lines.push(`key        shmid      owner      perms      bytes      nattch     status`);
+  shm_unlink(name: string): boolean {
+    return this.shmUnlink(name);
+  }
 
-    if (this.segments.size === 0) {
-      lines.push(`0x00000000 1000       user       666        4096       1        `);
-    } else {
-      for (const s of this.segments.values()) {
-        const keyHex = `0x0000${s.shmid.toString(16)}`;
-        lines.push(`${keyHex.padEnd(10)} ${s.shmid.toString().padEnd(10)} ${s.owner.padEnd(10)} 666        ${s.size.toString().padEnd(10)} 1        `);
-      }
+  formatIpcsShm(): string {
+    const lines: string[] = [
+      "=== Styx OS POSIX Shared Memory Segments (ipcs -m) ===",
+      "SHMID      KEY/NAME             SIZE (BYTES)  OWNER",
+    ];
+
+    for (const seg of this.segments.values()) {
+      lines.push(`${seg.shmid.toString().padEnd(10)} ${seg.name.padEnd(20)} ${seg.size.toString().padEnd(13)} ${seg.owner}`);
     }
+
     return lines.join("\n") + "\n";
+  }
+
+  formatIpcs(): string {
+    return this.formatIpcsShm();
   }
 }

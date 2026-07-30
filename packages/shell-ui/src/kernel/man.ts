@@ -387,6 +387,22 @@ export class ManualManager {
       description: "sigaction, sigprocmask, and sigcheck inspect and configure process signal masks, handlers, and real-time signals.",
       examples: "  sigcheck\n  signal 2 1",
     });
+
+    this.register({
+      name: "sem_open",
+      summary: "initialize and open a POSIX named semaphore",
+      synopsis: "sem_open | sem | ipcs -s",
+      description: "sem_open initializes and opens a POSIX named semaphore for inter-process synchronization.",
+      examples: "  ipcs -s\n  sem",
+    });
+
+    this.register({
+      name: "shm_open",
+      summary: "allocate or open a POSIX shared memory object",
+      synopsis: "shm_open | ipcs -m",
+      description: "shm_open opens a POSIX shared memory object in /dev/shm mapped into process memory.",
+      examples: "  ipcs -m",
+    });
   }
 
   register(entry: ManualEntry): void {

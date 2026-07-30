@@ -439,13 +439,20 @@ export class PipelineEngine {
           onStdout(this.kernel.mqueueManager.formatIpcsQueues());
         } else if (args.includes("-s")) {
           onStdout(this.kernel.semaphoreManager.formatIpcsSemaphores());
+        } else if (args.includes("-m")) {
+          onStdout(this.kernel.shmManager.formatIpcsShm());
         } else {
-          onStdout(this.kernel.shmManager.formatIpcs() + "\n" + this.kernel.semaphoreManager.formatIpcsSemaphores());
+          onStdout(this.kernel.shmManager.formatIpcsShm() + "\n" + this.kernel.semaphoreManager.formatIpcsSemaphores());
         }
         break;
 
       case "sem":
+      case "sem_open":
         onStdout(this.kernel.semaphoreManager.formatIpcsSemaphores());
+        break;
+
+      case "shm_open":
+        onStdout(this.kernel.shmManager.formatIpcsShm());
         break;
 
       case "mqueue":
