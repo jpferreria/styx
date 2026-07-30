@@ -1,9 +1,9 @@
-# Styx OS Roadmap: Version 0.20 (Milestones 62 - 71)
+# Styx OS Roadmap: Version 0.20 "Rivendell" (Milestones 62 - 71)
 
 ## Executive Summary
 **Styx OS v0.10** established a robust POSIX-compliant WebAssembly operating system with 60 core subsystems (VFS, ProcFS, SysFS, DevNodes, Termios, MMap, IPCCleanup, High-Res Timers, Capabilities, Resource Limits, SysInfo, Poll/Epoll, and LLM Code Execution Sandbox).
 
-**Styx OS v0.20** expands Styx OS into a production-grade WebAssembly desktop workstation and autonomous AI sandbox. Version 0.20 introduces **browser-native socket proxying**, **EXT4/OPFS virtual block storage**, **WASI Preview 2 component support**, **POSIX ACLs**, **tmux terminal multiplexing**, and a **dedicated Local LLM RPC Server**.
+**Styx OS v0.20 "Rivendell"** (named after the legendary sanctuary of safety, wisdom, and protection) expands Styx OS into a production-grade WebAssembly desktop workstation and autonomous AI sandbox. Version 0.20 introduces **browser-native socket proxying**, **EXT4/OPFS virtual block storage**, **WASI Preview 2 component support**, **POSIX ACLs**, **tmux terminal multiplexing**, and a **dedicated Local LLM RPC Server**.
 
 ---
 
