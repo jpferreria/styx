@@ -443,6 +443,14 @@ export class ManualManager {
       description: "cgcreate, cgexec, cgset, cgget, and lscgroup manage POSIX Cgroups v2 resource controllers under /sys/fs/cgroup.",
       examples: "  cgcreate /sys/fs/cgroup/sandbox1\n  cgset /sys/fs/cgroup/sandbox1 memory.max 64M\n  lscgroup",
     });
+
+    this.register({
+      name: "pthread_mutex_init",
+      summary: "initialize or inspect POSIX multi-process shared mutices and spinlocks",
+      synopsis: "mutex | pthread_mutex_init",
+      description: "pthread_mutex_init, pthread_mutex_lock, pthread_mutex_unlock, and pthread_spin_lock manage multi-process mutual exclusion.",
+      examples: "  mutex",
+    });
   }
 
   register(entry: ManualEntry): void {

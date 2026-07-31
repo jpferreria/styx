@@ -60,6 +60,7 @@ import { StyxSandboxEngine } from "./sandbox";
 import { Ext4BlockEngine } from "./ext4";
 import { AccessControlListEngine } from "./acl";
 import { CgroupV2Engine } from "./cgroup";
+import { MutexSpinlockEngine } from "./mutex";
 
 export enum Errno {
   EPERM = 1,
@@ -230,6 +231,7 @@ export class UnixKernel {
   public ext4BlockEngine: Ext4BlockEngine;
   public accessControlListEngine: AccessControlListEngine;
   public cgroupV2Engine: CgroupV2Engine;
+  public mutexSpinlockEngine: MutexSpinlockEngine;
 
   constructor() {
     this.root = new MemNode(1, true, 0o755);
@@ -276,6 +278,7 @@ export class UnixKernel {
     this.accessControlListEngine = new AccessControlListEngine(this);
     this.setupHierarchy();
     this.cgroupV2Engine = new CgroupV2Engine(this);
+    this.mutexSpinlockEngine = new MutexSpinlockEngine(this);
     this.fileLockEngine = new FileLockEngine(this);
     this.mmapEngine = new MMapEngine(this);
   }

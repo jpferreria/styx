@@ -727,6 +727,11 @@ export class PipelineEngine {
         onStdout(this.kernel.cgroupV2Engine.lscgroup());
         break;
 
+      case "mutex":
+      case "pthread_mutex":
+        onStdout(this.kernel.mutexSpinlockEngine.formatMutexStatus());
+        break;
+
       case "poll":
       case "lspoll":
         onStdout(this.kernel.eventMultiplexEngine.lspoll());
