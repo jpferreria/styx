@@ -26,21 +26,24 @@ impl SyscallDispatcher {
         let process = Arc::new(ProcessControlBlock::new(1, 0));
         let tty = TtyDevice::new();
 
-        let mut fds = process.fds.write().unwrap();
-        let open_tty = Arc::new(OpenFile {
-            node: tty.clone(),
-            offset: RwLock::new(0),
-            flags: OpenFlags::RDWR,
-        });
+        {
+            let mut fds = process.fds.write().unwrap();
+            let open_tty = Arc::new(OpenFile {
+                node: tty.clone(),
+                offset: RwLock::new(0),
+                flags: OpenFlags::RDWR,
+            });
 
-        fds.insert_at(0, open_tty.clone());
-        fds.insert_at(1, open_tty.clone());
-        fds.insert_at(2, open_tty.clone());
+            fds.insert_at(0, open_tty.clone());
+            fds.insert_at(1, open_tty.clone());
+            fds.insert_at(2, open_tty.clone());
+        }
 
         Self { vfs, process, tty }
     }
 
     pub fn sys_open(&self, path: &str, flags: u32, mode: u32) -> Result<Fd> {
+        self.process.capabilities.check(crate::security::Capability::STORAGE_ACCESS)?;
         let open_flags = OpenFlags::from_bits_truncate(flags);
         
         let node = match self.vfs.resolve_path(path) {
@@ -98,6 +101,7 @@ impl SyscallDispatcher {
     }
 
     pub fn sys_mkdir(&self, path: &str, mode: u32) -> Result<()> {
+        self.process.capabilities.check(crate::security::Capability::STORAGE_ACCESS)?;
         let (parent_path, dir_name) = match path.rfind('/') {
             Some(idx) => (&path[..idx], &path[idx + 1..]),
             None => ("", path),
@@ -113,6 +117,7 @@ impl SyscallDispatcher {
     }
 
     pub fn sys_unlink(&self, path: &str) -> Result<()> {
+        self.process.capabilities.check(crate::security::Capability::STORAGE_ACCESS)?;
         let (parent_path, filename) = match path.rfind('/') {
             Some(idx) => (&path[..idx], &path[idx + 1..]),
             None => ("", path),

@@ -126,23 +126,23 @@ impl KernelEngine {
 
     pub fn run_posix_tests(&self) -> String {
         let mut report = String::from("=== POSIX Conformance Test Suite Output ===\n");
-        let tests = vec![
-            ("test_mkdir_and_stat", || {
-                self.sys_mkdir("/tmp/posix_test_dir", 0o755)?;
-                let stat = self.dispatcher.sys_stat("/tmp/posix_test_dir")?;
+        let tests: Vec<(&str, Box<dyn Fn() -> Result<(), String>>)> = vec![
+            ("test_mkdir_and_stat", Box::new(|| {
+                self.sys_mkdir("/tmp/posix_test_dir", 0o755).map_err(|e| e.as_string().unwrap_or_else(|| "Error".to_string()))?;
+                let stat = self.dispatcher.sys_stat("/tmp/posix_test_dir").map_err(|e| e.to_string())?;
                 if stat.node_type == vfs::NodeType::Directory { Ok(()) } else { Err("Not dir".into()) }
-            }),
-            ("test_file_write_and_read", || {
-                let fd = self.sys_open("/tmp/posix_file.txt", 64 | 2, 0o644)?;
-                self.sys_write(fd, b"Hello POSIX!")?;
-                self.sys_close(fd)?;
+            })),
+            ("test_file_write_and_read", Box::new(|| {
+                let fd = self.sys_open("/tmp/posix_file.txt", 64 | 2, 0o644).map_err(|e| e.as_string().unwrap_or_else(|| "Error".to_string()))?;
+                self.sys_write(fd, b"Hello POSIX!").map_err(|e| e.as_string().unwrap_or_else(|| "Error".to_string()))?;
+                self.sys_close(fd).map_err(|e| e.as_string().unwrap_or_else(|| "Error".to_string()))?;
 
-                let fd2 = self.sys_open("/tmp/posix_file.txt", 0, 0)?;
-                let content = self.sys_read(fd2, 100)?;
-                self.sys_close(fd2)?;
+                let fd2 = self.sys_open("/tmp/posix_file.txt", 0, 0).map_err(|e| e.as_string().unwrap_or_else(|| "Error".to_string()))?;
+                let content = self.sys_read(fd2, 100).map_err(|e| e.as_string().unwrap_or_else(|| "Error".to_string()))?;
+                self.sys_close(fd2).map_err(|e| e.as_string().unwrap_or_else(|| "Error".to_string()))?;
 
                 if content == b"Hello POSIX!" { Ok(()) } else { Err("Content mismatch".into()) }
-            }),
+            })),
         ];
 
         let mut passed = 0;
