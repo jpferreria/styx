@@ -89,15 +89,21 @@ graph TD
 
 ---
 
-## Milestone Execution Matrix (v0.20)
+## Milestone Execution Matrix (v0.20 "Rivendell")
 
 | Milestone | Target Feature | Core Engine | New Commands | Status |
 | :--- | :--- | :--- | :--- | :--- |
-| **MS 62** | POSIX Async Signal Masks | `signal.ts` | `sigaction`, `sigprocmask` | Planned |
-| **MS 63** | Shared Memory Semaphore Bridge | `sem.ts` / `shm.ts` | `sem_open`, `shm_open` | Planned |
-| **MS 64** | WebSockets Socket Proxy | `socket.ts` | `curl`, `nc` | Planned |
-| **MS 65** | WASI Preview 2 Component Loader | `execve.ts` | `wasm-info` | Planned |
-| **MS 66** | EXT4 & OPFS Block Storage | `ext4.ts` | `fdisk`, `mkfs.ext4` | Planned |
+| **MS 61** | Ollama / Gemma LLM Code Sandbox | `sandbox.ts` | `sandbox` | **Completed** ✅ |
+| **MS 62** | POSIX Async Signal Masks & Real-Time Signals | `signal.ts` | `sigaction`, `sigprocmask`, `sigpending`, `sigsuspend` | **Completed** ✅ |
+| **MS 63** | POSIX Shared Memory & Semaphores Bridge | `sem.ts` / `shm.ts` | `sem_open`, `shm_open`, `ipcs` | **Completed** ✅ |
+| **MS 64** | WebSockets Socket Proxy Protocol | `socket.ts` | `curl`, `nc`, `ifconfig`, `ping` | **Completed** ✅ |
+| **MS 65** | WASI Preview 2 Component Loader | `execve.ts` | `wasm-info` | **Completed** ✅ |
+| **MS 66** | EXT4 & OPFS Virtual Block Storage | `ext4.ts` | `fdisk`, `mkfs.ext4`, `mount`, `umount` | **Completed** ✅ |
+| **MS 67** | POSIX Extended Access Control Lists | `acl.ts` | `getfacl`, `setfacl` | **Completed** ✅ |
+| **MS 68** | POSIX Cgroups v2 Resource Controllers | `cgroup.ts` | `cgcreate`, `cgexec`, `cgset`, `cgget`, `lscgroup` | **Completed** ✅ |
+| **MS 69** | Multi-Process Shared Mutex & Spinlock | `mutex.ts` | `pthread_mutex_init`, `pthread_mutex_lock`, `mutex` | **Completed** ✅ |
+| **MS 70** | POSIX Record Byte-Range File Locks | `lockf.ts` | `lockf`, `fcntl(F_SETLK)`, `lslocks` | **Completed** ✅ |
+| **MS 71** | Local LLM REST/RPC Agent Server | `llm-server.ts` | `llm-server` (`/v1/chat/completions`, `ws://`) | **Completed** ✅ |
 | **MS 67** | POSIX Extended Access Control Lists | `acl.ts` | `getfacl`, `setfacl` | Planned |
 | **MS 68** | Terminal Session Multiplexer | `pty.ts` | `tmux` | Planned |
 | **MS 69** | Window Manager Compositor & Themes | `wm.ts` | `wm-config` | Planned |
