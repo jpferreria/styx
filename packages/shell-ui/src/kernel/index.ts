@@ -62,6 +62,7 @@ import { AccessControlListEngine } from "./acl";
 import { CgroupV2Engine } from "./cgroup";
 import { MutexSpinlockEngine } from "./mutex";
 import { RecordLockEngine } from "./lockf";
+import { LlmAgentServerEngine } from "./llm-server";
 
 export enum Errno {
   EPERM = 1,
@@ -234,6 +235,7 @@ export class UnixKernel {
   public cgroupV2Engine: CgroupV2Engine;
   public mutexSpinlockEngine: MutexSpinlockEngine;
   public recordLockEngine: RecordLockEngine;
+  public llmAgentServerEngine: LlmAgentServerEngine;
 
   constructor() {
     this.root = new MemNode(1, true, 0o755);
@@ -282,6 +284,7 @@ export class UnixKernel {
     this.cgroupV2Engine = new CgroupV2Engine(this);
     this.mutexSpinlockEngine = new MutexSpinlockEngine(this);
     this.recordLockEngine = new RecordLockEngine(this);
+    this.llmAgentServerEngine = new LlmAgentServerEngine(this);
     this.fileLockEngine = new FileLockEngine(this);
     this.mmapEngine = new MMapEngine(this);
   }

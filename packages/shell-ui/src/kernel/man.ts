@@ -459,6 +459,14 @@ export class ManualManager {
       description: "lockf and fcntl F_SETLK/F_GETLK manage POSIX advisory byte-range file locks.",
       examples: "  lslocks",
     });
+
+    this.register({
+      name: "llm-server",
+      summary: "local LLM OpenAI/Ollama REST & WebSockets RPC agent server",
+      synopsis: "llm-server [start|stop|status]",
+      description: "llm-server exposes /v1/chat/completions REST and ws://localhost:8080/rpc endpoints with direct kernel tool execution binding.",
+      examples: "  llm-server start\n  llm-server status",
+    });
   }
 
   register(entry: ManualEntry): void {

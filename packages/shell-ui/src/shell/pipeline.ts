@@ -736,6 +736,16 @@ export class PipelineEngine {
         onStdout(this.kernel.recordLockEngine.formatRecordLocksStatus());
         break;
 
+      case "llm-server":
+        if (args[0] === "start") {
+          onStdout(this.kernel.llmAgentServerEngine.startServer());
+        } else if (args[0] === "stop") {
+          onStdout(this.kernel.llmAgentServerEngine.stopServer());
+        } else {
+          onStdout(this.kernel.llmAgentServerEngine.formatServerStatus());
+        }
+        break;
+
       case "poll":
       case "lspoll":
         onStdout(this.kernel.eventMultiplexEngine.lspoll());
