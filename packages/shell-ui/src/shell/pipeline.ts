@@ -732,6 +732,10 @@ export class PipelineEngine {
         onStdout(this.kernel.mutexSpinlockEngine.formatMutexStatus());
         break;
 
+      case "lockf":
+        onStdout(this.kernel.recordLockEngine.formatRecordLocksStatus());
+        break;
+
       case "poll":
       case "lspoll":
         onStdout(this.kernel.eventMultiplexEngine.lspoll());

@@ -451,6 +451,14 @@ export class ManualManager {
       description: "pthread_mutex_init, pthread_mutex_lock, pthread_mutex_unlock, and pthread_spin_lock manage multi-process mutual exclusion.",
       examples: "  mutex",
     });
+
+    this.register({
+      name: "lockf",
+      summary: "apply, test or remove a POSIX advisory byte-range record lock",
+      synopsis: "lockf | lslocks",
+      description: "lockf and fcntl F_SETLK/F_GETLK manage POSIX advisory byte-range file locks.",
+      examples: "  lslocks",
+    });
   }
 
   register(entry: ManualEntry): void {
