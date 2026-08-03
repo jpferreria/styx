@@ -80,8 +80,8 @@ export enum Errno {
 export enum Capability {
   STORAGE_ACCESS = 1 << 0,
   PROCESS_EXEC   = 1 << 1,
-  SYS_ADMIN      = 2 << 2,
-  DAC_OVERRIDE   = 3 << 3,
+  SYS_ADMIN      = 1 << 2,
+  DAC_OVERRIDE   = 1 << 3,
 }
 
 export interface FileStat {
@@ -745,6 +745,7 @@ export class UnixKernel {
   }
 
   sys_setuid(uid: number): void {
+    this.checkCap(Capability.SYS_ADMIN);
     if (uid === 0) {
       this.userManager.setCurrentUser("root");
     } else {
@@ -753,6 +754,7 @@ export class UnixKernel {
   }
 
   sys_setgid(_gid: number): void {
+    this.checkCap(Capability.SYS_ADMIN);
     // Set group ID handler
   }
 
