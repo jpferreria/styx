@@ -8,6 +8,12 @@
 
 ---
 
+## 🖥️ Desktop & Terminal Interface
+
+![Styx OS Desktop & Terminal Interface](docs/assets/styx-desktop-ui.png)
+
+---
+
 ## 🏛️ Architecture Overview
 
 ```mermaid
