@@ -16,7 +16,7 @@ if [ -f "$PID_FILE" ]; then
     PID=$(cat "$PID_FILE")
     if ps -p "$PID" > /dev/null 2>&1; then
         echo "Status:    RUNNING (PID: $PID)"
-        echo "Local URL: http://localhost:5173/"
+        echo "Local URL: http://localhost:5180/"
         echo "Log File:  $LOG_FILE"
         echo ""
         echo "Recent Log Tail:"
@@ -28,11 +28,11 @@ if [ -f "$PID_FILE" ]; then
         exit 1
     fi
 else
-    # Fallback check if vite is running on 5173
+    # Fallback check if vite is running on 5180
     VITE_PID=$(pgrep -f "vite")
     if [ -n "$VITE_PID" ]; then
         echo "Status:    RUNNING (Vite PID: $VITE_PID)"
-        echo "Local URL: http://localhost:5173/"
+        echo "Local URL: http://localhost:5180/"
         exit 0
     else
         echo "Status:    STOPPED (No server process found)"

@@ -119,6 +119,7 @@ npm test -- --coverage
 4. Launch local development server:
    ```bash
    npm run dev
+   # Open http://localhost:5180/
    ```
 
 ---

@@ -17,7 +17,7 @@ if [ -f "$PID_FILE" ]; then
     PID=$(cat "$PID_FILE")
     if ps -p "$PID" > /dev/null 2>&1; then
         echo "⚠️  Styx OS is already running! (PID: $PID)"
-        echo "🌐 Local URL: http://localhost:5173/"
+        echo "🌐 Local URL: http://localhost:5180/"
         exit 0
     else
         rm -f "$PID_FILE"
@@ -40,7 +40,7 @@ if ps -p "$SERVER_PID" > /dev/null 2>&1; then
     echo "✅ Styx OS started successfully!"
     echo "   PID:       $SERVER_PID"
     echo "   Logs:      $LOG_FILE"
-    echo "   Local URL: http://localhost:5173/"
+    echo "   Local URL: http://localhost:5180/"
 else
     echo "❌ Failed to start Styx OS server. See $LOG_FILE for details."
     rm -f "$PID_FILE"
