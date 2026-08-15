@@ -110,4 +110,10 @@ export class ArchiveManager {
       URL.revokeObjectURL(url);
     }
   }
+
+  downloadVfsArchive(targetPath: string = "/home/user", kernel: UnixKernel, filename: string = "styx-vfs-backup.tar"): string {
+    const tarData = this.exportDirectory(targetPath, kernel);
+    this.triggerBrowserDownload(tarData, filename);
+    return `[exported VFS directory '${targetPath}' (${tarData.length} bytes) to host download '${filename}']\n`;
+  }
 }

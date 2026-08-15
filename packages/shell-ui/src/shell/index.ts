@@ -360,7 +360,12 @@ export class ShellHost {
           break;
 
         case "spkg":
-          this.pipelineEngine.executePipeline(`spkg ${args.join(" ")}`, (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
+          if (args[0] === "export") {
+            const targetPath = args[1] || "/home/user";
+            this.writeOutput(this.kernel.pkgManager.export(targetPath));
+          } else {
+            this.pipelineEngine.executePipeline(`spkg ${args.join(" ")}`, (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
+          }
           break;
 
         case "nano":

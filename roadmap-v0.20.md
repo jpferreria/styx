@@ -106,3 +106,4 @@ graph TD
 | **MS 71** | Local LLM REST/RPC Agent Server | `llm-server.ts` | `llm-server` (`/v1/chat/completions`, `ws://`) | **Completed** ✅ |
 | **MS 72** | Terminal Session Multiplexer | `tmux.ts` | `tmux` (`ls`, `new`, `attach`, `detach`) | **Completed** ✅ |
 | **MS 73** | Window Manager Compositor & Themes | `wm.ts` | `wm-config` (`tile-left`, `glassmorphism`, `status`) | **Completed** ✅ |
+| **MS 74** | One-Click VFS Backup & Exporter | `archive.ts` | `spkg export` (`.tar.gz` browser host download) | **Completed** ✅ |

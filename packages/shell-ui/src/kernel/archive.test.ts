@@ -61,4 +61,10 @@ describe("Styx OS File Archive & Compression Test Suite", () => {
     expect(exitCode).toBe(0);
     expect(stdout).toContain("Gzip v1.12");
   });
+
+  it("should export VFS directory and trigger browser download string", () => {
+    const kernel = new UnixKernel();
+    const res = kernel.archiveManager.downloadVfsArchive("/home/user", kernel, "backup.tar");
+    expect(res).toContain("exported VFS directory '/home/user'");
+  });
 });
