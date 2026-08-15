@@ -107,6 +107,19 @@ graph TD
 
 ---
 
+## 📚 Documentation & GitHub Wiki
+
+Detailed technical documentation, architectural guides, and API specifications are available in the repository wiki:
+
+- 🌐 **Online GitHub Wiki**: [https://github.com/jpferreria/styx/wiki](https://github.com/jpferreria/styx/wiki)
+- 🏠 **[Wiki Home](wiki/Home.md)** - Overview, key highlights, and feature catalog.
+- 🏛️ **[Architecture & Runtime](wiki/Architecture.md)** - High-level microkernel architecture and WASI Preview 2 Component Model.
+- 📋 **[POSIX Subsystems Catalog](wiki/POSIX-Subsystems.md)** - Detailed breakdown of all 77 POSIX milestone subsystems.
+- 🚀 **[Getting Started Guide](wiki/Getting-Started-&-Running-Guide.md)** - Quickstart, dev server setup, and control scripts (`./start.sh`, `./status.sh`, `./stop.sh`).
+- 📖 **[API & Syscall Reference](wiki/API-&-Syscall-Reference.md)** - System call reference table and kernel module APIs.
+
+---
+
 ## 🧪 Test Suite & Code Coverage
 
 - **Vitest Test Suite:** **205 / 205 Tests Passed (100% Success Score)** across 67 test files.
