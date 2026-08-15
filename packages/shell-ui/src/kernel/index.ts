@@ -9,7 +9,7 @@
  */
 
 import { createHelloWasmBinary } from "./sampleWasm";
-import { createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary, createIfconfigWasmBinary, createSpkgExportWasmBinary, createThemeWasmBinary, createShDebugWasmBinary, createSwaponWasmBinary, createSysbenchWasmBinary, createGetfattrWasmBinary, createSetfattrWasmBinary, createAliasWasmBinary, createTopGuiWasmBinary, createIpcsWasmBinary, createMqueueWasmBinary, createTermcolorWasmBinary, createPmapWasmBinary, createLscpuWasmBinary, createEpollWasmBinary, createMknodWasmBinary, createBrowserWasmBinary, createMkfifoWasmBinary, createLddWasmBinary, createEvtestWasmBinary, createSemWasmBinary, createFlockWasmBinary, createSttyWasmBinary, createMmapWasmBinary, createIpcrmWasmBinary, createTimeWasmBinary, createGetcapWasmBinary, createUlimitWasmBinary, createSysinfoWasmBinary, createPollWasmBinary, createSyscheckWasmBinary, createWasmInfoWasmBinary } from "./binaries";
+import { createMessageWasmBinary, createCalcWasmBinary, createWcWasmBinary, createCurlWasmBinary, createDrawWasmBinary, createPsWasmBinary, createKillWasmBinary, createSuWasmBinary, createSudoWasmBinary, createWhoamiWasmBinary, createSpkgWasmBinary, createNanoWasmBinary, createTopWasmBinary, createBeepWasmBinary, createEnvWasmBinary, createRandWasmBinary, createSignalWasmBinary, createTarWasmBinary, createGzipWasmBinary, createPingWasmBinary, createCronWasmBinary, createDmesgWasmBinary, createHistoryWasmBinary, createBenchWasmBinary, createLspciWasmBinary, createLsusbWasmBinary, createManWasmBinary, createVimWasmBinary, createPtyWasmBinary, createIfconfigWasmBinary, createSpkgExportWasmBinary, createThemeWasmBinary, createShDebugWasmBinary, createSwaponWasmBinary, createSysbenchWasmBinary, createGetfattrWasmBinary, createSetfattrWasmBinary, createAliasWasmBinary, createTopGuiWasmBinary, createIpcsWasmBinary, createMqueueWasmBinary, createTermcolorWasmBinary, createPmapWasmBinary, createLscpuWasmBinary, createEpollWasmBinary, createMknodWasmBinary, createBrowserWasmBinary, createMkfifoWasmBinary, createLddWasmBinary, createEvtestWasmBinary, createSemWasmBinary, createFlockWasmBinary, createSttyWasmBinary, createMmapWasmBinary, createIpcrmWasmBinary, createTimeWasmBinary, createGetcapWasmBinary, createUlimitWasmBinary, createSysinfoWasmBinary, createPollWasmBinary, createSyscheckWasmBinary, createWasmInfoWasmBinary } from "./binaries";
 import { WasmProcessRunner } from "./execve";
 import { PipeNode } from "./pipe";
 import { SocketNode, SocketDomain, SocketType } from "./socket";
@@ -602,6 +602,11 @@ export class UnixKernel {
     const bashHistNode = userHome?.createChild(".bash_history", false, 0o600);
     if (bashHistNode) {
       bashHistNode.write(0, new TextEncoder().encode(this.historyManager.generateBashHistory()));
+    }
+
+    const sampleWasmNode = userHome?.createChild("sample_app.wasm", false, 0o755);
+    if (sampleWasmNode) {
+      sampleWasmNode.write(0, createMessageWasmBinary("Hello from Custom Styx WASM App!\n"));
     }
 
     const demoScriptNode = userHome?.createChild("demo.sh", false, 0o755);
