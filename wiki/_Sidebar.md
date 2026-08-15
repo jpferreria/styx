@@ -1,4 +1,4 @@
-### 🌟 Styx OS Wiki
+### Styx OS Wiki
 
 - [[Home]]
 - [[Architecture]]
@@ -8,7 +8,7 @@
 
 ---
 
-### 💻 System & Repo Info
+### System & Repo Info
 - **GitHub**: [jpferreria/styx](https://github.com/jpferreria/styx)
 - **License**: GNU GPL-3.0-or-later
-- **Language**: Rust + TypeScript
+- **Language**: TypeScript + WebAssembly

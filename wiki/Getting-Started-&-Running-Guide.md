@@ -4,17 +4,16 @@ This guide details how to set up, build, test, and run **Styx OS** locally.
 
 ---
 
-## ⚙️ Prerequisites
+## Prerequisites
 
 Ensure you have the following installed on your machine:
 
 - **Node.js**: v18.0.0 or higher
 - **npm**: v9.0.0 or higher
-- **Rust & Cargo** (optional, for rebuilding `packages/kernel` WebAssembly core): `rustc`, `cargo`, `wasm-pack`
 
 ---
 
-## 🚀 Setup & Installation
+## Setup & Installation
 
 Clone the Styx OS repository and install workspace dependencies:
 
@@ -26,20 +25,32 @@ npm install
 
 ---
 
-## 💻 Running the Local Development Server
+## Running the Local Development Server
 
-To launch Styx OS in your browser:
+To launch Styx OS in your browser, you can use the convenience control scripts in the repository root:
 
+```bash
+./start.sh
+# Server starts on dedicated port 5180: http://localhost:5180/
+```
+
+To check server status or stop it:
+```bash
+./status.sh
+./stop.sh
+```
+
+Alternatively, launch directly via npm:
 ```bash
 cd packages/shell-ui
 npm run dev
 ```
 
-Open your web browser and navigate to **`http://localhost:5173/`** (or the URL printed in terminal output).
+Open your web browser and navigate to **`http://localhost:5180/`**.
 
 ---
 
-## 🧪 Running Automated Tests
+## Running Automated Tests
 
 Styx OS uses **Vitest** for unit and integration testing across all kernel modules, syscalls, and UI components.
 
@@ -52,14 +63,14 @@ npm test
 
 Expected output:
 ```text
- Test Files  54 passed (54)
-      Tests  161 passed (161)
-   Duration  4.59s
+ Test Files  67 passed (67)
+      Tests  205 passed (205)
+   Duration  1.89s
 ```
 
 ---
 
-## 📦 Building for Production
+## Building for Production
 
 To compile production bundles for deployment:
 
@@ -72,16 +83,16 @@ This compiles TypeScript (`tsc`) and generates optimized production assets in `d
 
 ---
 
-## 🖥 Interacting with Styx OS Desktop & Terminal
+## Interacting with Styx OS Desktop & Terminal
 
 ### 1. Terminal Shell Features
-- **Tab Auto-Completion**: Type command prefixes and hit `Tab` (e.g., `st<Tab>` -> `stty`, `ip<Tab>` -> `ipcmk`, `ipcrm`, `ipcclean`, `ipcs`).
+- **Tab Auto-Completion**: Type command prefixes and hit `Tab` (e.g., `st<Tab>` -> `stty`, `tm<Tab>` -> `tmux`, `dl<Tab>` -> `dlopen`).
 - **Command Pipeline Execution**: Pipe outputs across stages (e.g. `cat /etc/passwd | wc`).
-- **Script Execution**: Execute shell scripts directly (e.g. `./demo.sh`).
+- **Script Execution & Debugging**: Execute shell scripts directly (`./demo.sh`) or trace line-by-line (`sh -x /home/user/demo.sh`).
 
 ### 2. Graphical Desktop Applications
 - **Desktop Dock**: Click application icons at the bottom dock to open windows:
-  - 🌐 **Browser**: Launches the Graphical Web Browser window.
-  - 📁 **Files**: Launches the File Explorer window.
-  - 📊 **Top**: Launches the Real-Time Process Monitor GUI window.
-- **File Explorer & Text Editor**: Double-click any `.txt`, `.sh`, or document file in File Explorer to open it in the Glassmorphism Text Editor. Click `💾 Save` to save modifications back to VFS.
+  - **Browser**: Launches the Web Browser window.
+  - **Files / Finder**: Launches the VFS File Finder window.
+  - **Top**: Launches the Real-Time Process Monitor GUI window.
+- **VFS File Finder & Text Editor**: Double-click any `.txt`, `.sh`, or document file to open it in the Text Editor. Click `Save` to save modifications back to VFS.

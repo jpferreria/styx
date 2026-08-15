@@ -1,40 +1,40 @@
 # Welcome to Styx OS Wiki
 
-**Styx OS** (`Styx`) is an ultra-modern, Unix-like Operating System built with a **Rust WebAssembly Kernel Core** (`packages/kernel`) and a **TypeScript Host Shell & Graphical Web Desktop UI** (`packages/shell-ui`).
+**Styx OS** (`Styx`) is a Unix-like Operating System built with a **WebAssembly & TypeScript Microkernel** (`packages/shell-ui`).
 
-It provides full POSIX emulation, multi-user authentication, virtual memory & process execution, Glassmorphism Window Management, interactive desktop applications (Graphical Web Browser, File Explorer, Real-Time Process Monitor, Text Editor), and 55 POSIX kernel subsystem milestones.
+It provides POSIX emulation, multi-user authentication, virtual memory & process execution, Window Management, interactive desktop applications (Web Browser, VFS File Finder, Real-Time Process Monitor, Text Editor), Local LLM Server, EXT4 OPFS block storage, and 77 POSIX kernel subsystem milestones.
 
 ---
 
-## 🌟 Key Highlights
+## Key Highlights
 
-- **WebAssembly Kernel (`packages/kernel`)**: High-performance Rust WebAssembly kernel compiled with `wasm-pack` and target `wasm32-unknown-unknown`.
-- **Graphical Web Desktop UI (`packages/shell-ui`)**: Glassmorphism Window Manager (`wm.ts`) with interactive windows:
-  - 🌐 **Web Browser Window** (`browser.ts`): Built-in web client rendering HTML/CSS, iframe sandboxing, tabbed navigation, and address bar.
-  - 📁 **File Explorer Window**: Interactive VFS directory browser with double-click text editing integration.
-  - 📊 **Real-Time Process Monitor GUI Window**: Live task & CPU/memory monitoring inspector.
-  - 📝 **Glassmorphism Text Editor**: Direct file editing with VFS write sync.
-- **POSIX Subsystem Compatibility**: 55 completed milestones including:
-  - Advisory File Locking (`flock`, `fcntl`, `lslocks`, `/proc/locks`).
-  - Termios Line Discipline (`stty`, `tcgetattr`, `tcsetattr`, raw/sane modes).
-  - Virtual Memory Mapping (`mmap`, `munmap`, `msync`, `mprotect`, `/proc/self/maps`).
-  - System V & POSIX IPC Management (`ipcmk`, `ipcrm`, `ipcclean`, `ipcs -a`).
-  - High-Resolution Time & Timers (`clock_gettime`, `nanosleep`, `timer_create`, `date`, `uptime`, `time`).
-- **Comprehensive Test Coverage**: 161/161 passing Vitest unit & integration tests across 54 test suites.
+- **WebAssembly & TypeScript Kernel Core**: POSIX microkernel execution runtime with WASI 0.1 and WASI 0.2 Component Model WIT loader.
+- **Graphical Web Desktop UI**: Window Manager (`wm.ts`) with interactive desktop windows:
+  - **Web Browser Window** (`browser.ts`): Web client rendering HTML/CSS, iframe sandboxing, tabbed navigation, and address bar.
+  - **VFS File Finder Window** (`wm.ts`): Interactive VFS file search window with live text/regex search filtering and directory previews.
+  - **Real-Time Process Monitor GUI Window**: Live task, CPU, and memory monitoring inspector.
+  - **Glassmorphism Text Editor**: Direct file editing with VFS write sync.
+- **POSIX Subsystem Compatibility**: 77 completed milestones including:
+  - Local LLM REST/RPC Agent Server (`/v1/chat/completions`, `ws://localhost:8080/rpc`).
+  - Virtual EXT4 Block Storage Driver & OPFS Persistence (`/dev/sda`).
+  - Terminal Session Multiplexer (`tmux`).
+  - Dynamic Shared Object Loader (`dlopen`).
+  - Shell Script Debugger (`sh -x`).
+- **Comprehensive Test Coverage**: 205/205 passing Vitest unit & integration tests across 67 test files.
 - **Copyleft Licensing**: Licensed under the **GNU General Public License v3.0 or later (GPL-3.0-or-later)**.
 
 ---
 
-## 📚 Navigation & Documentation
+## Navigation & Documentation
 
-- [[Architecture]] - High-level system architecture and Rust WASM / TypeScript integration.
-- [[POSIX-Subsystems]] - Complete list of 55 POSIX milestones & kernel modules.
+- [[Architecture]] - High-level system architecture and WASI / TypeScript integration.
+- [[POSIX-Subsystems]] - Complete list of 77 POSIX milestones & kernel modules.
 - [[Getting-Started-&-Running-Guide]] - How to build, run dev server, test, and use Styx OS.
 - [[API-&-Syscall-Reference]] - System call reference table and kernel module APIs.
 
 ---
 
-## 📜 License & Copyleft Notice
+## License & Copyleft Notice
 
 ```text
 Styx OS Project

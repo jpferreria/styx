@@ -4,10 +4,14 @@ This document provides a reference for core kernel module engines and system cal
 
 ---
 
-## 🛠 Core Kernel Managers (`UnixKernel`)
+## Core Kernel Managers (`UnixKernel`)
 
 | Property | Type / Class | Module File | Primary Responsibilities |
 |---|---|---|---|
+| `kernel.llmServerEngine` | `LlmAgentServerEngine` | `llm-server.ts` | `/v1/chat/completions`, `ws://localhost:8080/rpc`, LLM agent tool calls |
+| `kernel.ext4DriverEngine` | `Ext4DriverEngine` | `ext4.ts` | 64MB `/dev/sda` block device, EXT4 superblock, OPFS browser persistence |
+| `kernel.tmuxEngine` | `TmuxEngine` | `tmux.ts` | `createSession()`, `attachSession()`, `detachSession()`, `killSession()` |
+| `kernel.recordLockEngine` | `RecordLockEngine` | `lockf.ts` | `lockf()`, `fcntl_setlk()`, `fcntl_getlk()`, `lslocks()` |
 | `kernel.fileLockEngine` | `FileLockEngine` | `flock.ts` | `lock()`, `unlock()`, `/proc/locks`, `lslocks()` |
 | `kernel.termiosEngine` | `TermiosEngine` | `termios.ts` | `tcgetattr()`, `tcsetattr()`, `setRawMode()`, `stty()` |
 | `kernel.mmapEngine` | `MMapEngine` | `mmap.ts` | `mmap()`, `munmap()`, `msync()`, `mprotect()`, `/proc/self/maps`, `lsmaps()` |
@@ -17,18 +21,25 @@ This document provides a reference for core kernel module engines and system cal
 | `kernel.mqueueManager` | `MessageQueueManager` | `mqueue.ts` | `mqOpen()`, `mqSend()`, `mqReceive()`, `mqUnlink()` |
 | `kernel.semaphoreManager` | `SemaphoreManager` | `sem.ts` | `semOpen()`, `semWait()`, `semPost()`, `semUnlink()` |
 | `kernel.fifoManager` | `FIFOManager` | `fifo.ts` | `mkfifo()`, `lsfifo()`, circular buffer IPC streams |
-| `kernel.sharedLibraryEngine` | `SharedLibraryEngine` | `shlib.ts` | `ldd()`, `ldconfig()`, `/etc/ld.so.cache` generation |
+| `kernel.sharedLibraryEngine` | `SharedLibraryEngine` | `shlib.ts` | `dlopen()`, `dlsym()`, `dlclose()`, `dlerror()`, `ldd()`, `ldconfig()` |
 | `kernel.inputDeviceEngine` | `InputDeviceEngine` | `input.ts` | `evtest()`, `/dev/input/event0`, `/dev/input/mice` |
 | `kernel.ptyManager` | `PtyManager` | `pty.ts` | `createPair()`, `/dev/ptmx`, `/dev/pts/0` |
 | `kernel.userManager` | `UserManager` | `user.ts` | User auth (`su`, `sudo`), `/etc/passwd`, capability checking |
-| `kernel.pkgManager` | `PackageManager` | `pkg.ts` | Styx Package Manager (`spkg`) |
+| `kernel.pkgManager` | `PackageManager` | `pkg.ts` | Styx Package Manager (`spkg`), VFS exporter (`export`) |
 
 ---
 
-## ⚡ POSIX Syscall Signatures
+## POSIX Syscall Signatures
 
 ```typescript
-// File Locking (flock.ts)
+// Dynamic Shared Object Linker (shlib.ts)
+dlopen(path: string, mode?: number): number;
+dlsym(handle: number, symbol: string): any;
+dlclose(handle: number): boolean;
+dlerror(): string;
+
+// File Locking (lockf.ts & flock.ts)
+lockf(fd: number, cmd: number, len: number): number;
 lock(pid: number, path: string, mode?: "READ" | "WRITE", nonBlocking?: boolean): boolean;
 unlock(pid: number, path: string): boolean;
 
