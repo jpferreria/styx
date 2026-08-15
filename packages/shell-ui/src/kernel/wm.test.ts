@@ -12,6 +12,7 @@
 
 import { describe, it, expect, beforeEach } from "vitest";
 import { WindowManager } from "../shell/wm";
+import { UnixKernel } from "./index";
 
 describe("Styx OS Window Manager & Desktop Tray Test Suite", () => {
   let wm: WindowManager;
@@ -103,10 +104,12 @@ describe("Styx OS Window Manager & Desktop Tray Test Suite", () => {
     expect(status).toContain("Glassmorphism Filter:  DISABLED");
   });
 
-  it("should open GUI VFS file finder window element", () => {
-    const win = wm.openFileFinderWindow("/home/user");
+  it("should open GUI VFS file finder window element and list VFS files", () => {
+    const kernel = new UnixKernel();
+    const win = wm.openFileFinderWindow("/home/user", kernel);
     expect(win).toBeDefined();
     expect(win.id).toBe("win-files-app");
     expect(win.querySelector(".window-title")?.textContent).toContain("VFS File Finder");
+    expect(win.textContent).toContain("demo.sh");
   });
 });

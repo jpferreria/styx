@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const shell = new ShellHost(terminalRoot);
   const kernel = (shell as any).kernel;
   const installer = new BinaryInstaller(kernel);
-  const wm = new WindowManager();
+  const wm = new WindowManager(kernel);
 
   // Desktop Taskbar Controls
   const tbTerminal = document.getElementById("tb-terminal");

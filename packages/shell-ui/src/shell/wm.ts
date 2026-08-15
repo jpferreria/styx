@@ -788,7 +788,8 @@ export class WindowManager {
     );
   }
 
-  openFileFinderWindow(targetPath: string = "/home/user"): HTMLElement {
+  openFileFinderWindow(targetPath: string = "/home/user", passedKernel?: any): HTMLElement {
+    const k = passedKernel || this.kernel;
     const container = document.createElement("div");
     container.className = "file-finder-container";
     container.style.display = "flex";
@@ -837,8 +838,8 @@ export class WindowManager {
     const populateFiles = (query: string = "") => {
       fileList.innerHTML = "";
       try {
-        if (this.kernel && this.kernel.sys_readdir) {
-          const entries = this.kernel.sys_readdir(targetPath);
+        if (k && k.sys_readdir) {
+          const entries = k.sys_readdir(targetPath);
           for (const entry of entries) {
             if (!query || entry.name.toLowerCase().includes(query.toLowerCase())) {
               const item = document.createElement("div");

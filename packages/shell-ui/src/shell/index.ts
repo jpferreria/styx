@@ -31,7 +31,7 @@ export class ShellHost {
   constructor(container: HTMLElement) {
     this.kernel = new UnixKernel();
     this.pipelineEngine = new PipelineEngine(this.kernel);
-    this.windowManager = new WindowManager();
+    this.windowManager = new WindowManager(this.kernel);
     this.dockManager = new DockManager();
     this.terminal = new Terminal({
       cursorBlink: true,
@@ -504,7 +504,7 @@ export class ShellHost {
         case "files":
         case "finder":
           const searchPath = args[0] || "/home/user";
-          this.windowManager.openFileFinderWindow(searchPath);
+          this.windowManager.openFileFinderWindow(searchPath, this.kernel);
           this.writeOutput(`Launched GUI VFS File Finder on Desktop (${searchPath})\n`);
           break;
 
