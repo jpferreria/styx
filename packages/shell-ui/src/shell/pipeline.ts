@@ -790,7 +790,10 @@ export class PipelineEngine {
 
       case "syscheck":
       case "posix-status":
-        onStdout(this.kernel.systemDiagnosticEngine.formatPosixStatus());
+      case "posix-test":
+      case "run-posix-test":
+      case "posix":
+        onStdout(this.kernel.runPosixTestSuite() + "\n");
         break;
 
       case "sigcheck":

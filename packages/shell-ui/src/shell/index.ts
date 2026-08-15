@@ -534,8 +534,6 @@ export class ShellHost {
         case "free":
         case "poll":
         case "lspoll":
-        case "syscheck":
-        case "posix-status":
         case "sigaction":
         case "sigprocmask":
         case "sigcheck":
@@ -676,7 +674,22 @@ export class ShellHost {
           this.terminal.writeln(`Type: ${st.isDir ? "Directory" : "Regular File"}`);
           break;
 
+        case "run":
+          if (args[0] === "posix" || args[0] === "posix-test" || args[0] === "test") {
+            this.writeOutput("Executing POSIX compatibility test suite...\n\n");
+            const report = this.kernel.runPosixTestSuite();
+            this.writeOutput(report + "\n");
+          } else if (args[0]) {
+            this.pipelineEngine.executePipeline(args.join(" "), (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
+          } else {
+            this.terminal.writeln("Usage: run <command|posix|test>");
+          }
+          break;
+
         case "posix-test":
+        case "run-posix-test":
+        case "posix":
+        case "syscheck":
           this.writeOutput("Executing POSIX compatibility test suite...\n\n");
           const report = this.kernel.runPosixTestSuite();
           this.writeOutput(report + "\n");
