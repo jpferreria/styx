@@ -501,7 +501,13 @@ export class ShellHost {
         case "epoll":
         case "eventfd":
         case "mknod":
-        case "lsdev":
+        case "files":
+        case "finder":
+          const searchPath = args[0] || "/home/user";
+          this.windowManager.openFileFinderWindow(searchPath);
+          this.writeOutput(`Launched GUI VFS File Finder on Desktop (${searchPath})\n`);
+          break;
+
         case "mkfifo":
         case "lsfifo":
         case "ldd":
@@ -576,11 +582,6 @@ export class ShellHost {
           const procReport = this.kernel.procFSNode ? new TextDecoder().decode(this.kernel.procFSNode.read(0, 4096)) : "PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND\n";
           this.windowManager.createProcessMonitorWindow(procReport);
           this.terminal.writeln("Opened Real-Time Process Monitor GUI window.");
-          break;
-
-        case "files":
-          this.windowManager.createFileExplorerWindow(this.kernel);
-          this.terminal.writeln("Opened Styx OS VFS File Explorer window.");
           break;
 
         case "browser":

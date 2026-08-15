@@ -102,4 +102,11 @@ describe("Styx OS Window Manager & Desktop Tray Test Suite", () => {
     const status = wm.formatWmConfigStatus();
     expect(status).toContain("Glassmorphism Filter:  DISABLED");
   });
+
+  it("should open GUI VFS file finder window element", () => {
+    const win = wm.openFileFinderWindow("/home/user");
+    expect(win).toBeDefined();
+    expect(win.id).toBe("win-files-app");
+    expect(win.querySelector(".window-title")?.textContent).toContain("VFS File Finder");
+  });
 });

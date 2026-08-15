@@ -109,3 +109,4 @@ graph TD
 | **MS 74** | One-Click VFS Backup & Exporter | `archive.ts` | `spkg export` (`.tar.gz` browser host download) | **Completed** ✅ |
 | **MS 75** | Virtual Dynamic Shared Object Loader | `shlib.ts` | `dlopen` (`dlsym`, `dlclose`, `dlerror`, `/lib/*.so`) | **Completed** ✅ |
 | **MS 76** | POSIX Shell Script Debugger | `script.ts` | `sh -x` (line-by-line script tracing & variables) | **Completed** ✅ |
+| **MS 77** | Interactive Visual VFS Search & Grep | `wm.ts` | `files` / `finder` (GUI File Finder window) | **Completed** ✅ |

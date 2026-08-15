@@ -18,12 +18,17 @@ export interface WindowOptions {
 }
 
 export class WindowManager {
+  private kernel?: any;
   private windows: Map<string, HTMLElement> = new Map();
   private minimized: Set<string> = new Set();
   private topZIndex: number = 100;
   private clockInterval?: ReturnType<typeof setInterval>;
   private glassmorphismEnabled: boolean = true;
   private currentWallpaper: string = "default-cyberpunk";
+
+  constructor(kernel?: any) {
+    this.kernel = kernel;
+  }
 
   snapWindow(id: string, mode: "tile-left" | "tile-right" | "maximize" | "restore"): string {
     const win = this.windows.get(id) || Array.from(this.windows.values())[0];
@@ -779,6 +784,85 @@ export class WindowManager {
 
     return this.createWindow(
       { id: "browser-app", title: "Styx OS Web Browser", width: 720, height: 480 },
+      container
+    );
+  }
+
+  openFileFinderWindow(targetPath: string = "/home/user"): HTMLElement {
+    const container = document.createElement("div");
+    container.className = "file-finder-container";
+    container.style.display = "flex";
+    container.style.flexDirection = "column";
+    container.style.height = "100%";
+    container.style.background = "var(--bg-card)";
+    container.style.color = "var(--text-main)";
+    container.style.fontFamily = "var(--font-mono)";
+
+    const searchBar = document.createElement("div");
+    searchBar.style.display = "flex";
+    searchBar.style.gap = "8px";
+    searchBar.style.padding = "8px";
+    searchBar.style.background = "rgba(0,0,0,0.3)";
+    searchBar.style.borderBottom = "1px solid var(--border-color)";
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = "Search files or regex in VFS...";
+    input.style.flex = "1";
+    input.style.padding = "6px 12px";
+    input.style.borderRadius = "4px";
+    input.style.border = "1px solid var(--border-color)";
+    input.style.background = "var(--bg-main)";
+    input.style.color = "var(--text-main)";
+
+    const btnSearch = document.createElement("button");
+    btnSearch.textContent = "🔍 Search";
+    btnSearch.style.padding = "6px 14px";
+    btnSearch.style.borderRadius = "4px";
+    btnSearch.style.border = "none";
+    btnSearch.style.background = "var(--primary)";
+    btnSearch.style.color = "#0f172a";
+    btnSearch.style.fontWeight = "600";
+    btnSearch.style.cursor = "pointer";
+
+    searchBar.appendChild(input);
+    searchBar.appendChild(btnSearch);
+    container.appendChild(searchBar);
+
+    const fileList = document.createElement("div");
+    fileList.style.flex = "1";
+    fileList.style.overflowY = "auto";
+    fileList.style.padding = "10px";
+
+    const populateFiles = (query: string = "") => {
+      fileList.innerHTML = "";
+      try {
+        if (this.kernel && this.kernel.sys_readdir) {
+          const entries = this.kernel.sys_readdir(targetPath);
+          for (const entry of entries) {
+            if (!query || entry.name.toLowerCase().includes(query.toLowerCase())) {
+              const item = document.createElement("div");
+              item.style.padding = "6px 10px";
+              item.style.marginBottom = "4px";
+              item.style.borderRadius = "4px";
+              item.style.background = "rgba(255,255,255,0.05)";
+              item.style.cursor = "pointer";
+              item.textContent = `${entry.isDir ? "📁" : "📄"} ${entry.name} (${entry.size} bytes)`;
+              fileList.appendChild(item);
+            }
+          }
+        }
+      } catch (e) {}
+    };
+
+    btnSearch.addEventListener("click", () => populateFiles(input.value));
+    input.addEventListener("keydown", (e) => { if (e.key === "Enter") populateFiles(input.value); });
+    populateFiles();
+
+    container.appendChild(fileList);
+
+    return this.createWindow(
+      { id: "files-app", title: `VFS File Finder - ${targetPath}`, width: 640, height: 420 },
       container
     );
   }
