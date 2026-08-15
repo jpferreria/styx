@@ -467,6 +467,14 @@ export class ManualManager {
       description: "llm-server exposes /v1/chat/completions REST and ws://localhost:8080/rpc endpoints with direct kernel tool execution binding.",
       examples: "  llm-server start\n  llm-server status",
     });
+
+    this.register({
+      name: "tmux",
+      summary: "virtual terminal session multiplexer (tmux / screen)",
+      synopsis: "tmux [ls|new -s <name>|attach -t <name>|detach|kill-session -t <name>]",
+      description: "tmux manages persistent terminal multiplexer sessions, window tabs, session detaching, and reattaching.",
+      examples: "  tmux new -s dev\n  tmux ls\n  tmux detach\n  tmux attach -t dev",
+    });
   }
 
   register(entry: ManualEntry): void {

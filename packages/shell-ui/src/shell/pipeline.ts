@@ -746,6 +746,26 @@ export class PipelineEngine {
         }
         break;
 
+      case "tmux":
+        if (args[0] === "ls" || args[0] === "list-sessions") {
+          onStdout(this.kernel.tmuxEngine.formatTmuxStatus());
+        } else if (args[0] === "new" || args[0] === "new-session") {
+          const sName = args[1] === "-s" ? args[2] : args[1];
+          const session = this.kernel.tmuxEngine.createSession(sName);
+          onStdout(`[created & attached to tmux session '${session.name}']\n`);
+        } else if (args[0] === "attach" || args[0] === "attach-session" || args[0] === "a") {
+          const sName = args[1] === "-t" ? args[2] : args[1] || "0";
+          onStdout(this.kernel.tmuxEngine.attachSession(sName));
+        } else if (args[0] === "detach") {
+          onStdout(this.kernel.tmuxEngine.detachSession());
+        } else if (args[0] === "kill-session") {
+          const sName = args[1] === "-t" ? args[2] : args[1];
+          onStdout(this.kernel.tmuxEngine.killSession(sName || ""));
+        } else {
+          onStdout(this.kernel.tmuxEngine.formatTmuxStatus());
+        }
+        break;
+
       case "poll":
       case "lspoll":
         onStdout(this.kernel.eventMultiplexEngine.lspoll());
