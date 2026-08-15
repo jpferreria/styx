@@ -109,7 +109,7 @@ export function createWhoamiWasmBinary(): Uint8Array {
 }
 
 export function createSpkgWasmBinary(): Uint8Array {
-  return createMessageWasmBinary("Styx Package Manager (spkg) v0.1.0\n");
+  return createMessageWasmBinary("Styx Package Manager (spkg) v0.20.0\n");
 }
 
 export function createNanoWasmBinary(): Uint8Array {

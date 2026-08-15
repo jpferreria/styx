@@ -20,7 +20,7 @@ export class LoggerManager {
   private maxEntries = 100;
 
   constructor() {
-    this.log("INFO", "kernel", "Styx OS v0.1.0-alpha booting on WebAssembly runtime...");
+    this.log("INFO", "kernel", "Styx OS v0.20.0 booting on WebAssembly runtime...");
     this.log("INFO", "vfs", "Mounting root filesystem (VNode hierarchy) [OK]");
     this.log("INFO", "opfs", "OPFS persistent storage sync enabled [OK]");
     this.log("INFO", "worker", "SharedArrayBuffer Atomics Futex worker pool initialized [OK]");

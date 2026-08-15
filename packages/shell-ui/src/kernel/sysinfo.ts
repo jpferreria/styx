@@ -63,7 +63,7 @@ export class SysInfoEngine {
     const sysName = "Linux";
     const nodeName = "styx-os";
     const release = "6.1.0-styx-wasm";
-    const version = "#1 SMP PREEMPT Styx OS v0.1.0";
+    const version = "#1 SMP PREEMPT Styx OS v0.20.0";
     const machine = "wasm32";
 
     if (args.includes("-a") || args.length === 0) {

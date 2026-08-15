@@ -396,7 +396,7 @@ export class UnixKernel {
     procNode.children.set("cpuinfo", new ProcFSNode(201, () => "processor\t: 0\nvendor_id\t: WasmEngine\ncpu family\t: 6\nmodel name\t: WebAssembly 32-bit (v8 / SIMD128)\n"));
     procNode.children.set("meminfo", new ProcFSNode(202, () => "MemTotal:\t 4194304 kB\nMemFree:\t 3145728 kB\nMemAvailable:\t 3670016 kB\nBuffers:\t  524288 kB\n"));
     procNode.children.set("uptime", new ProcFSNode(203, () => `${Math.floor(performance.now() / 1000)} ${Math.floor(performance.now() / 2000)}\n`));
-    procNode.children.set("version", new ProcFSNode(204, () => "Linux version 6.1.0-styx-wasm (gcc 12.2.0) #1 SMP PREEMPT Styx OS v0.1.0\n"));
+    procNode.children.set("version", new ProcFSNode(204, () => "Linux version 6.1.0-styx-wasm (gcc 12.2.0) #1 SMP PREEMPT Styx OS v0.20.0\n"));
 
     const proc1Node = new ProcFSNode(205, () => "", true);
     procNode.children.set("1", proc1Node);

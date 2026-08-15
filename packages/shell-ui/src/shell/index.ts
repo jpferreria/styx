@@ -66,7 +66,7 @@ export class ShellHost {
   private async init() {
     await this.kernel.mountOpfsStorage();
     this.terminal.writeln("\x1b[1;36m=====================================================\x1b[0m");
-    this.terminal.writeln("\x1b[1;32m       Styx Unix-Compatible Browser OS v0.1.0        \x1b[0m");
+    this.terminal.writeln("\x1b[1;32m       Styx Unix-Compatible Browser OS v0.20.0       \x1b[0m");
     this.terminal.writeln("\x1b[1;36m=====================================================\x1b[0m");
     this.terminal.writeln("Kernel initialized with VFS, OPFS storage, and WASI app execution.");
     this.terminal.writeln("Type \x1b[1;33mhelp\x1b[0m for commands, \x1b[1;33mexec /bin/hello.wasm\x1b[0m, or \x1b[1;33mposix-test\x1b[0m.\n");
@@ -355,7 +355,7 @@ export class ShellHost {
           if (args[0]) {
             this.pipelineEngine.executePipeline(`sh ${args.join(" ")}`, (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
           } else {
-            this.terminal.writeln("Styx Shell Subshell v0.1.0");
+            this.terminal.writeln("Styx Shell Subshell v0.20.0");
           }
           break;
 

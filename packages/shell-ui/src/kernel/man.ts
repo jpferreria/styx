@@ -500,7 +500,7 @@ export class ManualManager {
       lines.push("", "EXAMPLES", entry.examples);
     }
 
-    lines.push("", `Styx OS v0.1.0-alpha                 2026-07-26                 ${entry.name.toUpperCase()}(1)`);
+    lines.push("", `Styx OS v0.20.0                     2026-08-15                 ${entry.name.toUpperCase()}(1)`);
     return lines.join("\n") + "\n";
   }
 
