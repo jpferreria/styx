@@ -82,4 +82,24 @@ describe("Styx OS Window Manager & Desktop Tray Test Suite", () => {
     expect(editorWin).toBeDefined();
     expect(editorWin?.querySelector(".window-title")?.textContent).toContain("Text Editor - /README.txt");
   });
+
+  it("should handle window layout snapping and glassmorphism compositor settings", () => {
+    const content = document.createElement("div");
+    wm.createWindow({ id: "term", title: "Terminal" }, content);
+
+    const snapRes = wm.snapWindow("term", "tile-left");
+    expect(snapRes).toContain("snapped window layout: tile-left");
+
+    const maxRes = wm.snapWindow("term", "maximize");
+    expect(maxRes).toContain("snapped window layout: maximize");
+
+    const glassRes = wm.setGlassmorphism(false);
+    expect(glassRes).toContain("DISABLED");
+
+    const wallRes = wm.setWallpaper("https://example.com/wallpaper.png");
+    expect(wallRes).toContain("wallpaper.png");
+
+    const status = wm.formatWmConfigStatus();
+    expect(status).toContain("Glassmorphism Filter:  DISABLED");
+  });
 });

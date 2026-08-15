@@ -475,6 +475,14 @@ export class ManualManager {
       description: "tmux manages persistent terminal multiplexer sessions, window tabs, session detaching, and reattaching.",
       examples: "  tmux new -s dev\n  tmux ls\n  tmux detach\n  tmux attach -t dev",
     });
+
+    this.register({
+      name: "wm-config",
+      summary: "window manager compositor, snap layout & glassmorphism theme config",
+      synopsis: "wm-config [tile-left|tile-right|maximize|restore|glassmorphism on/off|wallpaper <url>|status]",
+      description: "wm-config controls desktop window layout snapping, glassmorphism backdrop filters, and wallpapers.",
+      examples: "  wm-config tile-left\n  wm-config glassmorphism off\n  wm-config status",
+    });
   }
 
   register(entry: ManualEntry): void {

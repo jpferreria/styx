@@ -152,7 +152,7 @@ export class ShellHost {
               this.terminal.write(this.inputBuffer);
             }
           } else {
-            const available = ["cat", "ls", "pwd", "mkdir", "rm", "cp", "mv", "whoami", "su", "sudo", "ps", "kill", "draw", "curl", "calc", "wc", "spkg", "nano", "edit", "top", "beep", "env", "export", "unset", "rand", "signal", "tar", "gzip", "ping", "cron", "crontab", "dmesg", "history", "lspci", "lsusb", "man", "vim", "vi", "pty", "ifconfig", "theme", "swapon", "swapoff", "sysbench", "getfattr", "setfattr", "alias", "unalias", "top-gui", "ipcs", "mqueue", "termcolor", "color", "pmap", "files", "lscpu", "epoll", "eventfd", "mknod", "lsdev", "browser", "web", "mkfifo", "lsfifo", "ldd", "ldconfig", "evtest", "lsinput", "sem", "flock", "lslocks", "stty", "mmap", "lsmaps", "ipcmk", "ipcrm", "ipcclean", "date", "uptime", "time", "getcap", "setcap", "ulimit", "sysinfo", "uname", "free", "poll", "lspoll", "syscheck", "posix-status", "sigaction", "sigprocmask", "sigcheck", "sem_open", "shm_open", "nc", "socket", "wasm-info", "fdisk", "mkfs.ext4", "mount", "umount", "getfacl", "setfacl", "cgcreate", "cgexec", "cgset", "cgget", "lscgroup", "mutex", "lockf", "llm-server", "tmux"];
+            const available = ["cat", "ls", "pwd", "mkdir", "rm", "cp", "mv", "whoami", "su", "sudo", "ps", "kill", "draw", "curl", "calc", "wc", "spkg", "nano", "edit", "top", "beep", "env", "export", "unset", "rand", "signal", "tar", "gzip", "ping", "cron", "crontab", "dmesg", "history", "lspci", "lsusb", "man", "vim", "vi", "pty", "ifconfig", "theme", "swapon", "swapoff", "sysbench", "getfattr", "setfattr", "alias", "unalias", "top-gui", "ipcs", "mqueue", "termcolor", "color", "pmap", "files", "lscpu", "epoll", "eventfd", "mknod", "lsdev", "browser", "web", "mkfifo", "lsfifo", "ldd", "ldconfig", "evtest", "lsinput", "sem", "flock", "lslocks", "stty", "mmap", "lsmaps", "ipcmk", "ipcrm", "ipcclean", "date", "uptime", "time", "getcap", "setcap", "ulimit", "sysinfo", "uname", "free", "poll", "lspoll", "syscheck", "posix-status", "sigaction", "sigprocmask", "sigcheck", "sem_open", "shm_open", "nc", "socket", "wasm-info", "fdisk", "mkfs.ext4", "mount", "umount", "getfacl", "setfacl", "cgcreate", "cgexec", "cgset", "cgget", "lscgroup", "mutex", "lockf", "llm-server", "tmux", "wm-config"];
             const candidates = this.kernel.historyManager.autoComplete(this.inputBuffer, available);
 
             if (candidates.length === 1) {
@@ -551,6 +551,19 @@ export class ShellHost {
         case "llm-server":
         case "tmux":
           this.pipelineEngine.executePipeline(`${cmd} ${args.join(" ")}`, (out) => this.writeOutput(out), (err) => this.writeOutput(`\x1b[1;31m${err}\x1b[0m`));
+          break;
+
+        case "wm-config":
+          if (args[0] === "tile-left" || args[0] === "tile-right" || args[0] === "maximize" || args[0] === "restore") {
+            this.writeOutput(this.windowManager.snapWindow("", args[0]));
+          } else if (args[0] === "glassmorphism") {
+            const mode = args[1] === "off" || args[1] === "false" ? false : true;
+            this.writeOutput(this.windowManager.setGlassmorphism(mode));
+          } else if (args[0] === "wallpaper") {
+            this.writeOutput(this.windowManager.setWallpaper(args[1] || "default-cyberpunk"));
+          } else {
+            this.writeOutput(this.windowManager.formatWmConfigStatus());
+          }
           break;
 
         case "top-gui":

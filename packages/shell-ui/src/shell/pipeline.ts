@@ -766,6 +766,10 @@ export class PipelineEngine {
         }
         break;
 
+      case "wm-config":
+        onStdout("Styx OS Window Manager Compositor initialized.\n");
+        break;
+
       case "poll":
       case "lspoll":
         onStdout(this.kernel.eventMultiplexEngine.lspoll());

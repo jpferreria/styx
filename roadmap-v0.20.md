@@ -104,8 +104,5 @@ graph TD
 | **MS 69** | Multi-Process Shared Mutex & Spinlock | `mutex.ts` | `pthread_mutex_init`, `pthread_mutex_lock`, `mutex` | **Completed** ✅ |
 | **MS 70** | POSIX Record Byte-Range File Locks | `lockf.ts` | `lockf`, `fcntl(F_SETLK)`, `lslocks` | **Completed** ✅ |
 | **MS 71** | Local LLM REST/RPC Agent Server | `llm-server.ts` | `llm-server` (`/v1/chat/completions`, `ws://`) | **Completed** ✅ |
-| **MS 67** | POSIX Extended Access Control Lists | `acl.ts` | `getfacl`, `setfacl` | Planned |
-| **MS 68** | Terminal Session Multiplexer | `pty.ts` | `tmux` | Planned |
-| **MS 69** | Window Manager Compositor & Themes | `wm.ts` | `wm-config` | Planned |
-| **MS 70** | Local LLM REST/RPC Agent Server | `agent-rpc.ts` | `agent-rpc` | Planned |
-| **MS 71** | Styx OS v0.20 Grand Release | `system.ts` | `syscheck` | Planned |
+| **MS 72** | Terminal Session Multiplexer | `tmux.ts` | `tmux` (`ls`, `new`, `attach`, `detach`) | **Completed** ✅ |
+| **MS 73** | Window Manager Compositor & Themes | `wm.ts` | `wm-config` (`tile-left`, `glassmorphism`, `status`) | **Completed** ✅ |

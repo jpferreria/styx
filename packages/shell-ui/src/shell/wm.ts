@@ -22,6 +22,65 @@ export class WindowManager {
   private minimized: Set<string> = new Set();
   private topZIndex: number = 100;
   private clockInterval?: ReturnType<typeof setInterval>;
+  private glassmorphismEnabled: boolean = true;
+  private currentWallpaper: string = "default-cyberpunk";
+
+  snapWindow(id: string, mode: "tile-left" | "tile-right" | "maximize" | "restore"): string {
+    const win = this.windows.get(id) || Array.from(this.windows.values())[0];
+    if (!win) {
+      return `wm-config: no active window to snap (${mode})\n`;
+    }
+    if (mode === "tile-left") {
+      win.style.left = "0px";
+      win.style.top = "0px";
+      win.style.width = "50vw";
+      win.style.height = "100vh";
+    } else if (mode === "tile-right") {
+      win.style.left = "50vw";
+      win.style.top = "0px";
+      win.style.width = "50vw";
+      win.style.height = "100vh";
+    } else if (mode === "maximize") {
+      win.style.left = "0px";
+      win.style.top = "0px";
+      win.style.width = "100vw";
+      win.style.height = "100vh";
+    } else if (mode === "restore") {
+      win.style.left = "100px";
+      win.style.top = "80px";
+      win.style.width = "600px";
+      win.style.height = "400px";
+    }
+    return `[snapped window layout: ${mode}]\n`;
+  }
+
+  setGlassmorphism(enabled: boolean): string {
+    this.glassmorphismEnabled = enabled;
+    if (typeof document !== "undefined" && document.body) {
+      document.body.classList.toggle("glassmorphism-disabled", !enabled);
+    }
+    return `[glassmorphism theme: ${enabled ? "ENABLED" : "DISABLED"}]\n`;
+  }
+
+  setWallpaper(url: string): string {
+    this.currentWallpaper = url;
+    if (typeof document !== "undefined" && document.body) {
+      document.body.style.backgroundImage = `url('${url}')`;
+    }
+    return `[desktop wallpaper updated: ${url}]\n`;
+  }
+
+  formatWmConfigStatus(): string {
+    const activeCount = this.windows.size;
+    const lines: string[] = [
+      "=== Styx OS Window Manager Compositor & Theme Config ===",
+      `Active Windows:        ${activeCount}`,
+      `Glassmorphism Filter:  ${this.glassmorphismEnabled ? "ENABLED" : "DISABLED"}`,
+      `Current Wallpaper:     ${this.currentWallpaper}`,
+      `Top Stacking Z-Index:  ${this.topZIndex}`,
+    ];
+    return lines.join("\n") + "\n";
+  }
 
   createWindow(options: WindowOptions, contentElement: HTMLElement): HTMLElement {
     const win = document.createElement("div");
