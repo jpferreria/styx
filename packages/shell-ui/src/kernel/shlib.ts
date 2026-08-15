@@ -17,9 +17,18 @@ export interface SharedLibraryInfo {
   address: string;
 }
 
+export interface LoadedDlHandle {
+  handle: number;
+  path: string;
+  symbols: Map<string, any>;
+}
+
 export class SharedLibraryEngine {
   private kernel: UnixKernel;
   private libraries: Map<string, SharedLibraryInfo> = new Map();
+  private loadedHandles: Map<number, LoadedDlHandle> = new Map();
+  private nextHandleId: number = 1000;
+  private lastError: string = "";
 
   constructor(kernel: UnixKernel) {
     this.kernel = kernel;
@@ -85,6 +94,74 @@ export class SharedLibraryEngine {
       `\t/lib/ld-styx.so.1 (0x00007f9010800000)`,
     ];
 
+    return lines.join("\n") + "\n";
+  }
+
+  dlopen(path: string, _mode: number = 1): number {
+    const normPath = path.startsWith("/") ? path : `/lib/${path}`;
+    const libName = path.split("/").pop() || path;
+    const file = this.kernel.resolvePath(normPath);
+    if (!file && !this.libraries.has(libName)) {
+      this.lastError = `dlopen: cannot open shared object file: No such file or directory (${path})`;
+      return 0;
+    }
+
+    const handleId = ++this.nextHandleId;
+    const symbols = new Map<string, any>();
+    symbols.set("sin", (x: number) => Math.sin(x));
+    symbols.set("cos", (x: number) => Math.cos(x));
+    symbols.set("strlen", (s: string) => s.length);
+    symbols.set("styx_version", () => "0.20.0");
+
+    this.loadedHandles.set(handleId, {
+      handle: handleId,
+      path: normPath,
+      symbols,
+    });
+
+    this.lastError = "";
+    return handleId;
+  }
+
+  dlsym(handle: number, symbol: string): any {
+    const loaded = this.loadedHandles.get(handle);
+    if (!loaded) {
+      this.lastError = `dlsym: invalid handle ${handle}`;
+      return null;
+    }
+    if (!loaded.symbols.has(symbol)) {
+      this.lastError = `dlsym: undefined symbol '${symbol}' in ${loaded.path}`;
+      return null;
+    }
+    this.lastError = "";
+    return loaded.symbols.get(symbol);
+  }
+
+  dlclose(handle: number): boolean {
+    if (!this.loadedHandles.has(handle)) {
+      this.lastError = `dlclose: handle ${handle} not loaded`;
+      return false;
+    }
+    this.loadedHandles.delete(handle);
+    this.lastError = "";
+    return true;
+  }
+
+  dlerror(): string {
+    const err = this.lastError;
+    this.lastError = "";
+    return err;
+  }
+
+  formatDlopenStatus(): string {
+    const lines: string[] = ["=== Styx OS Dynamic Shared Object Loader Status (dlopen) ==="];
+    lines.push(`Loaded Libraries: ${this.loadedHandles.size}`);
+    lines.push(`System Cache:     ${this.libraries.size} sonames in /etc/ld.so.cache`);
+    lines.push("");
+    lines.push("HANDLE  PATH                  SYMBOLS EXPORTED");
+    for (const dl of this.loadedHandles.values()) {
+      lines.push(`${dl.handle.toString().padEnd(7)} ${dl.path.padEnd(21)} ${Array.from(dl.symbols.keys()).join(", ")}`);
+    }
     return lines.join("\n") + "\n";
   }
 }

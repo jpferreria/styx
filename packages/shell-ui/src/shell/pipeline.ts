@@ -770,6 +770,19 @@ export class PipelineEngine {
         onStdout("Styx OS Window Manager Compositor initialized.\n");
         break;
 
+      case "dlopen":
+        if (args[0] && args[0] !== "status") {
+          const handle = this.kernel.sharedLibraryEngine.dlopen(args[0]);
+          if (handle > 0) {
+            onStdout(`[dlopen] Loaded shared library '${args[0]}' (handle ${handle})\n`);
+          } else {
+            onStderr(`${this.kernel.sharedLibraryEngine.dlerror()}\n`);
+          }
+        } else {
+          onStdout(this.kernel.sharedLibraryEngine.formatDlopenStatus());
+        }
+        break;
+
       case "poll":
       case "lspoll":
         onStdout(this.kernel.eventMultiplexEngine.lspoll());

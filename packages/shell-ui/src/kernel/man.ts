@@ -483,6 +483,14 @@ export class ManualManager {
       description: "wm-config controls desktop window layout snapping, glassmorphism backdrop filters, and wallpapers.",
       examples: "  wm-config tile-left\n  wm-config glassmorphism off\n  wm-config status",
     });
+
+    this.register({
+      name: "dlopen",
+      summary: "gain interface to dynamic shared object loader and symbol resolution",
+      synopsis: "dlopen [<libpath>|status]",
+      description: "dlopen, dlsym, dlclose, and dlerror manage in-browser Wasm dynamic library symbol linking from /lib and /usr/lib.",
+      examples: "  dlopen /lib/libm.so.6\n  dlopen status",
+    });
   }
 
   register(entry: ManualEntry): void {

@@ -47,4 +47,23 @@ describe("Styx OS Dynamic Linker & Shared Library Loader Test Suite", () => {
     expect(exitCode).toBe(0);
     expect(stdout).toContain("Dynamic Linker Inspector");
   });
+
+  it("should support dynamic library loading and symbol resolution via dlopen, dlsym, and dlclose", () => {
+    const kernel = new UnixKernel();
+    const handle = kernel.sharedLibraryEngine.dlopen("/lib/libm.so.6");
+    expect(handle).toBeGreaterThan(0);
+
+    const sinFunc = kernel.sharedLibraryEngine.dlsym(handle, "sin");
+    expect(sinFunc).toBeDefined();
+    expect(sinFunc(Math.PI / 2)).toBeCloseTo(1);
+
+    const verFunc = kernel.sharedLibraryEngine.dlsym(handle, "styx_version");
+    expect(verFunc()).toBe("0.20.0");
+
+    const status = kernel.sharedLibraryEngine.formatDlopenStatus();
+    expect(status).toContain("libm.so.6");
+
+    const closeRes = kernel.sharedLibraryEngine.dlclose(handle);
+    expect(closeRes).toBe(true);
+  });
 });
