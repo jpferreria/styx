@@ -96,3 +96,10 @@ This compiles TypeScript (`tsc`) and generates optimized production assets in `d
   - **Files / Finder**: Launches the VFS File Finder window.
   - **Top**: Launches the Real-Time Process Monitor GUI window.
 - **VFS File Finder & Text Editor**: Double-click any `.txt`, `.sh`, or document file to open it in the Text Editor. Click `Save` to save modifications back to VFS.
+
+---
+
+## Browser Compatibility Note
+
+- **Supported Browsers**: Chrome, Edge, Firefox, Safari, Brave.
+- **Native Host Directory Mounting (`mount-host`)**: Requires Chromium-based browsers (Chrome, Edge, Brave) supporting W3C File System Access API (`showDirectoryPicker`). Safari/WebKit does not support native host folder mounting.

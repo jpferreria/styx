@@ -152,6 +152,10 @@ npm test -- --coverage
    # Open http://localhost:5180/
    ```
 
+> [!NOTE]
+> **Browser Compatibility Note:**
+> Styx OS runs fully on all modern browsers (Chrome, Firefox, Edge, Safari). Native host folder mounting (`mount-host` / File System Access API `showDirectoryPicker`) requires Chromium-based browsers (Google Chrome, Microsoft Edge, Brave). Safari/WebKit does not support the File System Access API.
+
 ---
 
 ## 📄 License

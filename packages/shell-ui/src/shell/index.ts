@@ -703,7 +703,7 @@ export class ShellHost {
               this.terminal.writeln(`\x1b[1;31mMount canceled or failed: ${err.message}\x1b[0m`);
             });
           } else {
-            this.terminal.writeln("File System Access API is not supported by this browser.");
+            this.terminal.writeln("\x1b[1;33mFile System Access API (showDirectoryPicker) is not supported by Safari/WebKit. Please use Chrome, Edge, or Chromium for native host folder mounting.\x1b[0m");
           }
           break;
 
