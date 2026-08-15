@@ -35,13 +35,26 @@ export class ScriptInterpreter {
       expanded = expanded.replace(new RegExp(`\\$${index + 1}`, "g"), arg);
     });
 
+    expanded = expanded.replace(/\$\?/g, "0").replace(/\$\$/g, "1");
     this.variables.set("USER", this.kernel.userManager.getCurrentUser().username);
 
     this.variables.forEach((value, key) => {
-      expanded = expanded.replace(new RegExp(`\\$${key}`, "g"), value);
+      if (key !== "?" && key !== "$") {
+        expanded = expanded.replace(new RegExp(`\\$${key}`, "g"), value);
+      }
     });
 
     return expanded;
+  }
+
+  formatScriptDebugReport(scriptName: string, linesExecuted: number): string {
+    const lines: string[] = [
+      `=== Styx OS Shell Script Debugger Report (${scriptName}) ===`,
+      `Lines Executed:      ${linesExecuted}`,
+      `Environment Traps:   Active`,
+      `Variable Registry:   ${this.variables.size} active environment variables`,
+    ];
+    return lines.join("\n") + "\n";
   }
 
   async executeScript(

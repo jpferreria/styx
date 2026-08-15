@@ -57,4 +57,19 @@ describe("Styx OS Shell Script Interpreter Test Suite", () => {
 
     expect(stdout).toContain("Executing Styx OS Script Demo");
   });
+
+  it("should execute sh -x in line-by-line debug trace mode and format debug report", async () => {
+    const kernel = new UnixKernel();
+    const pipeline = new PipelineEngine(kernel);
+    const interpreter = new ScriptInterpreter(kernel, pipeline);
+
+    let stdout = "";
+    await pipeline.executePipeline("sh -x /home/user/demo.sh", (text) => { stdout += text; }, () => {});
+
+    expect(stdout).toContain("+ line [");
+    expect(stdout).toContain("Executing Styx OS Script Demo");
+
+    const report = interpreter.formatScriptDebugReport("demo.sh", 5);
+    expect(report).toContain("=== Styx OS Shell Script Debugger Report (demo.sh) ===");
+  });
 });
