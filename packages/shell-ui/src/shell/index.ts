@@ -193,7 +193,7 @@ export class ShellHost {
     });
   }
 
-  private executeCommand(rawCmdLine: string) {
+  public executeCommand(rawCmdLine: string) {
     if (!rawCmdLine) return;
     const cmdLine = this.kernel.aliasManager.expandAlias(rawCmdLine);
 

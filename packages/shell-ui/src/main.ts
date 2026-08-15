@@ -159,20 +159,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // Sidebar Controls
   const btnPosix = document.getElementById("btn-posix");
   btnPosix?.addEventListener("click", () => {
-    const input = document.querySelector(".xterm-helper-textarea") as HTMLTextAreaElement;
-    if (input) {
-      input.value = "posix-test\n";
-      input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
-    }
+    shell.executeCommand("posix-test");
   });
 
   const btnMount = document.getElementById("btn-mount");
   btnMount?.addEventListener("click", () => {
-    const input = document.querySelector(".xterm-helper-textarea") as HTMLTextAreaElement;
-    if (input) {
-      input.value = "mount-host\n";
-      input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
-    }
+    shell.executeCommand("mount-host");
   });
 
   const fileInput = document.getElementById("file-input") as HTMLInputElement;
