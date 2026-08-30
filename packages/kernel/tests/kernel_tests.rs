@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
-    use unix_browser_kernel::syscall::SyscallDispatcher;
-    use unix_browser_kernel::vfs::NodeType;
+    use styx_kernel::syscall::SyscallDispatcher;
+    use styx_kernel::vfs::NodeType;
 
     #[test]
     fn test_vfs_hierarchy_init() {
